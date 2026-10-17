@@ -51,6 +51,14 @@ page is served from somewhere else, name that origin:
 DIE_WAND_ORIGIN=https://wall.example:8443
 ```
 
+Put it in the `.service`, not on the command line — the helper is started by
+the socket, not by you:
+
+```ini
+[Service]
+Environment=DIE_WAND_ORIGIN=https://wall.example:8443
+```
+
 A request from any other origin is answered `403`, and the preflight for it
 fails as well — otherwise any website you visit could read your bookmarks out
 of `127.0.0.1`. `curl` and other tools without an `Origin` still work and get

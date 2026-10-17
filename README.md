@@ -74,17 +74,55 @@ systemctl --user daemon-reload
 systemctl --user enable --now die-wand-sync.socket
 ```
 
-**Security.** The answer holds your bookmark bar, so it only goes to an origin
-you allow. Loopback origins (`http://127.0.0.1`, `http://localhost`, any port)
-are allowed by default, which is what the local setup above needs. If the page
-is served from somewhere else — a server, GitHub Pages — add that origin:
+The helper only reads. It writes nothing, deletes nothing, and opens Chrome's
+icon database read-only — the file on the server is written by `chrome.py`.
+
+## Security
+
+The helper sits on `127.0.0.1:8124` and hands out your whole bookmark bar: the
+titles of your bookmarks, the addresses, and for every tile which service it
+points at. That makes it worth being precise about who may ask.
+
+**It binds to the loopback only.** Not to `0.0.0.0`. From the network, from
+another machine, nothing answers — there is no second line of defence to fall
+back on, so the address it listens on is the first wall.
+
+**It answers only the origins you allow.** This part was wrong at first and is
+worth spelling out, because the failure is silent. With
+`Access-Control-Allow-Origin: *` — which is what a quick CORS header tends to
+become — **any website you happen to visit could ask the helper and read your
+bookmarks**. Not the tiles you look at: all of them, including the ones you did
+not click. `Access-Control-Allow-Private-Network: true` was set as well, which
+is what lets a page on the open internet reach an address on your own network
+in the first place. Nothing on the wall would have looked wrong, because from
+the wall everything looked fine.
+
+So the helper checks the `Origin` header and answers anything unexpected with
+`403` — the preflight as well, so the browser never even gets to the answer.
+Measured, against the running helper:
+
+| Who asks | Answer |
+|---|---|
+| A foreign origin, e.g. `https://evil.example` | `403` |
+| `http://127.0.0.1.evil.example`, passing itself off as local | `403` |
+| `Origin: null`, from a `file://` page or a sandboxed frame | `403` |
+| `http://127.0.0.1:8099`, the local setup | `200` |
+| No origin at all, `curl` on your own machine | `200`, no CORS header |
+
+**Loopback origins are allowed by default**, because the local setup runs the
+page on one port and the helper on another, which counts as cross-origin on its
+own. Anything else you name yourself:
 
 ```sh
 DIE_WAND_ORIGIN=https://wall.example:8443
 ```
 
-Without this, a website you happen to visit could ask the helper and read your
-bookmarks; the helper answers a foreign origin with `403`.
+**What this does not protect against.** Any program running on your own machine
+can read `http://127.0.0.1:8124/tiles.json` without sending an origin, and there
+is nothing it can do about that — the helper binds to localhost, and localhost
+means every process you run. The origin check protects the browser; it is not
+protection against your own software. If that is the threat you are worried
+about, the way out is a shared secret the page presents, not a header.
 
 ## Configuration
 
