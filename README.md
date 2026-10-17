@@ -19,6 +19,10 @@ Open <http://127.0.0.1:8099/>. That is the whole installation. It needs an HTTP
 server, not a file: the page loads `tiles.json` and its modules, and `file://`
 fails on both.
 
+This local setup was successfully reproduced with GitHub Copilot without
+choosing a model, confirming that an AI assistant can set it up from these
+instructions.
+
 **If Chrome is not where the code expects it**, the page stays empty. Chrome
 keeps its profile in `~/.config/google-chrome` by default; a Flatpak Chrome
 lives under `~/.var/app/com.google.Chrome/config/google-chrome`. In both cases
