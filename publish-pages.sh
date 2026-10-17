@@ -7,4 +7,7 @@ rm -rf "$here/docs"
 mkdir -p "$here/docs"
 cp "$here"/site/index.html "$here"/site/icon.svg "$here"/site/wall.css \
    "$here"/site/main.js "$here"/site/logic.js "$here"/site/tiles.json "$here"/docs/
+# Keeps Pages from running the directory through Jekyll, which would ignore
+# files it does not know. Rebuilt here because docs/ is deleted above.
+touch "$here/docs/.nojekyll"
 echo "docs/ rebuilt from site/"
