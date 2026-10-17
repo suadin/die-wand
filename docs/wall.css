@@ -136,12 +136,12 @@ a:focus-visible {
 
 body.dragging #wall { outline: 2px dashed var(--accent); outline-offset: 8px; }
 
-/* The source link. Deliberately the quietest thing on the page: on a wall full
+/* The credit line. Deliberately the quietest thing on the page: on a full wall
    of tiles it falls below the fold anyway, and on the empty published demo it
-   is the only thing that says where the page came from. */
+   is the only thing that says who wrote this. */
 footer {
   margin-top: 1.4rem;
-  text-align: center;
+  text-align: left;
   font-size: .75rem;
   color: var(--muted);
 }
