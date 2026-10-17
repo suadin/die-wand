@@ -32,6 +32,8 @@ import os
 import socket
 import socketserver
 import sys
+import threading
+import time
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
@@ -199,6 +201,34 @@ class Server(socketserver.ThreadingTCPServer):
             self.socket.bind(address)
             self.server_address = self.socket.getsockname()
         self.server_activate()
+        self.last_request = time.monotonic()
+        self.asked = threading.Event()
+
+    def process_request_thread(self, request, client_address):
+        self.asked.set()
+        try:
+            super().process_request_thread(request, client_address)
+        finally:
+            self.last_request = time.monotonic()
+
+    def stop_when_idle(self, seconds):
+        """Bring the helper down after `seconds` without a request.
+
+        `server.timeout` is not enough and looks like it would be:
+        `serve_forever` documents that it *ignores* it, only `handle_request`
+        respects it. Without this the helper stays resident from the first
+        question onwards, which is exactly what it must not do — the whole
+        point of the socket is that nothing runs unless the page asks.
+        """
+        while True:
+            if self.asked.wait(seconds):
+                self.asked.clear()
+                continue
+            if time.monotonic() - self.last_request < seconds:
+                continue
+            print(f'no request for {seconds}s, stopping')
+            self.shutdown()
+            return
 
     def handle_error(self, request, client_address):
         """A browser that hung up is not an error of the helper."""
@@ -215,7 +245,14 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.test:
-        data = bookmarks_now()
+        try:
+            data = bookmarks_now()
+        except Exception as error:  # noqa: BLE001 (a person is reading this)
+            print(f'cannot read Chrome: {error}', file=sys.stderr)
+            print('If Chrome is a Flatpak or in an unusual place, set '
+                  'DIE_WAND_CHROME to the directory holding the profiles.',
+                  file=sys.stderr)
+            return 1
         top = data['tiles']
         total = mod_count(top)
         with_icon = sum(1 for t in top if 'icon' in t)
@@ -228,7 +265,6 @@ def main() -> int:
     except OSError as error:
         print(f'Port {args.port} cannot be bound: {error}', file=sys.stderr)
         return 1
-    server.timeout = args.seconds
     try:
         source = ('activated by socket' if os.environ.get('LISTEN_PID') == str(os.getpid())
                   else 'started by hand')
@@ -236,6 +272,9 @@ def main() -> int:
         print(f'DIE WAND listens on {server.server_address[0]}:{server.server_address[1]} '
               f'({source}, read only, end after {args.seconds}s without a request)')
         print(f'allowed origins beyond loopback: {extra}')
+        watcher = threading.Thread(target=server.stop_when_idle,
+                                   args=(args.seconds,), daemon=True)
+        watcher.start()
         server.serve_forever()
     finally:
         server.server_close()

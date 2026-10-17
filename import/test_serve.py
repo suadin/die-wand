@@ -141,5 +141,66 @@ class TestHelper(unittest.TestCase):
         self.assertIsNone(self.serve.socket_from_systemd())
 
 
+class TestIdleStops(unittest.TestCase):
+    """The helper must end on its own when the page stops asking.
+
+    This is the whole point of the socket: nothing runs in the background, and
+    what ran is gone again. It was broken once because `server.timeout` looks
+    like it does that — socketserver.serve_forever documents that it *ignores*
+    it. The helper ran for hours with `--seconds 120` and nobody noticed,
+    because nothing on the wall looked wrong.
+    """
+
+    def setUp(self):
+        self.serve = load()
+        self.serve.bookmarks_now = lambda: {'version': 1, 'updated': 'x', 'tiles': []}
+
+    def test_it_stops_after_the_stated_number_of_seconds(self):
+        import threading
+        server = self.serve.Server(('127.0.0.1', 0), self.serve.Response)
+        self.addCleanup(server.server_close)
+        serving = threading.Thread(target=server.serve_forever, daemon=True)
+        serving.start()
+        self.addCleanup(server.shutdown)
+
+        watcher = threading.Thread(target=server.stop_when_idle, args=(1,),
+                                   daemon=True)
+        watcher.start()
+        watcher.join(timeout=10)
+
+        self.assertFalse(watcher.is_alive(),
+                         'the helper is still running after the idle time')
+        # serve_forever returned, which is what lets the process exit.
+        serving.join(timeout=10)
+        self.assertFalse(serving.is_alive())
+
+    def test_a_request_postpones_the_end(self):
+        import threading
+        import time
+        server = self.serve.Server(('127.0.0.1', 0), self.serve.Response)
+        self.addCleanup(server.server_close)
+        serving = threading.Thread(target=server.serve_forever, daemon=True)
+        serving.start()
+        self.addCleanup(server.shutdown)
+
+        watcher = threading.Thread(target=server.stop_when_idle, args=(2,),
+                                   daemon=True)
+        watcher.start()
+
+        # Three asks over two seconds; the helper must outlive all of them.
+        for _ in range(3):
+            time.sleep(1.0)
+            with urllib.request.urlopen(
+                    f'http://127.0.0.1:{server.server_address[1]}/tiles.json',
+                    timeout=5) as a:
+                a.read()
+        self.assertTrue(watcher.is_alive(),
+                        'the helper stopped although it was being asked')
+
+        # And once the questions stop, it goes away.
+        watcher.join(timeout=10)
+        self.assertFalse(watcher.is_alive())
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
