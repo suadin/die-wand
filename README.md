@@ -6,8 +6,11 @@ the page is HTML, CSS and two JavaScript modules.
 
 ## Install
 
+Needs `python3` and a browser. `gjs` as well, if you want to run the tests;
+Docker only for the server variant.
+
 ```sh
-git clone <url> die-wand
+git clone https://github.com/suadin/die-wand.git
 cd die-wand
 python3 -m http.server 8099 --directory site/
 ```
@@ -16,8 +19,31 @@ Open <http://127.0.0.1:8099/>. That is the whole installation. It needs an HTTP
 server, not a file: the page loads `tiles.json` and its modules, and `file://`
 fails on both.
 
-To have the tiles from Chrome appear automatically, install the helper — see
+**If Chrome is not where the code expects it**, the page stays empty. Chrome
+keeps its profile in `~/.config/google-chrome` by default; a Flatpak Chrome
+lives under `~/.var/app/com.google.Chrome/config/google-chrome`. In both cases
+name the directory that *contains* the profiles:
+
+```sh
+DIE_WAND_CHROME=~/.var/app/com.google.Chrome/config/google-chrome ./import/chrome.py --dry-run
+```
+
+That prints how many tiles it found, or tells you which paths it looked in.
+To have them appear automatically, install the helper — see
 [Reading Chrome automatically](#reading-chrome-automatically).
+
+## Make it your start page
+
+The page is a start page by being a page you open first. In Chrome, at
+`chrome://settings/onStartup`, choose **Open a specific page** and set it to the
+address you serve it on, `http://127.0.0.1:8099/`. A window that opens only the
+wall gets the same effect with
+`google-chrome --app=http://127.0.0.1:8099/`, which you can put in your
+autostart.
+
+Note that the wall fills itself from the helper on the machine where **the
+browser** runs, not where Chrome runs. On another device it shows the last
+`tiles.json` and nothing more.
 
 ## What it does
 
@@ -128,7 +154,7 @@ about, the way out is a shared secret the page presents, not a header.
 
 | Variable | Default | What it is |
 |---|---|---|
-| `DIE_WAND_CHROME` | the Flatpak Chrome profile | which browser profile to read |
+| `DIE_WAND_CHROME` | `~/.config/google-chrome` | which browser to read; a Flatpak Chrome lives under `~/.var/app/com.google.Chrome/config/google-chrome` |
 | `DIE_WAND_FILE` | `~/die-wand-tiles.json` | where to write the local file |
 | `DIE_WAND_NAS` | `/volume1/docker/die-wand/site/tiles.json` | where to write on the server |
 | `DIE_WAND_NAS_HOST` / `_USER` / `_KEY` | — | how to reach the server over ssh |
@@ -136,6 +162,16 @@ about, the way out is a shared secret the page presents, not a header.
 
 The local file is written only when something changed, so a tile you made by
 hand on the wall is not overwritten on the next run.
+
+**Renaming tiles.** `import/chrome.py` also looks for an `import/renames.json`
+next to itself, mapping a bookmark title to what it should say on the wall:
+
+```json
+{"Homepage": "DIE WAND"}
+```
+
+The file is in `.gitignore` — it is a personal table, not a property of the
+tool. Without it nothing is renamed; nothing breaks.
 
 ## Deploying on a server
 

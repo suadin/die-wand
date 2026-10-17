@@ -94,11 +94,41 @@ dissolved like any other.
 If a tile has no name, the wall takes the name of the machine from the address.
 One without `http://` or `https://` is discarded, as is `javascript:`.
 
-From the wall back to Chrome, the HTML file is there: in Chrome
-`chrome://bookmarks` → three-dot menu → **Import bookmarks** → the downloaded
-`bookmarks.html`.
+## 5. Writing the tiles file by hand
 
-## 5. What travels and what does not
+Dragging a file onto the page is for the browser you are sitting at. To fill the
+file the page reads on a server, or to refresh it without opening the page, use
+the importer:
+
+```sh
+./import/chrome.py             # reads Chrome, writes locally and to the server
+./import/chrome.py --dry-run   # only counts, writes nothing
+./import/chrome.py --local-only  # only the local file, no server
+```
+
+**Without a server, `--local-only` is the flag you want.** The plain form tries
+to push over ssh afterwards and ends with `nothing reached the server` when
+there is no server.
+
+**Where it writes.** By default `~/die-wand-tiles.json`. The page, however,
+reads `tiles.json` next to itself. Point the importer at that file, or copy it
+over:
+
+```sh
+DIE_WAND_FILE=/path/to/die-wand/site/tiles.json ./import/chrome.py --local-only
+```
+
+It is written only when something changed, so a tile you made by hand on the
+wall survives the next run.
+
+**If it says it found no bookmarks,** the profile path is wrong. Set
+`DIE_WAND_CHROME` to the directory that *contains* the profiles:
+
+```sh
+DIE_WAND_CHROME=~/.var/app/com.google.Chrome/config/google-chrome ./import/chrome.py --dry-run
+```
+
+## 6. What travels and what does not
 
 | | HTML export | JSON on the server |
 |---|---|---|
@@ -111,7 +141,7 @@ From the wall back to Chrome, the HTML file is there: in Chrome
 Chrome knows no field for a self-set glyph in the bookmark format, so there is
 no place for it. Whoever needs that takes the JSON file.
 
-## 6. On a server
+## 7. On a server
 
 `deploy/` holds a compose file and an nginx configuration:
 
@@ -133,7 +163,7 @@ The wall is written to by `import/chrome.py` from the machine where Chrome
 runs; it pushes the file over ssh, base64 by base64, and compares the checksum
 on both sides. See the variables in the README.
 
-## 7. Checking
+## 8. Checking
 
 ```bash
 ./test/run.sh                    # the page's logic
