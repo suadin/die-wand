@@ -183,10 +183,6 @@ locally:
 
 So: Pages is the demo, the local copy is the wall.
 
-## Not in this repository
-
-`import/renames.json` is a personal renaming table and stays local.
-
 ## Tests
 
 ```sh
