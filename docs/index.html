@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DIE WAND</title>
+  <!-- The number after the name forces Chrome to fetch the icon again. Without
+       it the old version sticks in the icon cache, across reloads and across
+       devices. -->
+  <link rel="icon" href="icon.svg?v=4" type="image/svg+xml">
+  <link rel="stylesheet" href="wall.css">
+</head>
+<body>
+  <!-- No button: everything comes from Chrome, and what Chrome can do the user
+       can do there too. -->
+  <header>
+    <h1><img class="logo" src="icon.svg" alt=""> DIE WAND</h1>
+    <!-- The notice sits in the header, centered. At the bottom it was the most
+         conspicuous part of the page, which is exactly what bothered. -->
+    <p id="notice" hidden></p>
+  </header>
+
+  <main id="wall" aria-live="polite"></main>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

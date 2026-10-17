@@ -115,12 +115,16 @@ The page is mounted from `../site`. Details and the certificate are in
 
 ## GitHub Pages
 
-The page itself is static, so it runs on GitHub Pages as they are. What does
-not come along is the helper: it is a program on your own machine, so the page
-on Pages cannot reach your Chrome. What it can do is read the `tiles.json` in
-the repository, and it can import a file you drop onto it. For the wall to fill
-itself from Chrome, keep the helper on the machine where Chrome runs and point
-the page at it.
+The page is published at <https://suadin.github.io/die-wand/>. What is served
+is `docs/`, a copy of `site/`; run `./publish-pages.sh` after a change in
+`site/` so both stay in step.
+
+What comes with it is the page only. The helper that reads Chrome is a program
+on your own machine, so the published page cannot reach it: on GitHub Pages the
+wall shows the committed `tiles.json` (empty) and fills when you drop a
+bookmark file onto it. For the wall to fill itself from Chrome, run the helper
+locally and open the private copy — that is the version with the automatic
+reading.
 
 ## Not in this repository
 
