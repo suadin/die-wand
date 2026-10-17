@@ -4,8 +4,6 @@ Your Chrome bookmark bar as a start page. Every bookmark becomes a tile, one
 click opens it in a new tab. No build step, no framework, no account, no cloud —
 the page is HTML, CSS and two JavaScript modules.
 
-![DIE WAND](site/icon.svg)
-
 ## Install
 
 ```sh
@@ -125,6 +123,27 @@ wall shows the committed `tiles.json` (empty) and fills when you drop a
 bookmark file onto it. For the wall to fill itself from Chrome, run the helper
 locally and open the private copy — that is the version with the automatic
 reading.
+
+## Why host it on your own machine
+
+The published demo shows the same tiles as your private copy, because the icons
+are embedded in the file rather than fetched. The difference shows up with the
+addresses that only exist at home, and that is the reason this is worth running
+locally:
+
+- **LAN entries work where they are reachable.** A tile for a host like
+  `192.168.1.50` or a service on your own port opens only from a machine inside
+  the network. Anyone who opens the published page is somewhere else, so those
+  tiles point at addresses that do not answer for them. The icon still shows —
+  it is a picture in the file — but the tile itself does nothing.
+- **Nothing about the network leaves the house.** The bookmark bar names your
+  machines, their services and what they are called. On Pages that list would
+  be readable by anyone who opens the page, together with the names of your
+  hosts. Locally it stays on your own server.
+- **The automatic reading only works locally**, for the reason above: the
+  helper answers `127.0.0.1`, and 127.0.0.1 means the visitor's own machine.
+
+So: Pages is the demo, the local copy is the wall.
 
 ## Not in this repository
 
