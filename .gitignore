@@ -6,9 +6,10 @@ __pycache__/
 .DS_Store
 
 # Real bookmark data never belongs in the repository; the committed
-# site/tiles.json is an empty placeholder and stays.
+# site/tiles.json and docs/tiles.json are empty placeholders and stay.
 tiles.json
 !site/tiles.json
+!docs/tiles.json
 
 # Personal renames, not for the repository.
 import/renames.json
