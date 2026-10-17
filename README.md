@@ -187,7 +187,7 @@ docker compose up -d
 ```
 
 The page is mounted from `../site`. Details and the certificate are in
-[GUIDE.md](GUIDE.md).
+[GUIDE.md](GUIDE.md), which covers the deployment details not repeated here.
 
 ## GitHub Pages
 
