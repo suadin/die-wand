@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="DIE WAND">
+  <title>DIE WAND</title>
+  <!-- Three rows of bricks with staggered joints, matching the heading where
+       this same icon now stands next to the name. Bold shapes instead of many:
+       at 16 pixels in the tab the finer 3x3 grid collapsed into a smudge. -->
+  <g fill="#6f9df0">
+    <rect x="2" y="4" width="14" height="6.5" rx="1.6"/>
+    <rect x="17.5" y="4" width="12.5" height="6.5" rx="1.6"/>
+    <rect x="2" y="12.75" width="9" height="6.5" rx="1.6"/>
+    <rect x="12.5" y="12.75" width="17.5" height="6.5" rx="1.6"/>
+    <rect x="2" y="21.5" width="14" height="6.5" rx="1.6"/>
+    <rect x="17.5" y="21.5" width="12.5" height="6.5" rx="1.6"/>
+  </g>
+</svg>

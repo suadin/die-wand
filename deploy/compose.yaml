@@ -1,0 +1,35 @@
+# Tile wall on a server: nginx serves the static directory.
+# nginx:1.27-alpine is a small image; nothing has to be pulled at runtime.
+#
+# The own nginx.conf is needed because UGOS-Btrfs denies non-root users in
+# containers any access to bind mounts. It therefore runs with `user root`.
+# Without it nginx answers everything with 403. On a system that does not have
+# this restriction, drop the mount and the `user root` line.
+#
+# Two ports: 8110 is the http that only redirects to https, 8443 is the https.
+# Not 443, because something already runs there on most servers.
+#
+# `../site` points at the page in this repository. `docker compose up -d` is
+# run from `deploy/`, so the page is one level up.
+services:
+  die-wand:
+    image: nginx:1.27-alpine
+    container_name: die-wand
+    restart: unless-stopped
+    ports:
+      - "8110:80"
+      - "8443:443"
+    volumes:
+      - ../site:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "--no-check-certificate", "https://127.0.0.1/tiles.json"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

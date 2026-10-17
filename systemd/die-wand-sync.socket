@@ -1,0 +1,20 @@
+# The helper that reads Chrome, runs only when the page asks it.
+#
+# systemd starts the service on the first connection attempt and ends it again
+# when nothing comes any more. There is therefore no process running in the
+# background that the user had not triggered — that is exactly why no timer was
+# taken.
+#
+# Install both files into ~/.config/systemd/user/, adjust the paths, then:
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now die-wand-sync.socket
+[Unit]
+Description=Socket for the tile wall so it can ask for Chrome's bookmarks
+
+[Socket]
+# Only on this machine. From outside nobody gets in.
+ListenStream=127.0.0.1:8124
+NoDelay=true
+
+[Install]
+WantedBy=sockets.target

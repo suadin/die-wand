@@ -1,0 +1,14 @@
+# Python: the import creates .pyc files next to the source while reading.
+__pycache__/
+*.pyc
+
+# Files taken over from macOS
+.DS_Store
+
+# Real bookmark data never belongs in the repository; the committed
+# site/tiles.json is an empty placeholder and stays.
+tiles.json
+!site/tiles.json
+
+# Personal renames, not for the repository.
+import/renames.json

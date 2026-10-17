@@ -1,0 +1,14 @@
+# Woken by the socket, not by hand. Reads Chrome and answers.
+[Unit]
+Description=Reads Chrome's bookmarks for the tile wall
+Documentation=file:README.md
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/dev/repos/die-wand/import/serve.py --seconds 120
+TimeoutStopSec=10
+
+# If Chrome is not in its usual place, or the page is served from somewhere
+# else, set it here, for example:
+# Environment=DIE_WAND_CHROME=%h/.var/app/com.google.Chrome/config/google-chrome
+# Environment=DIE_WAND_ORIGIN=https://wall.example:8443
