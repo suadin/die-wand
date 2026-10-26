@@ -3,9 +3,9 @@
     "total": 122,
     "coverage": null,
     "failed": 0,
-    "duration": 15.7,
-    "perTest": 0.129,
-    "measured": "2026-10-26T18:39",
+    "duration": 16.2,
+    "perTest": 0.132,
+    "measured": "2026-10-26T18:44",
     "suites": [
       {
         "name": "page logic",
@@ -27,6 +27,6 @@
     "coverage": null,
     "duration": 2,
     "perTest": 0.182,
-    "measured": "2026-10-26T17:37:21.479Z"
+    "measured": "2026-10-26T17:43:53.241Z"
   }
 }

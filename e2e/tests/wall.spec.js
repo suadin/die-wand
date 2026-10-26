@@ -43,7 +43,11 @@ test("the wall shows tiles and a one-row header", async ({ page }) => {
   expect(Math.abs(titleMiddle - taglineMiddle)).toBeLessThan(4);
   await expect(page.locator(".footer-item")).toHaveCount(4);
   await expect(page.locator(".footer-sep")).toHaveCount(3);
+  const footerIcons = await page.locator(".footer-items svg").evaluateAll(
+    (nodes) => nodes.map((node) => node.innerHTML),
+  );
   await expect(page.locator(".footer-items svg")).toHaveCount(4);
+  expect(new Set(footerIcons).size).toBe(footerIcons.length);
 });
 
 test("README opens the reader and a deep link survives a reload", async ({ page }) => {
