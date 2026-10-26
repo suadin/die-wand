@@ -20,7 +20,7 @@ serve_output="$(python3 import/test_serve.py 2>&1)"
 serve_count="$(grep -oE 'Ran [0-9]+ tests?' <<<"$serve_output" | grep -oE '[0-9]+' | head -1)"
 
 total=$((logic_count + chrome_count + serve_count))
-measured="$(date '+%Y-%m-%dT%H:%M:%S%z')"
+measured="$(date '+%Y-%m-%dT%H:%M')"
 
 cat > "$root/site/test-metrics.json" <<JSON
 {
