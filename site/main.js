@@ -17,8 +17,17 @@ import {
     fromBookmarks, flatten, hasLocalTiles, iconCandidates, normalize, glyph,
     count,
 } from './logic.js';
+import {docsHash, parseRoute, renderMarkdown, splitDocument} from './reader.js';
 
 const STORAGE_KEY = 'die-wand.tiles';
+
+// The documents the reader offers. The Markdown files are copies of the root
+// README and GUIDE, rebuilt by ./publish-pages.sh; keeping them next to the
+// page is what lets the reader work on the NAS and on GitHub Pages alike.
+const DOCUMENTS = [
+    {slug: 'readme', title: 'README', file: 'docs/README.md'},
+    {slug: 'guide', title: 'GUIDE', file: 'docs/GUIDE.md'},
+];
 
 // The helper that reads Chrome. If it does not run, things continue with the
 // file from the server. Nothing is touched in the background: the page asks,
@@ -29,10 +38,18 @@ const HELPER = 'http://127.0.0.1:8124/tiles.json';
 // retry the same dead path on every redraw.
 const iconMissing = new Set();
 
-const state = {tiles: []};
+const state = {tiles: [], docs: null, currentDoc: null};
 
 const wall = document.getElementById('wall');
 const notice = document.getElementById('notice');
+const reader = document.getElementById('reader');
+const readerTitle = document.getElementById('reader-title');
+const readerTabs = document.getElementById('reader-tabs');
+const readerSections = document.getElementById('reader-sections');
+const readerSectionTitle = document.getElementById('reader-section-title');
+const readerBody = document.getElementById('reader-body');
+const unitMetrics = document.getElementById('unit-metrics');
+const e2eMetrics = document.getElementById('e2e-metrics');
 
 // How long a message stays. Most messages disappear on their own — an empty
 // wall does not, that is a state and not an intermediate step.
@@ -246,4 +263,201 @@ async function start() {
     render();
 }
 
+// ---- Documentation reader ------------------------------------------------
+
+async function loadDocs() {
+    if (state.docs)
+        return state.docs;
+    const docs = [];
+    for (const entry of DOCUMENTS) {
+        try {
+            const response = await fetch(entry.file, {cache: 'no-store'});
+            if (!response.ok)
+                continue;
+            docs.push(splitDocument({
+                slug: entry.slug,
+                title: entry.title,
+                markdown: await response.text(),
+            }));
+        } catch (e) {
+            // A missing document is not fatal: the other tabs still work.
+        }
+    }
+    state.docs = docs;
+    return docs;
+}
+
+function showReader(open) {
+    reader.hidden = !open;
+    document.body.classList.toggle('reading', open);
+    if (open)
+        document.getElementById('reader-close').focus();
+}
+
+function docLinkTarget(file, anchor) {
+    const name = String(file ?? '').toLowerCase();
+    const slug = name === 'readme.md' ? 'readme'
+        : name === 'guide.md' ? 'guide' : null;
+    if (!slug)
+        return null;
+    const section = String(anchor ?? '').replace(/^#/, '');
+    return docsHash(slug, section || null);
+}
+
+async function showDocs(docSlug, sectionSlug) {
+    const docs = await loadDocs();
+    showReader(true);
+    readerTabs.replaceChildren();
+    readerSections.replaceChildren();
+
+    if (!docs.length) {
+        readerTitle.textContent = 'Documentation';
+        readerSectionTitle.hidden = true;
+        readerBody.innerHTML = '<p>The documentation is not next to the page. '
+            + 'Run <code>./publish-pages.sh</code> to copy it.</p>';
+        return;
+    }
+
+    const doc = docs.find(item => item.slug === docSlug) ?? docs[0];
+    const page = doc.pages.find(item => item.slug === sectionSlug) ?? doc.pages[0];
+    state.currentDoc = doc.slug;
+    readerTitle.textContent = doc.title;
+
+    for (const item of docs) {
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = `reader-tab${item.slug === doc.slug ? ' active' : ''}`;
+        tab.textContent = item.title;
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-selected', String(item.slug === doc.slug));
+        tab.addEventListener('click', () => navigate(docsHash(item.slug)));
+        readerTabs.append(tab);
+    }
+
+    const continuous = doc.pages.length === 1;
+    readerSections.hidden = continuous;
+    readerSectionTitle.hidden = continuous;
+    if (!continuous) {
+        for (const item of doc.pages) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = `reader-section${item.slug === page.slug ? ' active' : ''}`;
+            button.textContent = item.title;
+            button.dataset.tip = item.title;
+            button.addEventListener('click', () => navigate(docsHash(doc.slug, item.slug)));
+            readerSections.append(button);
+        }
+        readerSectionTitle.textContent = page.title;
+    }
+    readerBody.innerHTML = renderMarkdown(page.markdown);
+    readerBody.scrollTop = 0;
+}
+
+function navigate(hash) {
+    if (location.hash === hash) {
+        applyRoute();
+        return;
+    }
+    location.hash = hash;
+}
+
+async function applyRoute() {
+    const route = parseRoute(location.hash);
+    if (route.view === 'docs') {
+        await showDocs(route.doc, route.section);
+        return;
+    }
+    showReader(false);
+}
+
+readerBody.addEventListener('click', event => {
+    const link = event.target.closest('a[data-doc-file]');
+    if (!link)
+        return;
+    const target = docLinkTarget(link.dataset.docFile ?? `${state.currentDoc}.md`,
+        link.dataset.docAnchor);
+    if (!target)
+        return;
+    event.preventDefault();
+    navigate(target);
+});
+
+document.getElementById('readme-button').addEventListener('click', () => navigate(docsHash('readme')));
+document.getElementById('reader-close').addEventListener('click', () => navigate('#/'));
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !reader.hidden)
+        navigate('#/');
+});
+window.addEventListener('hashchange', () => {
+    applyRoute().catch(error => announce(`Documentation not readable: ${error}`, 0));
+});
+
+// The footer shows the last measurement written by ./test/metrics.sh. A static
+// page cannot start a test run itself, so there is no button here.
+async function loadMetrics() {
+    try {
+        const response = await fetch('test-metrics.json', {cache: 'no-store'});
+        if (!response.ok)
+            return;
+        const metrics = await response.json();
+        const unit = metrics.unit;
+        if (unit && Number.isFinite(unit.total)) {
+            unitMetrics.textContent = `unit ${unit.total} tests`
+                + (unit.coverage == null ? ' · coverage not measured' : ` · ${unit.coverage} %`);
+            if (unit.measured)
+                unitMetrics.dataset.tip = `Measured ${unit.measured}. Run ./test/metrics.sh to measure again`;
+        }
+        const e2e = metrics.e2e;
+        if (e2e && Number.isFinite(e2e.total))
+            e2eMetrics.textContent = `e2e ${e2e.total} journeys`;
+    } catch (e) {
+        // No metrics file: the footer keeps "not measured".
+    }
+}
+
+// ---- Tooltip -------------------------------------------------------------
+
+const tooltip = document.getElementById('tooltip');
+let tipTarget = null;
+
+function placeTip(target) {
+    tooltip.textContent = target.dataset.tip;
+    tooltip.hidden = false;
+    const box = target.getBoundingClientRect();
+    const tip = tooltip.getBoundingClientRect();
+    const left = Math.min(Math.max(8, box.left + box.width / 2 - tip.width / 2),
+        window.innerWidth - tip.width - 8);
+    const above = box.top - tip.height - 8;
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${above >= 8 ? above : box.bottom + 8}px`;
+}
+
+function hideTip() {
+    tipTarget = null;
+    tooltip.hidden = true;
+}
+
+document.addEventListener('pointerover', event => {
+    const target = event.target.closest?.('[data-tip]');
+    if (!target || target === tipTarget)
+        return;
+    tipTarget = target;
+    placeTip(target);
+});
+document.addEventListener('pointerout', event => {
+    if (tipTarget && !tipTarget.contains(event.relatedTarget))
+        hideTip();
+});
+document.addEventListener('focusin', event => {
+    const target = event.target.closest?.('[data-tip]');
+    if (target) {
+        tipTarget = target;
+        placeTip(target);
+    }
+});
+document.addEventListener('focusout', () => hideTip());
+window.addEventListener('scroll', hideTip, true);
+
 start();
+loadMetrics();
+applyRoute().catch(error => announce(`Documentation not readable: ${error}`, 0));

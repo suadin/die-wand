@@ -71,6 +71,21 @@ browser** runs, not where Chrome runs. On another device it shows the last
   where Home Assistant puts it) for what Chrome has no bitmap for. No icon
   service, so no address of yours is sent to a third party. What has no icon at
   all gets its first letter.
+- **Serves its own documentation.** The footer opens this README and the
+  [GUIDE](GUIDE.md) in the page, one page per level-two heading. `#/docs/readme`
+  and `#/docs/readme/tests` are stable addresses; reloading one restores the
+  same page. A link inside a document opens the other document in the reader.
+- **Shows where it comes from and what it was measured with.** The footer
+  carries the repository, the last unit-test count from
+  `site/test-metrics.json`, and the E2E state. A missing measurement reads
+  "not measured", never zero.
+
+The interface follows the workspace contract where it applies: README and source
+in one centred footer, deep links, `yyyy-mm-dd` where dates appear, quiet
+colours, one name for one thing. Three rules do not apply to a wall: it has no
+lists to page, no calendar, and no E2E suite. The static page also cannot start
+a test run itself, so the unit number is the last measurement written by
+`./test/metrics.sh`, not a button. Coverage is not measured yet.
 
 ## Which bookmarks are supported
 
@@ -193,7 +208,8 @@ The page is mounted from `../site`. Details and the certificate are in
 
 The page is published at <https://suadin.github.io/die-wand/>. What is served
 is `docs/`, a copy of `site/`; run `./publish-pages.sh` after a change in
-`site/` so both stay in step.
+`site/`, in this README, or in `GUIDE.md` so both stay in step. The script also
+copies the two documents into `site/docs/`, which is what the reader fetches.
 
 What comes with it is the page only. The helper that reads Chrome is a program
 on your own machine, so the published page cannot reach it: on GitHub Pages the
@@ -226,10 +242,19 @@ So: Pages is the demo, the local copy is the wall.
 ## Tests
 
 ```sh
-./test/run.sh                 # the page's logic, gjs, no browser
+./test/run.sh                 # page logic and documentation reader, gjs, no browser
 python3 import/test_chrome.py # the Chrome import
 python3 import/test_serve.py  # the helper
+./test/metrics.sh             # run all three and write site/test-metrics.json
 ```
+
+The footer reads `site/test-metrics.json`; commit it after a change so the page
+shows the current count. The suites currently hold 115 unit tests: 64 for the
+page logic and reader, 37 for the Chrome import, 14 for the helper. There is no
+E2E suite and no coverage measurement yet, and the footer says so rather than
+showing zero. `./test/run.sh` also fails when `site/docs/README.md` or
+`site/docs/GUIDE.md` drifted from the root documents; `./publish-pages.sh`
+refreshes them.
 
 ## How this was written
 

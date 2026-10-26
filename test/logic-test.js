@@ -17,7 +17,9 @@ const {fromBookmarks, normalize, grapheme, glyph, count, hasLocalTiles,
     = await import(`file://${file}`);
 
 let fails = 0;
+let checks = 0;
 function check(name, got, want) {
+    checks++;
     const ok = JSON.stringify(got) === JSON.stringify(want);
     if (!ok)
         fails++;
@@ -260,6 +262,6 @@ check('broken entry counts as nothing', hasLocalTiles('nonsense'), false);
 // The closing part belongs to the test: without it the check passes even on
 // errors and reports nothing. That happened once during cleanup, because a
 // block was removed along with a function it did not belong to.
-print(fails === 0 ? '\nall green' : `\n${fails} errors`);
+print(fails === 0 ? `\n${checks} checks\nall green` : `\n${checks} checks\n${fails} errors`);
 if (fails > 0)
     throw new Error(`${fails} errors`);

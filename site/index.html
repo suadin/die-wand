@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DIE WAND</title>
+  <meta name="description" content="Your Chrome bookmark bar as a start page.">
+  <meta name="theme-color" content="#14161b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f5f6f8" media="(prefers-color-scheme: light)">
   <!-- The number after the name forces Chrome to fetch the icon again. Without
        it the old version sticks in the icon cache, across reloads and across
        devices. -->
@@ -22,10 +25,38 @@
 
   <main id="wall" aria-live="polite"></main>
 
-  <!-- Who wrote it and where it lives. On a full wall it sits below the fold
-       and out of the way; on the published demo, where there are no tiles, it
-       is the only thing that says where the page came from. -->
-  <footer>Vibe-Coded by: <a href="https://github.com/suadin/die-wand">suadin</a></footer>
+  <!-- The documentation reader. It covers the wall instead of replacing it, so
+       closing it costs nothing and the tiles stay where they are. -->
+  <section id="reader" class="reader" aria-label="Documentation" hidden>
+    <div class="reader-head">
+      <div>
+        <p class="eyebrow">Documentation</p>
+        <h2 id="reader-title">README</h2>
+      </div>
+      <button id="reader-close" class="button button-plain" type="button">Back to the wall</button>
+    </div>
+    <div id="reader-tabs" class="reader-tabs" role="tablist" aria-label="Documents"></div>
+    <nav id="reader-sections" class="reader-sections" aria-label="Sections"></nav>
+    <h3 id="reader-section-title" class="reader-section-title"></h3>
+    <article id="reader-body" class="reader-body"></article>
+  </section>
+
+  <!-- One compact footer: the documentation, the source, and the test numbers.
+       On a full wall it sits below the fold; on the published demo it is the
+       only thing that says where the page came from. -->
+  <footer class="footer">
+    <div class="footer-items">
+      <button id="readme-button" class="footer-item has-tip" type="button" data-tip="Read the documentation"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v20H7.5A2.5 2.5 0 0 1 5 19.5v-15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 7.5h6M9 11.5h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>README</span></button>
+      <span class="footer-sep" aria-hidden="true">|</span>
+      <span class="footer-item"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m9 7.5-4.5 4.5L9 16.5M15 7.5l4.5 4.5L15 16.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>source: <a href="https://github.com/suadin/die-wand" target="_blank" rel="noopener noreferrer">suadin/die-wand</a></span></span>
+      <span class="footer-sep" aria-hidden="true">|</span>
+      <span id="unit-metrics" class="footer-item has-tip" data-tip="Run ./test/metrics.sh to measure again">unit not measured</span>
+      <span class="footer-sep" aria-hidden="true">|</span>
+      <span id="e2e-metrics" class="footer-item has-tip" data-tip="The wall has no browser test suite yet">e2e not measured</span>
+    </div>
+  </footer>
+
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
 
   <script type="module" src="main.js"></script>
 </body>
