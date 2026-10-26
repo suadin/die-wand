@@ -79,9 +79,9 @@ browser** runs, not where Chrome runs. On another device it shows the last
   `#/docs/readme/tests` are stable addresses; a reload restores the same page. A
   link inside a document opens the other document in the reader.
 - **Shows where it comes from and what it was measured with.** The footer
-  carries the repository, the last unit-test count from
-  `site/test-metrics.json`, and the E2E state. A missing measurement reads
-  "not measured", never zero.
+  carries the repository, the unit-test count with its line coverage, and the
+  E2E count with its line coverage from `site/test-metrics.json`. A missing run
+  is red and says `not executed`, never zero.
 
 The interface follows the workspace contract where it applies: documentation and
 source in one centred footer, deep links, `yyyy-mm-dd` where dates appear, one
@@ -93,8 +93,9 @@ at 80–200 %. Cursors say what a thing does: hand for clickable, help for a
 tooltip, default for text. Purple is reserved for one special action; the wall
 has none yet. One rule does not apply to a wall: it has no lists to page and no
 calendar. The static page cannot start a test run itself, so the numbers are the
-last measurement written by `./test/metrics.sh`, not a button. Unit coverage is
-not measured yet; E2E coverage is not measured yet either.
+last measurement written by `./test/metrics.sh`, not a button. Unit coverage
+comes from the standard `trace` library over the Python helpers; E2E coverage
+comes from Playwright's `page.coverage` over the page's JavaScript.
 
 ## Which bookmarks are supported
 
@@ -259,19 +260,19 @@ python3 import/test_serve.py  # the helper
 
 The footer reads `site/test-metrics.json`; commit it after a change so the page
 shows the current count. The suites currently hold 122 unit tests: 71 for the
-page logic and reader, 37 for the Chrome import, 14 for the helper. The
-Playwright suite in `e2e/` has 12 journeys across the wall, the reader, the
-tooltips, the cursors and the bookmark drop:
+page logic and reader, 37 for the Chrome import, 14 for the helper, covering
+32.3 % of the helper modules. The Playwright suite in `e2e/` has 13 journeys
+across the wall, the reader, the tooltips, the cursors and the bookmark drop,
+covering 78.6 % of the page's JavaScript:
 
 ```sh
 cd e2e
 pnpm install
-pnpm test                  # writes e2e/test-metrics.e2e.json
+pnpm test                  # writes e2e/test-metrics.e2e.json and e2e/coverage.json
 cd ..
 ./test/metrics.sh          # merges unit and E2E numbers
 ```
 
-Coverage is not measured yet, and the footer says so rather than showing zero.
 `./test/run.sh` also fails when a copy under `site/docs/` drifts from its source
 under `specs/`, the root README, GUIDE or release notes; `./publish-pages.sh`
 refreshes them.

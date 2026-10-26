@@ -21,6 +21,12 @@ chrome_count="$(grep -oE 'Ran [0-9]+ tests?' <<<"$chrome_output" | grep -oE '[0-
 serve_output="$(python3 import/test_serve.py 2>&1)"
 serve_count="$(grep -oE 'Ran [0-9]+ tests?' <<<"$serve_output" | grep -oE '[0-9]+' | head -1)"
 
+# Coverage of the Python helpers, measured with the standard trace library.
+coverage_output="$(python3 "$root/test/coverage.py" 2>/dev/null | tail -1)"
+coverage_value="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["coverage"])' <<<"$coverage_output")"
+coverage_covered="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["coveredLines"])' <<<"$coverage_output")"
+coverage_total="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["totalLines"])' <<<"$coverage_output")"
+
 total=$((logic_count + chrome_count + serve_count))
 end="$(date +%s%N)"
 duration_ms=$(( (end - start) / 1000000 ))
@@ -38,10 +44,12 @@ cat > "$root/site/test-metrics.json" <<JSON
 {
   "unit": {
     "total": $total,
-    "coverage": null,
+    "coverage": $coverage_value,
     "failed": 0,
     "duration": $duration,
     "perTest": $per_test,
+    "coveredLines": $coverage_covered,
+    "totalLines": $coverage_total,
     "measured": "$measured",
     "suites": [
       {"name": "page logic", "tests": $logic_count},

@@ -1,11 +1,13 @@
 {
   "unit": {
     "total": 122,
-    "coverage": null,
+    "coverage": 32.3,
     "failed": 0,
-    "duration": 14.2,
-    "perTest": 0.116,
-    "measured": "2026-10-26T18:54",
+    "duration": 33.0,
+    "perTest": 0.27,
+    "coveredLines": 183,
+    "totalLines": 566,
+    "measured": "2026-10-26T19:30",
     "suites": [
       {
         "name": "page logic",
@@ -22,12 +24,14 @@
     ]
   },
   "e2e": {
-    "total": 12,
+    "total": 13,
     "failed": 0,
-    "coverage": null,
-    "duration": 3,
-    "perTest": 0.25,
-    "measured": "2026-10-26T17:54:26.560Z"
+    "coverage": 78.7,
+    "coveredLines": 669,
+    "totalLines": 850,
+    "duration": 4,
+    "perTest": 0.308,
+    "measured": "2026-10-26T18:29:56.272Z"
   },
   "requirements": {
     "footer": {

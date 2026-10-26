@@ -56,6 +56,8 @@ test("README opens the reader and a deep link survives a reload", async ({ page 
   await openWall(page);
   await page.locator("#readme-button").click();
   await expect(page.locator("#reader")).toBeVisible();
+  await expect(page.locator("header")).toBeVisible();
+  await expect(page.locator(".footer")).toBeVisible();
   await expect(page.locator(".reader-tab")).toHaveCount(5);
   await page.locator('.reader-section[aria-label="Tests"]').click();
   await expect(page).toHaveURL(/#\/docs\/readme\/tests$/);

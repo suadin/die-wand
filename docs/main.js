@@ -327,8 +327,8 @@ async function loadDocs() {
 }
 
 function showReader(open) {
+    wall.hidden = open;
     reader.hidden = !open;
-    document.body.classList.toggle('reading', open);
     if (open)
         document.getElementById('reader-close').focus();
 }

@@ -244,12 +244,8 @@ button.footer-item:hover { color: var(--ink); }
 /* ---- Documentation reader ------------------------------------------------ */
 
 .reader {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  overflow: auto;
-  padding: clamp(1rem, 4vw, 3.5rem);
-  background: var(--paper);
+  width: 100%;
+  padding-bottom: 2rem;
 }
 
 .reader-head {
@@ -420,10 +416,6 @@ button.footer-item:hover { color: var(--ink); }
 }
 .doc-test-group li { margin: 0; overflow-wrap: anywhere; }
 .doc-test-group li::marker { color: var(--green); font-weight: 900; }
-
-body.reading > header,
-body.reading > main,
-body.reading > footer { visibility: hidden; }
 
 /* ---- Tooltip: a speech bubble, not a plain title ------------------------- */
 

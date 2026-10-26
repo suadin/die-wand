@@ -27,11 +27,12 @@
     <p id="notice" hidden></p>
   </header>
 
-  <main id="wall" aria-live="polite"></main>
+  <main class="main-panel">
+    <div id="wall" aria-live="polite"></div>
 
   <!-- The documentation reader. It covers the wall instead of replacing it, so
        closing it costs nothing and the tiles stay where they are. -->
-  <section id="reader" class="reader" aria-label="Documentation" hidden>
+    <section id="reader" class="reader" aria-label="Documentation" hidden>
     <div class="reader-head">
       <div>
         <p class="eyebrow">Documentation</p>
@@ -42,8 +43,9 @@
     <div id="reader-tabs" class="reader-tabs" role="tablist" aria-label="Documents"></div>
     <nav id="reader-sections" class="reader-sections" aria-label="Sections"></nav>
     <h3 id="reader-section-title" class="reader-section-title"></h3>
-    <article id="reader-body" class="reader-body"></article>
-  </section>
+      <article id="reader-body" class="reader-body"></article>
+    </section>
+  </main>
 
   <!-- One compact footer: the documentation, the source, and the test numbers.
        On a full wall it sits below the fold; on the published demo it is the

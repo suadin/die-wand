@@ -7,8 +7,9 @@ die-wand applies it; project rules are in [APP SPECS](APP-SPECS.md).
 
 One centred line with icons: `README | source | unit | E2E`. Only README is a
 documentation item; it opens the reader, which lists README, both SPECS, GUIDE and
-release notes as tabs. Test items show count and coverage; a missing run is red
-and says `not executed`. Test tooltips always have three rows: `Measured`,
+release notes as tabs. Test items show count and line coverage; a missing run is red
+and says `not executed`. Coverage is always measured: Python via `trace`, browser
+JS via Playwright `page.coverage`. Test tooltips always have three rows: `Measured`,
 `Duration`, `Per test`.
 
 ## Reader
@@ -20,7 +21,7 @@ Release notes are one continuous page, newest first.
 ## Links and tests
 
 `#/docs/<doc>/<section>` restores the reader; `#/` is the wall. Unit tests live
-in `test/` and `import/`; Playwright E2E journeys live in `e2e/`. Both counts
+in `test/` and `import/`; Playwright E2E journeys live in `e2e/`. Both counts and both coverages
 come from `site/test-metrics.json`, and `./test/metrics.sh` merges the last E2E
 run into it. Each SPECS page lists the concrete names under `Automated tests`;
 `./test/check-requirements.py` fails when a name or a section drifts.

@@ -17,3 +17,5 @@ import/renames.json
 e2e/node_modules/
 e2e/test-results/
 e2e/test-metrics.e2e.json
+
+e2e/coverage.json
