@@ -38,4 +38,4 @@ repository. GitHub Pages publishes `docs/`, rebuilt from `site/` by
 
 ## Deviations
 
-No paging, no calendar and no E2E suite. The page is static and read-only.
+No paging and no calendar. The page is static and read-only.

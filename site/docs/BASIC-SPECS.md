@@ -20,8 +20,9 @@ Release notes are one continuous page, newest first.
 ## Links and tests
 
 `#/docs/<doc>/<section>` restores the reader; `#/` is the wall. Unit tests live
-in `test/` and `import/`; the count comes from `site/test-metrics.json`. There is
-no E2E suite, so that item says `not executed`.
+in `test/` and `import/`; Playwright E2E journeys live in `e2e/`. Both counts
+come from `site/test-metrics.json`, and `./test/metrics.sh` merges the last E2E
+run into it.
 
 ## Design
 

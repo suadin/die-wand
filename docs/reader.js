@@ -101,6 +101,27 @@ export function iconFor(title) {
     return 'dot';
 }
 
+const ICON_POOL = [
+    'book', 'play', 'install', 'sparkle', 'bookmark', 'sync', 'shield',
+    'sliders', 'server', 'pages', 'home', 'flask', 'pen', 'scale', 'layers',
+    'terminal', 'plug', 'tree', 'gamepad', 'dot',
+];
+
+/**
+ * One icon per heading, and no icon twice in the same row. The semantic match
+ * wins; a duplicate or an unknown heading takes the first unused icon.
+ */
+export function uniqueIcons(titles) {
+    const used = new Set();
+    return titles.map(title => {
+        let icon = iconFor(title);
+        if (used.has(icon))
+            icon = ICON_POOL.find(candidate => !used.has(candidate)) ?? 'dot';
+        used.add(icon);
+        return icon;
+    });
+}
+
 export function escapeHtml(value) {
     return String(value)
         .replace(/&/g, '&amp;')

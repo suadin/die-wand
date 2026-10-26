@@ -4,7 +4,8 @@ import GLib from 'gi://GLib';
 
 const file = GLib.getenv('TEST_READER')
     ?? decodeURIComponent(new URL('../site/reader.js', import.meta.url).pathname);
-const {docsHash, escapeHtml, iconFor, parseRoute, renderMarkdown, slugify, splitDocument}
+const {docsHash, escapeHtml, iconFor, parseRoute, renderMarkdown, slugify,
+       splitDocument, uniqueIcons}
     = await import(`file://${file}`);
 
 let fails = 0;
@@ -54,6 +55,11 @@ check('a play section gets the play icon', iconFor('▶ Play the game'), 'play')
 check('a test section gets the flask icon', iconFor('Tests and metrics'), 'flask');
 check('a security section gets the shield icon', iconFor('Security'), 'shield');
 check('an unknown section gets the dot', iconFor('Something else'), 'dot');
+
+const icons = uniqueIcons(['Overview', 'Tests', 'Tests', 'Something else']);
+check('icons in one row are unique', new Set(icons).size, icons.length);
+check('the first duplicate keeps its meaning', icons[0], 'book');
+check('the second duplicate changes', icons[1] !== icons[2], true);
 
 check('html is escaped', escapeHtml('<b>"x"</b>'),
     '&lt;b&gt;&quot;x&quot;&lt;/b&gt;');

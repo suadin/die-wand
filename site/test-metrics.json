@@ -1,16 +1,32 @@
 {
   "unit": {
-    "total": 119,
+    "total": 122,
     "coverage": null,
     "failed": 0,
-    "duration": 16.7,
-    "perTest": 0.141,
-    "measured": "2026-10-26T18:13",
+    "duration": 16.2,
+    "perTest": 0.133,
+    "measured": "2026-10-26T18:37",
     "suites": [
-      {"name": "page logic", "tests": 68},
-      {"name": "Chrome import", "tests": 37},
-      {"name": "helper", "tests": 14}
+      {
+        "name": "page logic",
+        "tests": 71
+      },
+      {
+        "name": "Chrome import",
+        "tests": 37
+      },
+      {
+        "name": "helper",
+        "tests": 14
+      }
     ]
   },
-  "e2e": null
+  "e2e": {
+    "total": 11,
+    "failed": 0,
+    "coverage": null,
+    "duration": 2,
+    "perTest": 0.182,
+    "measured": "2026-10-26T17:37:21.479Z"
+  }
 }

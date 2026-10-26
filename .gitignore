@@ -13,3 +13,7 @@ tiles.json
 
 # Personal renames, not for the repository.
 import/renames.json
+# E2E runtime and its raw report; the count is merged into site/test-metrics.json.
+e2e/node_modules/
+e2e/test-results/
+e2e/test-metrics.e2e.json

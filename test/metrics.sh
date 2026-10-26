@@ -48,6 +48,24 @@ cat > "$root/site/test-metrics.json" <<JSON
 JSON
 
 echo "unit: $total tests in ${duration}s (page logic $logic_count, Chrome import $chrome_count, helper $serve_count)"
+
+# Merge the last E2E run if one exists. Its raw report stays in e2e/; the page
+# reads the combined numbers.
+if [[ -f "$root/e2e/test-metrics.e2e.json" ]]; then
+  python3 - "$root/site/test-metrics.json" "$root/e2e/test-metrics.e2e.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+unit_path, e2e_path = Path(sys.argv[1]), Path(sys.argv[2])
+metrics = json.loads(unit_path.read_text())
+metrics["e2e"] = json.loads(e2e_path.read_text())
+unit_path.write_text(json.dumps(metrics, indent=2) + "\n")
+PY
+  e2e_total="$(python3 -c "import json;print(json.load(open('$root/e2e/test-metrics.e2e.json'))['total'])")"
+  echo "e2e: $e2e_total journeys"
+fi
+
 echo "wrote site/test-metrics.json"
 
 # The page fetches the file next to it; docs/ is the published copy.

@@ -17,7 +17,7 @@ import {
     fromBookmarks, flatten, hasLocalTiles, iconCandidates, normalize, glyph,
     count,
 } from './logic.js';
-import {docsHash, iconFor, parseRoute, renderMarkdown, splitDocument} from './reader.js';
+import {docsHash, parseRoute, renderMarkdown, splitDocument, uniqueIcons} from './reader.js';
 
 const STORAGE_KEY = 'die-wand.tiles';
 
@@ -383,16 +383,17 @@ async function showDocs(docSlug, sectionSlug) {
     readerSections.hidden = continuous;
     readerSectionTitle.hidden = continuous;
     if (!continuous) {
-        for (const item of doc.pages) {
+        const icons = uniqueIcons(doc.pages.map(item => item.title));
+        doc.pages.forEach((item, index) => {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = `reader-section${item.slug === page.slug ? ' active' : ''}`;
-            button.innerHTML = iconSvg(iconFor(item.title));
+            button.innerHTML = iconSvg(icons[index]);
             button.setAttribute('aria-label', item.title);
             button.dataset.tip = item.title;
             button.addEventListener('click', () => navigate(docsHash(doc.slug, item.slug)));
             readerSections.append(button);
-        }
+        });
         readerSectionTitle.textContent = page.title;
     }
     readerBody.innerHTML = renderMarkdown(page.markdown);
@@ -449,7 +450,7 @@ function notExecuted(container, label) {
 }
 
 function metricTip(metrics) {
-    const measured = String(metrics.measured ?? '—').replace('T', ' ');
+    const measured = String(metrics.measured ?? '—').replace('T', ' ').slice(0, 16);
     const duration = metrics.duration == null ? '—' : Number(metrics.duration).toFixed(1);
     const perTest = metrics.perTest == null ? '—' : Number(metrics.perTest).toFixed(3);
     return `Measured ${measured}\nDuration ${duration} s\nPer test ${perTest} s`;

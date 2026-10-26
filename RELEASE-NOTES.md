@@ -10,7 +10,9 @@ title, catch phrase. README in the footer opens the reader, which lists README,
 SPECS, SPECS basic, GUIDE and release notes as tabs. Unit and E2E use a clipboard
 check and a browser with a play triangle; a missing run is red, shows no percentage and says `not
 executed`. Test tooltips always carry `Measured`, `Duration`, and `Per test` on
-three rows.
+three rows. An 11-journey Playwright suite covers the wall, the reader tabs,
+deep links, unique section icons, tooltips, cursors, the bookmark drop and the
+no-overflow layout at 800 px.
 
 ## 0.2.0 — 2026-10-26
 

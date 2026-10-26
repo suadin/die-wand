@@ -91,10 +91,10 @@ shadows, yellow for selection, green for links and speech-bubble tooltips. The
 root stays at `100%`, so browser zoom scales the page and the layout still fits
 at 80–200 %. Cursors say what a thing does: hand for clickable, help for a
 tooltip, default for text. Purple is reserved for one special action; the wall
-has none yet. Three rules do not apply to a wall: it has no lists to page, no
-calendar, and no E2E suite. The static page also cannot start a test run itself,
-so the unit number is the last measurement written by `./test/metrics.sh`, not a
-button. Coverage is not measured yet.
+has none yet. One rule does not apply to a wall: it has no lists to page and no
+calendar. The static page cannot start a test run itself, so the numbers are the
+last measurement written by `./test/metrics.sh`, not a button. Unit coverage is
+not measured yet; E2E coverage is not measured yet either.
 
 ## Which bookmarks are supported
 
@@ -258,11 +258,22 @@ python3 import/test_serve.py  # the helper
 ```
 
 The footer reads `site/test-metrics.json`; commit it after a change so the page
-shows the current count. The suites currently hold 119 unit tests: 68 for the
-page logic and reader, 37 for the Chrome import, 14 for the helper. There is no
-E2E suite and no coverage measurement yet, and the footer says so rather than
-showing zero. `./test/run.sh` also fails when `site/docs/README.md` or
-`site/docs/GUIDE.md` drifted from the root documents; `./publish-pages.sh`
+shows the current count. The suites currently hold 122 unit tests: 71 for the
+page logic and reader, 37 for the Chrome import, 14 for the helper. The
+Playwright suite in `e2e/` has 11 journeys across the wall, the reader, the
+tooltips, the cursors and the bookmark drop:
+
+```sh
+cd e2e
+pnpm install
+pnpm test                  # writes e2e/test-metrics.e2e.json
+cd ..
+./test/metrics.sh          # merges unit and E2E numbers
+```
+
+Coverage is not measured yet, and the footer says so rather than showing zero.
+`./test/run.sh` also fails when a copy under `site/docs/` drifts from its source
+under `specs/`, the root README, GUIDE or release notes; `./publish-pages.sh`
 refreshes them.
 
 ## How this was written
