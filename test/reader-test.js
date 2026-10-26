@@ -4,7 +4,7 @@ import GLib from 'gi://GLib';
 
 const file = GLib.getenv('TEST_READER')
     ?? decodeURIComponent(new URL('../site/reader.js', import.meta.url).pathname);
-const {docsHash, escapeHtml, parseRoute, renderMarkdown, slugify, splitDocument}
+const {docsHash, escapeHtml, iconFor, parseRoute, renderMarkdown, slugify, splitDocument}
     = await import(`file://${file}`);
 
 let fails = 0;
@@ -49,6 +49,11 @@ check('route to a document', parseRoute('#/docs/guide'),
     {view: 'docs', doc: 'guide', section: null});
 check('route to the wall', parseRoute(''), {view: 'wall'});
 check('unknown route is the wall', parseRoute('#/elsewhere'), {view: 'wall'});
+
+check('a play section gets the play icon', iconFor('▶ Play the game'), 'play');
+check('a test section gets the flask icon', iconFor('Tests and metrics'), 'flask');
+check('a security section gets the shield icon', iconFor('Security'), 'shield');
+check('an unknown section gets the dot', iconFor('Something else'), 'dot');
 
 check('html is escaped', escapeHtml('<b>"x"</b>'),
     '&lt;b&gt;&quot;x&quot;&lt;/b&gt;');

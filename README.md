@@ -72,9 +72,11 @@ browser** runs, not where Chrome runs. On another device it shows the last
   service, so no address of yours is sent to a third party. What has no icon at
   all gets its first letter.
 - **Serves its own documentation.** The footer opens this README and the
-  [GUIDE](GUIDE.md) in the page, one page per level-two heading. `#/docs/readme`
-  and `#/docs/readme/tests` are stable addresses; reloading one restores the
-  same page. A link inside a document opens the other document in the reader.
+  [GUIDE](GUIDE.md) in the page, one page per level-two heading. Sections are
+  navigated by a row of line icons, one per heading, with the heading as
+  tooltip. `#/docs/readme` and `#/docs/readme/tests` are stable addresses;
+  reloading one restores the same page. A link inside a document opens the
+  other document in the reader.
 - **Shows where it comes from and what it was measured with.** The footer
   carries the repository, the last unit-test count from
   `site/test-metrics.json`, and the E2E state. A missing measurement reads
@@ -82,7 +84,7 @@ browser** runs, not where Chrome runs. On another device it shows the last
 
 The interface follows the workspace contract where it applies: README and source
 in one centred footer, deep links, `yyyy-mm-dd` where dates appear, quiet
-colours, one name for one thing. Three rules do not apply to a wall: it has no
+colours with short motion and offset shadows, one name for one thing. Three rules do not apply to a wall: it has no
 lists to page, no calendar, and no E2E suite. The static page also cannot start
 a test run itself, so the unit number is the last measurement written by
 `./test/metrics.sh`, not a button. Coverage is not measured yet.
@@ -249,7 +251,7 @@ python3 import/test_serve.py  # the helper
 ```
 
 The footer reads `site/test-metrics.json`; commit it after a change so the page
-shows the current count. The suites currently hold 115 unit tests: 64 for the
+shows the current count. The suites currently hold 119 unit tests: 68 for the
 page logic and reader, 37 for the Chrome import, 14 for the helper. There is no
 E2E suite and no coverage measurement yet, and the footer says so rather than
 showing zero. `./test/run.sh` also fails when `site/docs/README.md` or

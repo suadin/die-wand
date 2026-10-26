@@ -64,6 +64,43 @@ export function parseRoute(hash) {
     return {view: 'wall'};
 }
 
+/**
+ * The icon that stands for a section. Sections are navigated by icons, so the
+ * mapping is data: the tooltip still gives the full title. Adding a document
+ * with new headings means extending this table, not changing the reader.
+ */
+const ICON_RULES = [
+    [/play|start page|spiel/, 'play'],
+    [/install|setup|download/, 'install'],
+    [/game mode|modes/, 'gamepad'],
+    [/tech|stack/, 'layers'],
+    [/run|local/, 'terminal'],
+    [/api/, 'plug'],
+    [/project|structure/, 'tree'],
+    [/test/, 'flask'],
+    [/security|sicher/, 'shield'],
+    [/config|setting|einstellung/, 'sliders'],
+    [/why|reason|own machine/, 'home'],
+    [/deploy|server|host/, 'server'],
+    [/github|pages/, 'pages'],
+    [/how|written|geschrieben/, 'pen'],
+    [/licen[cs]e/, 'scale'],
+    [/feature|does|capab|kann/, 'sparkle'],
+    [/bookmark|supported|source|woher/, 'bookmark'],
+    [/read|chrome|automatic|sync|fresh|helper/, 'sync'],
+    [/export|import/, 'bookmark'],
+    [/documentation|guide|readme|overview/, 'book'],
+];
+
+export function iconFor(title) {
+    const text = String(title ?? '').toLowerCase();
+    for (const [pattern, icon] of ICON_RULES) {
+        if (pattern.test(text))
+            return icon;
+    }
+    return 'dot';
+}
+
 export function escapeHtml(value) {
     return String(value)
         .replace(/&/g, '&amp;')

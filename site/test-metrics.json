@@ -1,10 +1,10 @@
 {
   "unit": {
-    "total": 115,
+    "total": 119,
     "coverage": null,
-    "measured": "2026-10-26T13:16",
+    "measured": "2026-10-26T16:17",
     "suites": [
-      {"name": "page logic", "tests": 64},
+      {"name": "page logic", "tests": 68},
       {"name": "Chrome import", "tests": 37},
       {"name": "helper", "tests": 14}
     ]

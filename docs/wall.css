@@ -1,23 +1,31 @@
 :root {
   color-scheme: dark light;
-  --bg: #14161b;
-  --surface: #1e222a;
-  --surface-hover: #2a3039;
-  --border: #313844;
-  --text: #e7e9ee;
-  --muted: #9aa2b0;
-  --accent: #6f9df0;
+  --bg: #17181d;
+  --surface: #20232b;
+  --surface-hover: #292d37;
+  --border: #3b4250;
+  --ink: #07080b;
+  --text: #ece9e2;
+  --muted: #a3a8b4;
+  --accent: #f2c94c;
+  --link: #9db8ff;
+  --good: #6fcf97;
+  --warn: #eb5757;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    --bg: #f5f6f8;
-    --surface: #fff;
-    --surface-hover: #eef1f6;
-    --border: #dde1e8;
-    --text: #1b1e24;
-    --muted: #5f6775;
-    --accent: #2f6fd0;
+    --bg: #f4f0e6;
+    --surface: #fffdf8;
+    --surface-hover: #f8f1dc;
+    --border: #cfc7b5;
+    --ink: #20222a;
+    --text: #23252c;
+    --muted: #62687a;
+    --accent: #c99700;
+    --link: #2f6fd0;
+    --good: #2f9e63;
+    --warn: #c0392b;
   }
 }
 
@@ -51,7 +59,7 @@ header h1 {
   gap: .55rem;
   margin: 0;
   font-size: 1.4rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: .07em;
   color: var(--text);
   white-space: nowrap;
@@ -59,10 +67,14 @@ header h1 {
 
 /* The wall icon next to the name, the same one as the favicon. */
 header .logo {
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 4px;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 140ms ease;
 }
+
+header h1:hover .logo { transform: rotate(-6deg) translateY(-1px); }
 
 header #notice {
   grid-column: 2;
@@ -75,7 +87,8 @@ header #notice {
   color: var(--muted);
 }
 
-a:focus-visible {
+a:focus-visible,
+button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -86,7 +99,8 @@ a:focus-visible {
   gap: 1.2rem;
 }
 
-/* Square: icon on top, text below, both centered. */
+/* Square: icon on top, text below, both centered. The offset shadow and the
+   short lift are the playful part; the palette stays quiet. */
 .tile {
   position: relative;
   display: flex;
@@ -96,14 +110,25 @@ a:focus-visible {
   gap: .6rem;
   aspect-ratio: 1;
   padding: 1rem .5rem;
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
   background: var(--surface);
   color: inherit;
   text-decoration: none;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
 }
 
-.tile:hover { background: var(--surface-hover); border-color: var(--accent); }
+.tile:hover {
+  border-color: var(--accent);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.tile:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
 
 /* Above the text: the icon of the site, otherwise a large glyph. */
 .icon {
@@ -111,7 +136,8 @@ a:focus-visible {
   width: 3rem;
   height: 3rem;
   object-fit: contain;
-  border-radius: 6px;
+  border-radius: 8px;
+  transition: transform 140ms ease;
 }
 
 .initial {
@@ -123,9 +149,13 @@ a:focus-visible {
   font-size: 2.1rem;
   line-height: 1;
   color: var(--text);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--surface-hover);
+  transition: transform 140ms ease;
 }
+
+.tile:hover .icon,
+.tile:hover .initial { transform: translateY(-2px) rotate(-3deg); }
 
 .label { min-width: 0; width: 100%; text-align: center; }
 
@@ -150,7 +180,7 @@ body.dragging #wall { outline: 2px dashed var(--accent); outline-offset: 8px; }
   justify-content: center;
   margin-top: 1.4rem;
   padding: .7rem 0 .9rem;
-  border-top: 1px solid var(--border);
+  border-top: 2px solid var(--border);
   font-size: .76rem;
   color: var(--muted);
 }
@@ -173,15 +203,14 @@ body.dragging #wall { outline: 2px dashed var(--accent); outline-offset: 8px; }
   background: transparent;
   color: var(--muted);
   font: inherit;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 button.footer-item { cursor: pointer; }
+button.footer-item:hover { color: var(--accent); }
 
-.footer a { color: var(--accent); text-decoration: none; }
+.footer a { color: var(--link); text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
-.footer a:focus-visible,
-button.footer-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .footer-sep { color: var(--muted); opacity: .55; }
 
@@ -208,7 +237,7 @@ button.footer-item:focus-visible { outline: 2px solid var(--accent); outline-off
 .eyebrow {
   margin: 0;
   font-size: .72rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--muted);
@@ -220,65 +249,107 @@ button.footer-item:focus-visible { outline: 2px solid var(--accent); outline-off
 }
 
 .button {
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 999px;
   padding: .45rem 1rem;
   background: var(--surface);
   color: var(--text);
   font: inherit;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
 }
 
-.button:hover { border-color: var(--accent); background: var(--surface-hover); }
-.button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.button:hover {
+  border-color: var(--accent);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.button:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
 
 .reader-tabs,
 .reader-sections {
   display: flex;
   flex-wrap: wrap;
-  gap: .4rem;
+  gap: .45rem;
   max-width: 56rem;
   margin: 1rem auto .8rem;
 }
 
-.reader-tab,
-.reader-section {
-  border: 1px solid var(--border);
+.reader-tab {
+  border: 2px solid var(--border);
   border-radius: 999px;
-  padding: .3rem .8rem;
-  background: transparent;
+  padding: .3rem .9rem;
+  background: var(--surface);
   color: var(--muted);
   font: inherit;
   font-size: .82rem;
+  font-weight: 700;
   cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease, transform 120ms ease;
 }
 
-.reader-tab.active,
-.reader-section.active {
-  border-color: var(--accent);
-  background: var(--surface-hover);
-  color: var(--text);
+/* Sections are icons, not labels. The tooltip gives the heading. */
+.reader-section {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 2px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease,
+    background 120ms ease, color 120ms ease;
 }
 
 .reader-tab:hover,
-.reader-section:hover { color: var(--text); }
+.reader-section:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.reader-section:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.reader-tab.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.reader-section.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--ink);
+}
 
 .reader-section-title {
   max-width: 56rem;
   margin: 1.2rem auto .5rem;
   font-size: 1rem;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .reader-body {
   max-width: 56rem;
   margin: 0 auto 2rem;
   padding: clamp(1rem, 3vw, 1.8rem);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
   background: var(--surface);
+  box-shadow: 5px 5px 0 var(--ink);
   font-size: .95rem;
   line-height: 1.65;
 }
@@ -291,19 +362,19 @@ button.footer-item:focus-visible { outline: 2px solid var(--accent); outline-off
 .reader-body li { margin: .2rem 0; }
 .reader-body code {
   padding: .08rem .3rem;
-  border-radius: 4px;
+  border-radius: 5px;
   background: var(--surface-hover);
   font-size: .88em;
 }
 .reader-body pre {
   overflow: auto;
   padding: .8rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
   background: var(--bg);
 }
 .reader-body pre code { background: none; padding: 0; }
-.reader-body a { color: var(--accent); }
+.reader-body a { color: var(--link); }
 .reader-body table {
   width: 100%;
   margin: .8rem 0;
@@ -320,7 +391,7 @@ button.footer-item:focus-visible { outline: 2px solid var(--accent); outline-off
 .reader-body blockquote {
   margin: .8rem 0;
   padding-left: .9rem;
-  border-left: 3px solid var(--border);
+  border-left: 3px solid var(--accent);
   color: var(--muted);
 }
 
@@ -334,13 +405,31 @@ body.reading > footer { visibility: hidden; }
   position: fixed;
   z-index: 20;
   max-width: min(24rem, calc(100vw - 2rem));
-  padding: .35rem .6rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  padding: .4rem .7rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
   background: var(--surface);
   color: var(--text);
-  font-size: .76rem;
+  font-size: .78rem;
+  font-weight: 600;
   line-height: 1.35;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
+  box-shadow: 3px 3px 0 var(--ink);
   pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .icon,
+  .initial,
+  .reader-section,
+  .button,
+  header .logo { transition: none; }
+  .tile:hover,
+  .tile:active,
+  .tile:hover .icon,
+  .tile:hover .initial,
+  .reader-section:hover,
+  .button:hover,
+  .button:active,
+  header h1:hover .logo { transform: none; }
 }
