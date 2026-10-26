@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DIE WAND</title>
   <meta name="description" content="Your Chrome bookmark bar as a start page.">
-  <meta name="theme-color" content="#17181d" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#f4f0e6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#201f25" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f5f0e5" media="(prefers-color-scheme: light)">
   <!-- The number after the name forces Chrome to fetch the icon again. Without
        it the old version sticks in the icon cache, across reloads and across
        devices. -->
@@ -17,7 +17,10 @@
   <!-- No button: everything comes from Chrome, and what Chrome can do the user
        can do there too. -->
   <header>
-    <h1><img class="logo" src="icon.svg" alt=""> DIE WAND</h1>
+    <div class="brand-block">
+      <h1><img class="logo" src="icon.svg" alt=""> DIE WAND</h1>
+      <p class="tagline">Your bookmark bar, one wall away.</p>
+    </div>
     <!-- The notice sits in the header, centered. At the bottom it was the most
          conspicuous part of the page, which is exactly what bothered. -->
     <p id="notice" hidden></p>

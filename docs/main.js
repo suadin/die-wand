@@ -458,8 +458,10 @@ function placeTip(target) {
     const left = Math.min(Math.max(8, box.left + box.width / 2 - tip.width / 2),
         window.innerWidth - tip.width - 8);
     const above = box.top - tip.height - 8;
+    const placement = above >= 8 ? 'top' : 'bottom';
+    tooltip.dataset.placement = placement;
     tooltip.style.left = `${left}px`;
-    tooltip.style.top = `${above >= 8 ? above : box.bottom + 8}px`;
+    tooltip.style.top = `${placement === 'top' ? above : box.bottom + 8}px`;
 }
 
 function hideTip() {

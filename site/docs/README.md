@@ -83,11 +83,15 @@ browser** runs, not where Chrome runs. On another device it shows the last
   "not measured", never zero.
 
 The interface follows the workspace contract where it applies: README and source
-in one centred footer, deep links, `yyyy-mm-dd` where dates appear, quiet
-colours with short motion and offset shadows, one name for one thing. Three rules do not apply to a wall: it has no
-lists to page, no calendar, and no E2E suite. The static page also cannot start
-a test run itself, so the unit number is the last measurement written by
-`./test/metrics.sh`, not a button. Coverage is not measured yet.
+in one centred footer, deep links, `yyyy-mm-dd` where dates appear, one name for
+one thing. The design follows Diary's reference: the Comic Sans/Trebuchet stack,
+root sizing that scales with the viewport, thick dashed dividers, 2px ink
+outlines, hard offset shadows, yellow for selection, green for links and
+speech-bubble tooltips. Purple is reserved for one special action; the wall has
+none yet. Three rules do not apply to a wall: it has no lists to page, no
+calendar, and no E2E suite. The static page also cannot start a test run itself,
+so the unit number is the last measurement written by `./test/metrics.sh`, not a
+button. Coverage is not measured yet.
 
 ## Which bookmarks are supported
 
