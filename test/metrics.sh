@@ -28,6 +28,12 @@ duration="$(LC_ALL=C awk "BEGIN { printf \"%.1f\", $duration_ms / 1000 }")"
 per_test="$(LC_ALL=C awk "BEGIN { printf \"%.3f\", $duration_ms / 1000 / $total }")"
 measured="$(date '+%Y-%m-%dT%H:%M')"
 
+# Keep the last E2E result when only the unit suites are measured again.
+previous_e2e="null"
+if [[ -f "$root/site/test-metrics.json" ]]; then
+  previous_e2e="$(python3 -c "import json;print(json.dumps(json.load(open('$root/site/test-metrics.json')).get('e2e')))" 2>/dev/null || echo null)"
+fi
+
 cat > "$root/site/test-metrics.json" <<JSON
 {
   "unit": {
@@ -43,7 +49,7 @@ cat > "$root/site/test-metrics.json" <<JSON
       {"name": "helper", "tests": $serve_count}
     ]
   },
-  "e2e": null
+  "e2e": $previous_e2e
 }
 JSON
 
