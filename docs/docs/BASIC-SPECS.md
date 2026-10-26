@@ -5,11 +5,11 @@ die-wand applies it; project rules are in [APP SPECS](APP-SPECS.md).
 
 ## Footer
 
-One centred line with icons: `README | SPECS | SPECS basic | GUIDE | RELEASE
-NOTES | source | unit | E2E`. Every documentation item opens its page directly.
-Test items show count and coverage; a missing run is red and says `not
-executed`. Test tooltips always have three rows: `Measured`, `Duration`,
-`Per test`.
+One centred line with icons: `README | source | unit | E2E`. Only README is a
+documentation item; it opens the reader, which lists README, both SPECS, GUIDE and
+release notes as tabs. Test items show count and coverage; a missing run is red
+and says `not executed`. Test tooltips always have three rows: `Measured`,
+`Duration`, `Per test`.
 
 ## Reader
 

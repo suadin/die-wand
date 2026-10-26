@@ -71,13 +71,13 @@ browser** runs, not where Chrome runs. On another device it shows the last
   where Home Assistant puts it) for what Chrome has no bitmap for. No icon
   service, so no address of yours is sent to a third party. What has no icon at
   all gets its first letter.
-- **Serves its own documentation.** The footer opens README, [APP
-  SPECS](specs/APP-SPECS.md), [BASIC SPECS](specs/BASIC-SPECS.md), the
-  [GUIDE](GUIDE.md), and the [RELEASE NOTES](RELEASE-NOTES.md) directly. Each
-  document is split into one page per level-two heading, with line icons for the
-  sections. `#/docs/readme` and `#/docs/readme/tests` are stable addresses; a
-  reload restores the same page. A link inside a document opens the other
-  document in the reader.
+- **Serves its own documentation.** README in the footer opens the reader. It
+  lists README, [APP SPECS](specs/APP-SPECS.md), [BASIC
+  SPECS](specs/BASIC-SPECS.md), the [GUIDE](GUIDE.md), and the [RELEASE
+  NOTES](RELEASE-NOTES.md) as tabs. Each document is split into one page per
+  level-two heading, with line icons for the sections. `#/docs/readme` and
+  `#/docs/readme/tests` are stable addresses; a reload restores the same page. A
+  link inside a document opens the other document in the reader.
 - **Shows where it comes from and what it was measured with.** The footer
   carries the repository, the last unit-test count from
   `site/test-metrics.json`, and the E2E state. A missing measurement reads

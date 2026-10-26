@@ -6,9 +6,9 @@ The wall follows the shared design contract: Diary's type stack, thick dashed
 dividers, 2px ink outlines, hard shadows, speech-bubble tooltips and cursor
 rules. The root follows the browser base at `100%`, so Ctrl + wheel zoom scales
 the page and the layout still fits at 80–200 %. The header is one row: icon,
-title, catch phrase. The footer opens README, SPECS, SPECS basic, GUIDE and
-release notes directly. Unit and E2E use a clipboard check and a browser with a
-play triangle; a missing run is red, shows no percentage and says `not
+title, catch phrase. README in the footer opens the reader, which lists README,
+SPECS, SPECS basic, GUIDE and release notes as tabs. Unit and E2E use a clipboard
+check and a browser with a play triangle; a missing run is red, shows no percentage and says `not
 executed`. Test tooltips always carry `Measured`, `Duration`, and `Per test` on
 three rows.
 
