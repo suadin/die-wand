@@ -26,7 +26,11 @@ const STORAGE_KEY = 'die-wand.tiles';
 // page is what lets the reader work on the NAS and on GitHub Pages alike.
 const DOCUMENTS = [
     {slug: 'readme', title: 'README', file: 'docs/README.md'},
+    {slug: 'app-specs', title: 'SPECS', file: 'docs/APP-SPECS.md'},
+    {slug: 'basic-specs', title: 'SPECS basic', file: 'docs/BASIC-SPECS.md'},
     {slug: 'guide', title: 'GUIDE', file: 'docs/GUIDE.md'},
+    {slug: 'release-notes', title: 'RELEASE NOTES', file: 'docs/RELEASE-NOTES.md',
+     continuous: true},
 ];
 
 // The helper that reads Chrome. If it does not run, things continue with the
@@ -49,7 +53,9 @@ const readerSections = document.getElementById('reader-sections');
 const readerSectionTitle = document.getElementById('reader-section-title');
 const readerBody = document.getElementById('reader-body');
 const unitMetrics = document.getElementById('unit-metrics');
+const unitLabel = document.getElementById('unit-label');
 const e2eMetrics = document.getElementById('e2e-metrics');
+const e2eLabel = document.getElementById('e2e-label');
 
 // How long a message stays. Most messages disappear on their own — an empty
 // wall does not, that is a state and not an intermediate step.
@@ -294,6 +300,11 @@ function iconSvg(name) {
 
 // ---- Documentation reader ------------------------------------------------
 
+function continuousDocument(slug, title, markdown) {
+    const body = String(markdown).replace(/^# .*\n/, '').trim();
+    return {slug, title, pages: [{title: 'All versions', slug: 'all', markdown: body}]};
+}
+
 async function loadDocs() {
     if (state.docs)
         return state.docs;
@@ -303,11 +314,10 @@ async function loadDocs() {
             const response = await fetch(entry.file, {cache: 'no-store'});
             if (!response.ok)
                 continue;
-            docs.push(splitDocument({
-                slug: entry.slug,
-                title: entry.title,
-                markdown: await response.text(),
-            }));
+            const markdown = await response.text();
+            docs.push(entry.continuous
+                ? continuousDocument(entry.slug, entry.title, markdown)
+                : splitDocument({slug: entry.slug, title: entry.title, markdown}));
         } catch (e) {
             // A missing document is not fatal: the other tabs still work.
         }
@@ -323,10 +333,16 @@ function showReader(open) {
         document.getElementById('reader-close').focus();
 }
 
+const DOC_FILES = {
+    'readme.md': 'readme',
+    'guide.md': 'guide',
+    'app-specs.md': 'app-specs',
+    'basic-specs.md': 'basic-specs',
+    'release-notes.md': 'release-notes',
+};
+
 function docLinkTarget(file, anchor) {
-    const name = String(file ?? '').toLowerCase();
-    const slug = name === 'readme.md' ? 'readme'
-        : name === 'guide.md' ? 'guide' : null;
+    const slug = DOC_FILES[String(file ?? '').toLowerCase()];
     if (!slug)
         return null;
     const section = String(anchor ?? '').replace(/^#/, '');
@@ -412,7 +428,9 @@ readerBody.addEventListener('click', event => {
     navigate(target);
 });
 
-document.getElementById('readme-button').addEventListener('click', () => navigate(docsHash('readme')));
+for (const button of document.querySelectorAll('[data-doc]')) {
+    button.addEventListener('click', () => navigate(docsHash(button.dataset.doc)));
+}
 document.getElementById('reader-close').addEventListener('click', () => navigate('#/'));
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !reader.hidden)
@@ -424,7 +442,22 @@ window.addEventListener('hashchange', () => {
 
 // The footer shows the last measurement written by ./test/metrics.sh. A static
 // page cannot start a test run itself, so there is no button here.
+function notExecuted(container, label) {
+    container.classList.add('failed');
+    container.dataset.tip = 'not executed';
+    label.textContent = 'not executed';
+}
+
+function metricTip(metrics) {
+    const measured = String(metrics.measured ?? '—').replace('T', ' ');
+    const duration = metrics.duration == null ? '—' : Number(metrics.duration).toFixed(1);
+    const perTest = metrics.perTest == null ? '—' : Number(metrics.perTest).toFixed(3);
+    return `Measured ${measured}\nDuration ${duration} s\nPer test ${perTest} s`;
+}
+
 async function loadMetrics() {
+    notExecuted(unitMetrics, unitLabel);
+    notExecuted(e2eMetrics, e2eLabel);
     try {
         const response = await fetch('test-metrics.json', {cache: 'no-store'});
         if (!response.ok)
@@ -432,16 +465,24 @@ async function loadMetrics() {
         const metrics = await response.json();
         const unit = metrics.unit;
         if (unit && Number.isFinite(unit.total)) {
-            unitMetrics.textContent = `unit ${unit.total} tests`
-                + (unit.coverage == null ? ' · coverage not measured' : ` · ${unit.coverage} %`);
-            if (unit.measured)
-                unitMetrics.dataset.tip = `Measured ${unit.measured}. Run ./test/metrics.sh to measure again`;
+            unitMetrics.classList.toggle('failed', Number(unit.failed) > 0);
+            const coverage = unit.coverage == null ? ' · coverage not measured'
+                : ` · ${unit.coverage} %`;
+            const failed = Number(unit.failed) > 0 ? ` · ${unit.failed} failed` : '';
+            unitLabel.textContent = `unit ${unit.total} tests${coverage}${failed}`;
+            unitMetrics.dataset.tip = metricTip(unit);
         }
         const e2e = metrics.e2e;
-        if (e2e && Number.isFinite(e2e.total))
-            e2eMetrics.textContent = `e2e ${e2e.total} journeys`;
+        if (e2e && Number.isFinite(e2e.total)) {
+            e2eMetrics.classList.toggle('failed', Number(e2e.failed) > 0);
+            const coverage = e2e.coverage == null ? ' · coverage not measured'
+                : ` · ${e2e.coverage} %`;
+            const failed = Number(e2e.failed) > 0 ? ` · ${e2e.failed} failed` : '';
+            e2eLabel.textContent = `e2e ${e2e.total} journeys${coverage}${failed}`;
+            e2eMetrics.dataset.tip = metricTip(e2e);
+        }
     } catch (e) {
-        // No metrics file: the footer keeps "not measured".
+        // No metrics: the red "not executed" state stays.
     }
 }
 

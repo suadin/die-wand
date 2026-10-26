@@ -8,7 +8,8 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # The reader fetches these next to the page. Keeping the copies in site/ makes
 # the same page work from a local server, from the NAS, and from Pages.
 mkdir -p "$here/site/docs"
-cp "$here/README.md" "$here/GUIDE.md" "$here/site/docs/"
+cp "$here/README.md" "$here/GUIDE.md" "$here/RELEASE-NOTES.md" "$here/site/docs/"
+cp "$here"/specs/*.md "$here/site/docs/"
 
 rm -rf "$here/docs"
 mkdir -p "$here/docs"

@@ -71,24 +71,27 @@ browser** runs, not where Chrome runs. On another device it shows the last
   where Home Assistant puts it) for what Chrome has no bitmap for. No icon
   service, so no address of yours is sent to a third party. What has no icon at
   all gets its first letter.
-- **Serves its own documentation.** The footer opens this README and the
-  [GUIDE](GUIDE.md) in the page, one page per level-two heading. Sections are
-  navigated by a row of line icons, one per heading, with the heading as
-  tooltip. `#/docs/readme` and `#/docs/readme/tests` are stable addresses;
-  reloading one restores the same page. A link inside a document opens the
-  other document in the reader.
+- **Serves its own documentation.** The footer opens README, [APP
+  SPECS](specs/APP-SPECS.md), [BASIC SPECS](specs/BASIC-SPECS.md), the
+  [GUIDE](GUIDE.md), and the [RELEASE NOTES](RELEASE-NOTES.md) directly. Each
+  document is split into one page per level-two heading, with line icons for the
+  sections. `#/docs/readme` and `#/docs/readme/tests` are stable addresses; a
+  reload restores the same page. A link inside a document opens the other
+  document in the reader.
 - **Shows where it comes from and what it was measured with.** The footer
   carries the repository, the last unit-test count from
   `site/test-metrics.json`, and the E2E state. A missing measurement reads
   "not measured", never zero.
 
-The interface follows the workspace contract where it applies: README and source
-in one centred footer, deep links, `yyyy-mm-dd` where dates appear, one name for
-one thing. The design follows Diary's reference: the Comic Sans/Trebuchet stack,
-root sizing that scales with the viewport, thick dashed dividers, 2px ink
-outlines, hard offset shadows, yellow for selection, green for links and
-speech-bubble tooltips. Purple is reserved for one special action; the wall has
-none yet. Three rules do not apply to a wall: it has no lists to page, no
+The interface follows the workspace contract where it applies: documentation and
+source in one centred footer, deep links, `yyyy-mm-dd` where dates appear, one
+name for one thing. The design follows Diary's reference: the Comic
+Sans/Trebuchet stack, thick dashed dividers, 2px ink outlines, hard offset
+shadows, yellow for selection, green for links and speech-bubble tooltips. The
+root stays at `100%`, so browser zoom scales the page and the layout still fits
+at 80–200 %. Cursors say what a thing does: hand for clickable, help for a
+tooltip, default for text. Purple is reserved for one special action; the wall
+has none yet. Three rules do not apply to a wall: it has no lists to page, no
 calendar, and no E2E suite. The static page also cannot start a test run itself,
 so the unit number is the last measurement written by `./test/metrics.sh`, not a
 button. Coverage is not measured yet.

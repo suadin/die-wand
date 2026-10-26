@@ -11,6 +11,8 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
 
+start="$(date +%s%N)"
+
 logic_output="$(./test/run.sh 2>&1)" || { echo "$logic_output"; exit 1; }
 logic_count="$(grep -oE '^[0-9]+ checks$' <<<"$logic_output" | grep -oE '^[0-9]+' | awk '{sum += $1} END {print sum + 0}')"
 
@@ -20,6 +22,10 @@ serve_output="$(python3 import/test_serve.py 2>&1)"
 serve_count="$(grep -oE 'Ran [0-9]+ tests?' <<<"$serve_output" | grep -oE '[0-9]+' | head -1)"
 
 total=$((logic_count + chrome_count + serve_count))
+end="$(date +%s%N)"
+duration_ms=$(( (end - start) / 1000000 ))
+duration="$(LC_ALL=C awk "BEGIN { printf \"%.1f\", $duration_ms / 1000 }")"
+per_test="$(LC_ALL=C awk "BEGIN { printf \"%.3f\", $duration_ms / 1000 / $total }")"
 measured="$(date '+%Y-%m-%dT%H:%M')"
 
 cat > "$root/site/test-metrics.json" <<JSON
@@ -27,6 +33,9 @@ cat > "$root/site/test-metrics.json" <<JSON
   "unit": {
     "total": $total,
     "coverage": null,
+    "failed": 0,
+    "duration": $duration,
+    "perTest": $per_test,
     "measured": "$measured",
     "suites": [
       {"name": "page logic", "tests": $logic_count},
@@ -38,7 +47,7 @@ cat > "$root/site/test-metrics.json" <<JSON
 }
 JSON
 
-echo "unit: $total tests (page logic $logic_count, Chrome import $chrome_count, helper $serve_count)"
+echo "unit: $total tests in ${duration}s (page logic $logic_count, Chrome import $chrome_count, helper $serve_count)"
 echo "wrote site/test-metrics.json"
 
 # The page fetches the file next to it; docs/ is the published copy.

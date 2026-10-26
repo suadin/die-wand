@@ -28,11 +28,12 @@ done
 TEST_LOGIC="$root/site/logic.js" gjs -m "$root/test/logic-test.js"
 TEST_READER="$root/site/reader.js" gjs -m "$root/test/reader-test.js"
 
-# The reader fetches the copies next to the page. A copy that drifted from the
-# root README is a documentation bug, not a build detail.
-for doc in README.md GUIDE.md; do
-  if ! cmp -s "$root/$doc" "$root/site/docs/$doc"; then
-    echo "ERROR site/docs/$doc differs from $doc — run ./publish-pages.sh"
+# The reader fetches the copies next to the page. A copy that drifted from its
+# source is a documentation bug, not a build detail.
+for doc in README.md GUIDE.md RELEASE-NOTES.md specs/APP-SPECS.md specs/BASIC-SPECS.md; do
+  target="$root/site/docs/$(basename "$doc")"
+  if ! cmp -s "$root/$doc" "$target"; then
+    echo "ERROR $target differs from $doc — run ./publish-pages.sh"
     exit 1
   fi
 done

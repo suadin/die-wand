@@ -2,7 +2,10 @@
   "unit": {
     "total": 119,
     "coverage": null,
-    "measured": "2026-10-26T17:25",
+    "failed": 0,
+    "duration": 16.1,
+    "perTest": 0.136,
+    "measured": "2026-10-26T17:56",
     "suites": [
       {"name": "page logic", "tests": 68},
       {"name": "Chrome import", "tests": 37},
