@@ -42,7 +42,7 @@ const HELPER = 'http://127.0.0.1:8124/tiles.json';
 // retry the same dead path on every redraw.
 const iconMissing = new Set();
 
-const state = {tiles: [], docs: null, currentDoc: null};
+const state = {tiles: [], docs: null, currentDoc: null, metrics: null};
 
 const wall = document.getElementById('wall');
 const notice = document.getElementById('notice');
@@ -397,7 +397,51 @@ async function showDocs(docSlug, sectionSlug) {
         readerSectionTitle.textContent = page.title;
     }
     readerBody.innerHTML = renderMarkdown(page.markdown);
+    if (doc.slug === 'app-specs' || doc.slug === 'basic-specs') {
+        const metrics = state.metrics ?? await loadMetrics();
+        renderRequirementTests(page.slug, metrics);
+    }
     readerBody.scrollTop = 0;
+}
+
+function readableTestName(name) {
+    return name.startsWith('test_')
+        ? name.slice(5).replace(/_/g, ' ')
+        : name;
+}
+
+function renderRequirementTests(slug, metrics) {
+    const groups = metrics?.requirements?.[slug] ?? {};
+    const box = document.createElement('section');
+    box.className = 'doc-tests';
+    const heading = document.createElement('h4');
+    heading.textContent = 'Automated tests';
+    box.append(heading);
+    const unit = groups.unit ?? [];
+    const e2e = groups.e2e ?? [];
+    if (!unit.length && !e2e.length) {
+        const empty = document.createElement('p');
+        empty.textContent = 'No automated test names this requirement yet.';
+        box.append(empty);
+    }
+    for (const [label, names] of [['Unit', unit], ['E2E', e2e]]) {
+        if (!names.length)
+            continue;
+        const group = document.createElement('div');
+        group.className = 'doc-test-group';
+        const kind = document.createElement('span');
+        kind.className = 'doc-test-kind';
+        kind.textContent = `${label} · ${names.length}`;
+        const list = document.createElement('ol');
+        for (const name of names) {
+            const item = document.createElement('li');
+            item.textContent = label === 'Unit' ? readableTestName(name) : name;
+            list.append(item);
+        }
+        group.append(kind, list);
+        box.append(group);
+    }
+    readerBody.append(box);
 }
 
 function navigate(hash) {
@@ -464,6 +508,7 @@ async function loadMetrics() {
         if (!response.ok)
             return;
         const metrics = await response.json();
+        state.metrics = metrics;
         const unit = metrics.unit;
         if (unit && Number.isFinite(unit.total)) {
             unitMetrics.classList.toggle('failed', Number(unit.failed) > 0);
@@ -485,6 +530,7 @@ async function loadMetrics() {
     } catch (e) {
         // No metrics: the red "not executed" state stays.
     }
+    return state.metrics;
 }
 
 // ---- Tooltip -------------------------------------------------------------

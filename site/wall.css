@@ -399,6 +399,28 @@ button.footer-item:hover { color: var(--ink); }
   color: var(--muted);
 }
 
+.doc-tests {
+  margin-top: 1.4rem;
+  padding-top: .9rem;
+  border-top: 0.125rem dashed var(--muted);
+}
+.doc-tests h4 { margin: 0 0 .3rem; }
+.doc-test-group { margin-top: .6rem; }
+.doc-test-kind {
+  display: block;
+  color: var(--green);
+  font-size: .74em;
+  font-weight: 900;
+}
+.doc-test-group ol {
+  margin: .1rem 0 0;
+  padding-left: 1.4rem;
+  font-size: .8em;
+  line-height: 1.5;
+}
+.doc-test-group li { margin: 0; overflow-wrap: anywhere; }
+.doc-test-group li::marker { color: var(--green); font-weight: 900; }
+
 body.reading > header,
 body.reading > main,
 body.reading > footer { visibility: hidden; }

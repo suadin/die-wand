@@ -72,6 +72,17 @@ PY
   echo "e2e: $e2e_total journeys"
 fi
 
+python3 - "$root/site/test-metrics.json" "$root/test/requirements.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+metrics_path, requirements_path = Path(sys.argv[1]), Path(sys.argv[2])
+metrics = json.loads(metrics_path.read_text())
+metrics["requirements"] = json.loads(requirements_path.read_text())
+metrics_path.write_text(json.dumps(metrics, indent=2) + "\n")
+PY
+
 echo "wrote site/test-metrics.json"
 
 # The page fetches the file next to it; docs/ is the published copy.

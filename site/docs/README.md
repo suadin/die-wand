@@ -260,7 +260,7 @@ python3 import/test_serve.py  # the helper
 The footer reads `site/test-metrics.json`; commit it after a change so the page
 shows the current count. The suites currently hold 122 unit tests: 71 for the
 page logic and reader, 37 for the Chrome import, 14 for the helper. The
-Playwright suite in `e2e/` has 11 journeys across the wall, the reader, the
+Playwright suite in `e2e/` has 12 journeys across the wall, the reader, the
 tooltips, the cursors and the bookmark drop:
 
 ```sh

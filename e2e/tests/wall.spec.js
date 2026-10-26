@@ -26,8 +26,10 @@ async function openWall(page, metrics = METRICS) {
   await page.route("http://127.0.0.1:8124/**", (route) => route.abort());
   await page.route("http://127.0.0.1:8098/tiles.json", (route) =>
     route.fulfill({ json: TILES }));
-  await page.route("http://127.0.0.1:8098/test-metrics.json", (route) =>
-    route.fulfill({ json: metrics }));
+  if (metrics) {
+    await page.route("http://127.0.0.1:8098/test-metrics.json", (route) =>
+      route.fulfill({ json: metrics }));
+  }
   await page.goto("/");
   await expect(page.locator(".tile")).toHaveCount(3);
 }
@@ -152,6 +154,17 @@ test("dropping a bookmark file replaces the wall", async ({ page }) => {
   }, html);
   await expect(page.locator(".tile")).toHaveCount(1);
   await expect(page.locator(".tile .title")).toHaveText("Dropped");
+});
+
+test("specs list the tests that verify them", async ({ page }) => {
+  await openWall(page, null);
+  await page.goto("/#/docs/basic-specs/reader");
+  await expect(page.locator(".doc-tests")).toBeVisible();
+  await expect(page.locator(".doc-tests")).toContainText("Automated tests");
+  await expect(page.locator(".doc-test-kind").first()).toContainText("Unit ·");
+  await expect(page.locator(".doc-tests")).toContainText("icons in one row are unique");
+  await page.goto("/#/docs/app-specs/reading-chrome");
+  await expect(page.locator(".doc-tests")).toContainText("bitmap is embedded");
 });
 
 test("an unknown route returns to the wall", async ({ page }) => {

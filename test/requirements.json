@@ -1,0 +1,105 @@
+{
+  "footer": {
+    "unit": ["count"],
+    "e2e": [
+      "the wall shows tiles and a one-row header",
+      "a test that has not run is red with a plain tooltip",
+      "a test tooltip always has three rows"
+    ]
+  },
+  "reader": {
+    "unit": [
+      "overview holds the intro",
+      "first section",
+      "repeated headings get their own slug",
+      "a play section gets the play icon",
+      "icons in one row are unique",
+      "internal document link is marked",
+      "table is rendered"
+    ],
+    "e2e": [
+      "README opens the reader and a deep link survives a reload",
+      "each section has its own icon",
+      "the reader lists every document"
+    ]
+  },
+  "links-and-tests": {
+    "unit": [
+      "docs address",
+      "route to a section",
+      "route to the wall",
+      "unknown route is the wall"
+    ],
+    "e2e": [
+      "README opens the reader and a deep link survives a reload",
+      "an unknown route returns to the wall"
+    ]
+  },
+  "design": {
+    "unit": ["html is escaped"],
+    "e2e": [
+      "the wall shows tiles and a one-row header",
+      "cursors say what a thing does",
+      "the layout fits at 800 px and follows browser zoom"
+    ]
+  },
+  "not-applicable": {
+    "unit": [],
+    "e2e": ["an unknown route returns to the wall"]
+  },
+  "reading-chrome": {
+    "unit": [
+      "test_bitmap_is_embedded",
+      "test_without_a_bitmap_the_name_remains",
+      "test_embedded_image_is_unwrapped",
+      "test_with_an_account",
+      "test_without_an_account",
+      "test_both_present_the_account_file_wins",
+      "test_rename_only_when_entered",
+      "test_icons_arrive_inside_folders_too",
+      "test_local_table_is_read",
+      "test_count"
+    ],
+    "e2e": ["dropping a bookmark file replaces the wall"]
+  },
+  "the-wall": {
+    "unit": [
+      "folder as group",
+      "group content",
+      "glyph from the title",
+      "own glyph takes precedence",
+      "empty list counts as nothing stored",
+      "list with tiles counts as stored"
+    ],
+    "e2e": [
+      "the wall shows tiles and a one-row header",
+      "dropping a bookmark file replaces the wall"
+    ]
+  },
+  "the-helper": {
+    "unit": [
+      "test_serves_the_list",
+      "test_allows_a_loopback_origin",
+      "test_a_foreign_origin_gets_nothing",
+      "test_a_foreign_origin_fails_the_preflight",
+      "test_no_origin_still_works_for_the_command_line",
+      "test_not_cached",
+      "test_an_extra_origin_can_be_allowed",
+      "test_socket_comes_from_the_environment",
+      "test_it_stops_after_the_stated_number_of_seconds",
+      "test_a_request_postpones_the_end"
+    ],
+    "e2e": []
+  },
+  "deployment": {
+    "unit": [],
+    "e2e": ["the layout fits at 800 px and follows browser zoom"]
+  },
+  "deviations": {
+    "unit": [],
+    "e2e": [
+      "an unknown route returns to the wall",
+      "dropping a bookmark file replaces the wall"
+    ]
+  }
+}

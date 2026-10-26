@@ -27,6 +27,7 @@ done
 
 TEST_LOGIC="$root/site/logic.js" gjs -m "$root/test/logic-test.js"
 TEST_READER="$root/site/reader.js" gjs -m "$root/test/reader-test.js"
+python3 "$root/test/check-requirements.py"
 
 # The reader fetches the copies next to the page. A copy that drifted from its
 # source is a documentation bug, not a build detail.
