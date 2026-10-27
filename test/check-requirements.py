@@ -19,10 +19,14 @@ def section_slugs(path: Path) -> list[str]:
     return [slugify(match.group(1)) for match in re.finditer(r"^##\s+(.+?)\s*$", path.read_text(), re.M)]
 
 
+def clean(name: str) -> str:
+    return re.sub(r"^(?:\[[A-Z0-9-]+\]\s*)+", "", name)
+
+
 def unit_names() -> set[str]:
     names: set[str] = set()
     for path in [ROOT / "test/logic-test.js", ROOT / "test/reader-test.js"]:
-        names.update(re.findall(r"check\('([^']+)'", path.read_text()))
+        names.update(clean(name) for name in re.findall(r"check\('([^']+)'", path.read_text()))
     for path in [ROOT / "import/test_chrome.py", ROOT / "import/test_serve.py"]:
         names.update(re.findall(r"def (test_[a-z0-9_]+)", path.read_text()))
     return names
@@ -31,7 +35,7 @@ def unit_names() -> set[str]:
 def e2e_names() -> set[str]:
     names: set[str] = set()
     for path in (ROOT / "e2e/tests").glob("*.js"):
-        names.update(re.findall(r'test\("([^"]+)"', path.read_text()))
+        names.update(clean(name) for name in re.findall(r'test\("([^"]+)"', path.read_text()))
     return names
 
 

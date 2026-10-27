@@ -29,22 +29,22 @@ const doc = splitDocument({
 });
 check('document slug stays', doc.slug, 'readme');
 check('document title stays', doc.title, 'README');
-check('overview holds the intro', doc.pages[0], {
+check('[BASIC-READER-02] overview holds the intro', doc.pages[0], {
     title: 'Overview', slug: 'overview', markdown: 'Hello.',
 });
-check('first section', doc.pages[1].title, 'Install');
+check('[BASIC-READER-02] first section', doc.pages[1].title, 'Install');
 check('second section', doc.pages[2].title, 'Tests');
 check('level one is not repeated', doc.pages[1].markdown, 'Text.');
 
 const repeated = splitDocument({
     slug: 'guide', title: 'GUIDE', markdown: '## Same\n\nA\n\n## Same\n\nB\n',
 });
-check('repeated headings get their own slug',
+check('[BASIC-READER-02] repeated headings get their own slug',
     repeated.pages.map(page => page.slug), ['same', 'same-2']);
 
 check('docs address', docsHash('readme', 'install'), '#/docs/readme/install');
 check('docs address without section', docsHash('readme'), '#/docs/readme');
-check('route to a section', parseRoute('#/docs/readme/install'),
+check('[BASIC-LINKS-01] route to a section', parseRoute('#/docs/readme/install'),
     {view: 'docs', doc: 'readme', section: 'install'});
 check('route to a document', parseRoute('#/docs/guide'),
     {view: 'docs', doc: 'guide', section: null});
@@ -57,11 +57,11 @@ check('a security section gets the shield icon', iconFor('Security'), 'shield');
 check('an unknown section gets the dot', iconFor('Something else'), 'dot');
 
 const icons = uniqueIcons(['Overview', 'Tests', 'Tests', 'Something else']);
-check('icons in one row are unique', new Set(icons).size, icons.length);
+check('[BASIC-READER-03] icons in one row are unique', new Set(icons).size, icons.length);
 check('the first duplicate keeps its meaning', icons[0], 'book');
 check('the second duplicate changes', icons[1] !== icons[2], true);
 
-check('html is escaped', escapeHtml('<b>"x"</b>'),
+check('[BASIC-READER-04] html is escaped', escapeHtml('<b>"x"</b>'),
     '&lt;b&gt;&quot;x&quot;&lt;/b&gt;');
 
 const html = renderMarkdown([
@@ -85,7 +85,7 @@ check('inline code is rendered', html.includes('<code>code</code>'), true);
 check('bullet list is rendered', html.includes('<ul><li>one</li><li>two</li></ul>'), true);
 check('table is rendered', html.includes('<th>a</th><th>b</th>'), true);
 check('code block is escaped', html.includes('<pre><code>&lt;x&gt;</code></pre>'), true);
-check('internal document link is marked',
+check('[BASIC-READER-04] internal document link is marked',
     html.includes('data-doc-file="GUIDE.md"'), true);
 check('same-page anchor is marked',
     html.includes('data-doc-anchor="#tests"'), true);

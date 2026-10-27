@@ -1,0 +1,15 @@
+{
+  "name": "die-wand",
+  "standard": "1.0.0",
+  "profiles": ["web-static"],
+  "docs": "specs/BASIC-SPECS.md",
+  "appSpecs": "specs/APP-SPECS.md",
+  "metrics": "site/test-metrics.json",
+  "deviations": [],
+  "commands": {
+    "unit": "./test/run.sh",
+    "e2e": "cd e2e && pnpm test",
+    "metrics": "./test/metrics.sh",
+    "docs": "./publish-pages.sh && ./test/run.sh"
+  }
+}

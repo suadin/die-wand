@@ -3,11 +3,11 @@
     "total": 122,
     "coverage": 32.3,
     "failed": 0,
-    "duration": 33.0,
-    "perTest": 0.27,
+    "duration": 32.8,
+    "perTest": 0.269,
     "coveredLines": 183,
     "totalLines": 566,
-    "measured": "2026-10-26T19:30",
+    "measured": "2026-10-27T20:34",
     "suites": [
       {
         "name": "page logic",
@@ -24,16 +24,35 @@
     ]
   },
   "e2e": {
-    "total": 13,
+    "total": 16,
     "failed": 0,
-    "coverage": 78.7,
-    "coveredLines": 669,
+    "coverage": 77.9,
+    "coveredLines": 662,
     "totalLines": 850,
     "duration": 4,
-    "perTest": 0.308,
-    "measured": "2026-10-26T18:29:56.272Z"
+    "perTest": 0.25,
+    "measured": "2026-10-27T19:33:28.563Z"
   },
   "requirements": {
+    "documents": {
+      "unit": [],
+      "e2e": []
+    },
+    "reader": {
+      "unit": [
+        "overview holds the intro",
+        "first section",
+        "repeated headings get their own slug",
+        "icons in one row are unique",
+        "html is escaped",
+        "internal document link is marked"
+      ],
+      "e2e": [
+        "the reader lists every document",
+        "each section has its own icon",
+        "README opens the reader and a deep link survives a reload"
+      ]
+    },
     "footer": {
       "unit": [
         "count"
@@ -41,29 +60,15 @@
       "e2e": [
         "the wall shows tiles and a one-row header",
         "a test that has not run is red with a plain tooltip",
-        "a test tooltip always has three rows"
+        "a test tooltip always has three rows",
+        "a measured E2E run replaces the red state",
+        "the footer is fixed and wraps cleanly"
       ]
     },
-    "reader": {
+    "links": {
       "unit": [
-        "overview holds the intro",
-        "first section",
-        "repeated headings get their own slug",
-        "a play section gets the play icon",
-        "icons in one row are unique",
-        "internal document link is marked",
-        "table is rendered"
-      ],
-      "e2e": [
-        "README opens the reader and a deep link survives a reload",
-        "each section has its own icon",
-        "the reader lists every document"
-      ]
-    },
-    "links-and-tests": {
-      "unit": [
-        "docs address",
         "route to a section",
+        "route to a document",
         "route to the wall",
         "unknown route is the wall"
       ],
@@ -72,21 +77,60 @@
         "an unknown route returns to the wall"
       ]
     },
-    "design": {
-      "unit": [
-        "html is escaped"
-      ],
+    "layout": {
+      "unit": [],
       "e2e": [
         "the wall shows tiles and a one-row header",
-        "cursors say what a thing does",
         "the layout fits at 800 px and follows browser zoom"
       ]
     },
-    "not-applicable": {
+    "design": {
       "unit": [],
       "e2e": [
-        "an unknown route returns to the wall"
+        "cursors say what a thing does",
+        "the page follows the OS colour scheme",
+        "focus uses the green outline",
+        "the layout fits at 800 px and follows browser zoom"
       ]
+    },
+    "dates": {
+      "unit": [],
+      "e2e": [
+        "a test tooltip always has three rows"
+      ]
+    },
+    "data-and-access": {
+      "unit": [
+        "test_serves_the_list",
+        "test_allows_a_loopback_origin",
+        "test_a_foreign_origin_gets_nothing",
+        "test_a_foreign_origin_fails_the_preflight",
+        "test_no_origin_still_works_for_the_command_line",
+        "test_not_cached",
+        "test_an_extra_origin_can_be_allowed",
+        "test_socket_comes_from_the_environment",
+        "test_it_stops_after_the_stated_number_of_seconds",
+        "test_a_request_postpones_the_end"
+      ],
+      "e2e": []
+    },
+    "tests": {
+      "unit": [],
+      "e2e": [
+        "browser JS coverage is measured with page.coverage"
+      ]
+    },
+    "quality": {
+      "unit": [],
+      "e2e": []
+    },
+    "done": {
+      "unit": [],
+      "e2e": []
+    },
+    "this-app": {
+      "unit": [],
+      "e2e": []
     },
     "reading-chrome": {
       "unit": [
