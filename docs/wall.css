@@ -231,6 +231,7 @@ body.dragging #wall { outline: 0.1875rem dashed var(--yellow); outline-offset: .
   color: var(--muted);
   font: inherit;
   font-weight: 900;
+  white-space: nowrap;
 }
 
 button.footer-item { cursor: pointer; }
