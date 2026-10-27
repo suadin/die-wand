@@ -8,6 +8,11 @@ The normative text is [`specs/BASIC-SPECS.md`](specs/BASIC-SPECS.md). The rule I
 listed in [`rules.json`](rules.json). Apps pin a release with `basics.lock` and verify
 it with `python3 basics/check.py`.
 
+The footer shows the app version and the pinned Basic Specs version. The app version
+opens SPECS; the Basic Specs version opens BASIC SPECS. SPECS starts with a Changelog
+page. A newer major Basic Specs release turns the version red; minor and patch updates
+appear in the tooltip.
+
 ## Use it
 
 ```sh

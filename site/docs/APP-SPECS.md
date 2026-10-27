@@ -1,8 +1,8 @@
 # App specs — die-wand
 
-What this app does, beyond the shared rules in [BASIC SPECS](BASIC-SPECS.md).
-
 ## Reading Chrome
+
+These rules extend [BASIC SPECS](BASIC-SPECS.md).
 
 `import/chrome.py` reads `AccountBookmarks` (signed-in account) and `Bookmarks`
 (no account), both from the profile named by `DIE_WAND_CHROME`. It embeds the

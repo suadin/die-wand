@@ -11,18 +11,25 @@ dropped silently.
 - **BASIC-DOCS-01** — The app has `README.md`, `APP-SPECS.md`, `BASIC-SPECS.md` and
   `RELEASE-NOTES.md`. README explains setup, operation and deployment. APP-SPECS holds
   the rules specific to the app. This document is generated from the pinned standard.
+  `basics.json` names `appVersion`, `standard` and a served runtime file; `basics docs`
+  generates the runtime file from those values.
 - **BASIC-DOCS-02** — The root README is the single source. Copies used by the deployed
   page are checked against their source; a copy that differs is a defect.
 
 ## Reader
 
-- **BASIC-READER-01** — The footer opens a documentation reader in the main panel. It
-  lists every document as a tab: README, APP SPECS, BASIC SPECS and RELEASE NOTES.
-  Only README is a footer item.
-- **BASIC-READER-02** — README and SPECS use one page per level-two heading; text before
-  the first heading is an overview. RELEASE NOTES stays one continuous page, newest
-  first. An optional API document stays continuous. The level-one title names the
+- **BASIC-READER-01** — The footer opens a documentation reader in the main panel. Its
+  tabs are README, SPECS and BASIC SPECS; an optional API or GUIDE document may follow.
+  README, the app version and the Basic Specs version are the only documentation items
+  in the footer.
+- **BASIC-READER-02** — README and BASIC SPECS use one page per level-two heading; text
+  before the first heading is an overview. SPECS is assembled at load time: `Changelog`
+  is the first page and stays one continuous page, newest first; the app rules follow.
+  An optional API or GUIDE document stays continuous. The level-one title names the
   document and is not repeated in the body.
+- **BASIC-READER-05** — `RELEASE-NOTES.md` is the source of the Changelog page, but it
+  is not a separate tab. The Changelog is the first SPECS page; its dates or versions
+  are subheadings inside that one page.
 - **BASIC-READER-03** — Sections are a row of line icons, not text chips. Each icon
   symbolises its section, its tooltip gives the heading, the active icon is yellow and
   rotated by `-2deg`. Within one document no icon repeats.
@@ -31,10 +38,11 @@ dropped silently.
 
 ## Footer
 
-- **BASIC-FOOTER-01** — One centred footer carries exactly four items:
-  `README | source | unit | E2E`, separated by `|`. Each item has its own icon:
-  README a book, source chevrons, unit a clipboard with a check mark, E2E a browser
-  with a play triangle. No icon repeats.
+- **BASIC-FOOTER-01** — One centred footer carries exactly six items in this order:
+  `README | SPECS | BASIC SPECS | source | unit | E2E`, separated by `|`. Each item has
+  its own icon: README a book, SPECS the app icon, BASIC SPECS the standard icon,
+  source chevrons, unit a clipboard with a check mark, E2E a browser with a play
+  triangle. No icon repeats.
 - **BASIC-FOOTER-02** — Unit and E2E show their count and line coverage separately.
   A failure count appears only when at least one test failed, and then in red. A
   missing run is red and says `not executed`; a run without coverage says
@@ -45,6 +53,22 @@ dropped silently.
   the wide variant.
 - **BASIC-FOOTER-04** — The footer stays on one line at desktop width and wraps
   cleanly when narrow. It is fixed and always visible; the main panel scrolls.
+
+## Versions
+
+- **BASIC-VERSION-01** — The SPECS footer item shows the app icon and the app version
+  from `basics.json`; the visible text is only the version. Its tooltip and `aria-label`
+  name the app and open SPECS. The app version never turns stale and is never red.
+- **BASIC-VERSION-02** — The BASIC SPECS footer item shows the standard icon and the
+  pinned Basic Specs version; the visible text is only the version. Its tooltip and
+  `aria-label` name Basic Specs and open BASIC SPECS.
+- **BASIC-VERSION-03** — The Basic Specs item stays neutral when the pinned version is
+  current or only a minor/patch update is available. It turns red only when the latest
+  published major version is greater than the pinned major. The tooltip names the
+  available version; a failed lookup stays neutral and says `latest not checked`.
+- **BASIC-VERSION-04** — The latest version comes from the published release metadata
+  (`version.json`), not from `main` or a local checkout. The pinned version comes from
+  the generated runtime file, never from hand-written display text.
 
 ## Links
 

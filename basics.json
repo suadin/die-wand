@@ -1,6 +1,6 @@
 {
   "name": "die-wand",
-  "standard": "1.0.2",
+  "standard": "1.1.0",
   "profiles": [
     "web-static"
   ],
@@ -13,5 +13,7 @@
     "e2e": "cd e2e && pnpm test",
     "metrics": "./test/metrics.sh",
     "docs": "./publish-pages.sh && ./test/run.sh"
-  }
+  },
+  "appVersion": "0.5.0",
+  "runtime": "site/basic-specs.json"
 }

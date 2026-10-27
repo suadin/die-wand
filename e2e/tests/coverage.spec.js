@@ -87,7 +87,7 @@ test("browser JS coverage is measured with page.coverage", async ({ page }) => {
   await expect(page.locator(".tile")).toHaveCount(3);
   await page.locator("#readme-button").click();
   await expect(page.locator("#reader")).toBeVisible();
-  for (const title of ["SPECS", "SPECS basic", "GUIDE", "RELEASE NOTES", "README"]) {
+  for (const title of ["SPECS", "BASIC SPECS", "GUIDE", "README"]) {
     await page.getByRole("tab", { name: title, exact: true }).click();
     await expect(page.locator("#reader-title")).toHaveText(title);
   }

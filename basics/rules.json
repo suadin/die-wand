@@ -1,5 +1,5 @@
 {
-  "standard": "1.0.2",
+  "standard": "1.1.0",
   "rules": [
     {
       "id": "BASIC-DOCS-01",
@@ -213,6 +213,51 @@
         "quality-python"
       ],
       "check": "commands"
+    },
+    {
+      "id": "BASIC-READER-05",
+      "level": "MUST",
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
+      "test": "BASIC-READER-05"
+    },
+    {
+      "id": "BASIC-VERSION-01",
+      "level": "MUST",
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
+      "test": "BASIC-VERSION-01"
+    },
+    {
+      "id": "BASIC-VERSION-02",
+      "level": "MUST",
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
+      "test": "BASIC-VERSION-02"
+    },
+    {
+      "id": "BASIC-VERSION-03",
+      "level": "MUST",
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
+      "test": "BASIC-VERSION-03"
+    },
+    {
+      "id": "BASIC-VERSION-04",
+      "level": "MUST",
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
+      "test": "BASIC-VERSION-04"
     }
   ]
 }

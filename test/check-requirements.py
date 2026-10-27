@@ -25,7 +25,7 @@ def clean(name: str) -> str:
 
 def unit_names() -> set[str]:
     names: set[str] = set()
-    for path in [ROOT / "test/logic-test.js", ROOT / "test/reader-test.js"]:
+    for path in [ROOT / "test/logic-test.js", ROOT / "test/reader-test.js", ROOT / "test/version-test.js"]:
         names.update(clean(name) for name in re.findall(r"check\('([^']+)'", path.read_text()))
     for path in [ROOT / "import/test_chrome.py", ROOT / "import/test_serve.py"]:
         names.update(re.findall(r"def (test_[a-z0-9_]+)", path.read_text()))

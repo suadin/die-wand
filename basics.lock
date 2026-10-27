@@ -1,16 +1,16 @@
 {
-  "standard": "1.0.2",
-  "source": "/home/suki/dev/repos/basic-specs",
+  "standard": "1.1.0",
+  "source": "https://github.com/suadin/basic-specs",
   "files": {
-    "basics/README.md": "0ed81c38861a1253b2c6e169e723b278c83eaa5f587b144131b99787ac15cbb5",
-    "basics/VERSION": "9fd28642d3aca191e5c7fc2383cfd6fabb2aac8743f029dabb8989ac584e31bc",
-    "basics/check.py": "6128c516f5aa88f2ec65c5b866b7c7fda94d3a95c88cb427dccfc841d995169c",
+    "basics/README.md": "9a15daa4204da1e1ee39713acddcc2ef425d51be71daf364403293d77dc46c14",
+    "basics/VERSION": "1575e1af4a95f12f70b4ee6a6adce8160953d93ea17dc2611b90883ccc3ad3b8",
+    "basics/check.py": "5b69760d057d516eece2341b376bf5620169d631954a5058b230c70f78f9fdd7",
     "basics/profiles/design-only.md": "f8fe2be31f630b0ea4da33951d5836fc0985f47b315eb2ac8bc3b7a37083bcc6",
     "basics/profiles/quality-python.md": "215dcd7e2217464fa6b7118c15475d7bb93543a55d6325b53dcbff4d2d6a1588",
     "basics/profiles/quality-typescript.md": "5d774e224cf960e8b2da981ff2ee0538cb9213b4b2fd20ef3a30f659014717c6",
     "basics/profiles/web-server.md": "23c5c1e9180015e7badf66d02b08395bc87a1e8ef4ceba23afd1fde1bfb85388",
     "basics/profiles/web-static.md": "df07eb247dff3287c72bf7ac6b11049a4b5b632836be1197bcb4357944028b22",
-    "basics/rules.json": "3c0cca0c9707527059d31ebd05016fa8fb7325576ed1226dde6760b65cf5ef92",
-    "basics/specs/BASIC-SPECS.md": "1d45ecd8dc335c851db8fbfa6dabee76e10c8054fcdc5440fe0363121d62bdc9"
+    "basics/rules.json": "885fb1a19001bf851b5a65fc9b2c15ee412ced3dbee353c377cc6a330cae1acd",
+    "basics/specs/BASIC-SPECS.md": "f8080ebfa32e801630d8541ec10bec185335a527d1f5a052057cacdebc0f3c3b"
   }
 }

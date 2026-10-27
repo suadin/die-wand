@@ -1,17 +1,17 @@
 {
   "unit": {
-    "total": 122,
+    "total": 129,
     "coverage": 32.3,
     "failed": 0,
-    "duration": 32.8,
-    "perTest": 0.269,
+    "duration": 32.5,
+    "perTest": 0.252,
     "coveredLines": 183,
     "totalLines": 566,
-    "measured": "2026-10-27T20:34",
+    "measured": "2026-10-27T22:08",
     "suites": [
       {
         "name": "page logic",
-        "tests": 71
+        "tests": 78
       },
       {
         "name": "Chrome import",
@@ -24,14 +24,14 @@
     ]
   },
   "e2e": {
-    "total": 16,
+    "total": 21,
     "failed": 0,
-    "coverage": 77.9,
-    "coveredLines": 662,
-    "totalLines": 850,
-    "duration": 4,
-    "perTest": 0.25,
-    "measured": "2026-10-27T19:33:28.563Z"
+    "coverage": 78.3,
+    "coveredLines": 701,
+    "totalLines": 895,
+    "duration": 5,
+    "perTest": 0.238,
+    "measured": "2026-10-27T21:07:56.729Z"
   },
   "requirements": {
     "documents": {
@@ -189,6 +189,20 @@
       "e2e": [
         "an unknown route returns to the wall",
         "dropping a bookmark file replaces the wall"
+      ]
+    },
+    "versions": {
+      "unit": [
+        "parse",
+        "minor stays neutral",
+        "major turns red",
+        "unknown"
+      ],
+      "e2e": [
+        "the app version opens SPECS",
+        "the Basic Specs version opens BASIC SPECS",
+        "only a major update turns red",
+        "an unavailable latest version stays neutral"
       ]
     }
   }

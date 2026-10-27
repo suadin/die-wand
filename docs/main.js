@@ -17,7 +17,8 @@ import {
     fromBookmarks, flatten, hasLocalTiles, iconCandidates, normalize, glyph,
     count,
 } from './logic.js';
-import {docsHash, parseRoute, renderMarkdown, splitDocument, uniqueIcons} from './reader.js';
+import {composeSpecs, docsHash, parseRoute, renderMarkdown, splitDocument, uniqueIcons} from './reader.js';
+import {LATEST_URL, appVersionTip, basicVersionTip, updateState} from './version.js';
 
 const STORAGE_KEY = 'die-wand.tiles';
 
@@ -26,11 +27,10 @@ const STORAGE_KEY = 'die-wand.tiles';
 // page is what lets the reader work on the NAS and on GitHub Pages alike.
 const DOCUMENTS = [
     {slug: 'readme', title: 'README', file: 'docs/README.md'},
-    {slug: 'app-specs', title: 'SPECS', file: 'docs/APP-SPECS.md'},
-    {slug: 'basic-specs', title: 'SPECS basic', file: 'docs/BASIC-SPECS.md'},
+    {slug: 'app-specs', title: 'SPECS', file: 'docs/APP-SPECS.md',
+     changelog: 'docs/RELEASE-NOTES.md'},
+    {slug: 'basic-specs', title: 'BASIC SPECS', file: 'docs/BASIC-SPECS.md'},
     {slug: 'guide', title: 'GUIDE', file: 'docs/GUIDE.md'},
-    {slug: 'release-notes', title: 'RELEASE NOTES', file: 'docs/RELEASE-NOTES.md',
-     continuous: true},
 ];
 
 // The helper that reads Chrome. If it does not run, things continue with the
@@ -42,7 +42,7 @@ const HELPER = 'http://127.0.0.1:8124/tiles.json';
 // retry the same dead path on every redraw.
 const iconMissing = new Set();
 
-const state = {tiles: [], docs: null, currentDoc: null, metrics: null};
+const state = {tiles: [], docs: null, currentDoc: null, metrics: null, runtime: null, latest: null};
 
 const wall = document.getElementById('wall');
 const notice = document.getElementById('notice');
@@ -56,6 +56,10 @@ const unitMetrics = document.getElementById('unit-metrics');
 const unitLabel = document.getElementById('unit-label');
 const e2eMetrics = document.getElementById('e2e-metrics');
 const e2eLabel = document.getElementById('e2e-label');
+const specsButton = document.getElementById('specs-button');
+const appVersion = document.getElementById('app-version');
+const basicSpecsButton = document.getElementById('basic-specs-button');
+const basicVersion = document.getElementById('basic-version');
 
 // How long a message stays. Most messages disappear on their own — an empty
 // wall does not, that is a state and not an intermediate step.
@@ -314,10 +318,13 @@ async function loadDocs() {
             const response = await fetch(entry.file, {cache: 'no-store'});
             if (!response.ok)
                 continue;
-            const markdown = await response.text();
-            docs.push(entry.continuous
-                ? continuousDocument(entry.slug, entry.title, markdown)
-                : splitDocument({slug: entry.slug, title: entry.title, markdown}));
+            let markdown = await response.text();
+            if (entry.changelog) {
+                const notes = await fetch(entry.changelog, {cache: 'no-store'});
+                if (notes.ok)
+                    markdown = composeSpecs(markdown, await notes.text());
+            }
+            docs.push(splitDocument({slug: entry.slug, title: entry.title, markdown}));
         } catch (e) {
             // A missing document is not fatal: the other tabs still work.
         }
@@ -338,7 +345,7 @@ const DOC_FILES = {
     'guide.md': 'guide',
     'app-specs.md': 'app-specs',
     'basic-specs.md': 'basic-specs',
-    'release-notes.md': 'release-notes',
+    'release-notes.md': 'app-specs',
 };
 
 function docLinkTarget(file, anchor) {
@@ -476,6 +483,8 @@ readerBody.addEventListener('click', event => {
 for (const button of document.querySelectorAll('[data-doc]')) {
     button.addEventListener('click', () => navigate(docsHash(button.dataset.doc)));
 }
+specsButton.addEventListener('click', () => navigate(docsHash('app-specs')));
+basicSpecsButton.addEventListener('click', () => navigate(docsHash('basic-specs')));
 document.getElementById('reader-close').addEventListener('click', () => navigate('#/'));
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !reader.hidden)
@@ -498,6 +507,35 @@ function metricTip(metrics) {
     const duration = metrics.duration == null ? '—' : Number(metrics.duration).toFixed(1);
     const perTest = metrics.perTest == null ? '—' : Number(metrics.perTest).toFixed(3);
     return `Measured ${measured}\nDuration ${duration} s\nPer test ${perTest} s`;
+}
+
+async function fetchJson(url) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3000);
+    try {
+        const response = await fetch(url, {cache: 'no-store', signal: controller.signal});
+        return response.ok ? await response.json() : null;
+    } catch (e) {
+        return null;
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+async function loadVersions() {
+    state.runtime = await fetchJson('basic-specs.json');
+    const latest = await fetchJson(LATEST_URL);
+    state.latest = latest?.version ?? null;
+    if (!state.runtime)
+        return;
+    const view = updateState(state.runtime.standard, state.latest);
+    appVersion.textContent = state.runtime.appVersion;
+    specsButton.dataset.tip = appVersionTip(state.runtime.app, state.runtime.appVersion);
+    specsButton.setAttribute('aria-label', `${state.runtime.app} ${state.runtime.appVersion}, open SPECS`);
+    basicVersion.textContent = state.runtime.standard;
+    basicSpecsButton.dataset.tip = basicVersionTip(state.runtime.standard, state.latest, view);
+    basicSpecsButton.setAttribute('aria-label', basicSpecsButton.dataset.tip.replace(/\n/g, ', '));
+    basicSpecsButton.classList.toggle('outdated', view === 'major');
 }
 
 async function loadMetrics() {
@@ -580,4 +618,5 @@ window.addEventListener('scroll', hideTip, true);
 
 start();
 loadMetrics();
+loadVersions();
 applyRoute().catch(error => announce(`Documentation not readable: ${error}`, 0));

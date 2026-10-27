@@ -19,7 +19,9 @@
     ]
   },
   "footer": {
-    "unit": ["count"],
+    "unit": [
+      "count"
+    ],
     "e2e": [
       "the wall shows tiles and a one-row header",
       "a test that has not run is red with a plain tooltip",
@@ -29,8 +31,16 @@
     ]
   },
   "links": {
-    "unit": ["route to a section", "route to a document", "route to the wall", "unknown route is the wall"],
-    "e2e": ["README opens the reader and a deep link survives a reload", "an unknown route returns to the wall"]
+    "unit": [
+      "route to a section",
+      "route to a document",
+      "route to the wall",
+      "unknown route is the wall"
+    ],
+    "e2e": [
+      "README opens the reader and a deep link survives a reload",
+      "an unknown route returns to the wall"
+    ]
   },
   "layout": {
     "unit": [],
@@ -50,7 +60,9 @@
   },
   "dates": {
     "unit": [],
-    "e2e": ["a test tooltip always has three rows"]
+    "e2e": [
+      "a test tooltip always has three rows"
+    ]
   },
   "data-and-access": {
     "unit": [
@@ -69,7 +81,9 @@
   },
   "tests": {
     "unit": [],
-    "e2e": ["browser JS coverage is measured with page.coverage"]
+    "e2e": [
+      "browser JS coverage is measured with page.coverage"
+    ]
   },
   "quality": {
     "unit": [],
@@ -96,7 +110,9 @@
       "test_local_table_is_read",
       "test_count"
     ],
-    "e2e": ["dropping a bookmark file replaces the wall"]
+    "e2e": [
+      "dropping a bookmark file replaces the wall"
+    ]
   },
   "the-wall": {
     "unit": [
@@ -107,7 +123,10 @@
       "empty list counts as nothing stored",
       "list with tiles counts as stored"
     ],
-    "e2e": ["the wall shows tiles and a one-row header", "dropping a bookmark file replaces the wall"]
+    "e2e": [
+      "the wall shows tiles and a one-row header",
+      "dropping a bookmark file replaces the wall"
+    ]
   },
   "the-helper": {
     "unit": [
@@ -126,10 +145,29 @@
   },
   "deployment": {
     "unit": [],
-    "e2e": ["the layout fits at 800 px and follows browser zoom"]
+    "e2e": [
+      "the layout fits at 800 px and follows browser zoom"
+    ]
   },
   "deviations": {
     "unit": [],
-    "e2e": ["an unknown route returns to the wall", "dropping a bookmark file replaces the wall"]
+    "e2e": [
+      "an unknown route returns to the wall",
+      "dropping a bookmark file replaces the wall"
+    ]
+  },
+  "versions": {
+    "unit": [
+      "parse",
+      "minor stays neutral",
+      "major turns red",
+      "unknown"
+    ],
+    "e2e": [
+      "the app version opens SPECS",
+      "the Basic Specs version opens BASIC SPECS",
+      "only a major update turns red",
+      "an unavailable latest version stays neutral"
+    ]
   }
 }

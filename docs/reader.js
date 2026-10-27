@@ -50,6 +50,16 @@ export function splitDocument({slug, title, markdown}) {
     return {slug, title, pages};
 }
 
+/** Builds SPECS with one continuous Changelog page before the app rules. */
+export function composeSpecs(appSpecs, releaseNotes) {
+    const notes = String(releaseNotes)
+        .replace(/^#\s+.*$/m, '')
+        .replace(/^##\s+/gm, '### ')
+        .trim();
+    const rules = String(appSpecs).replace(/^#\s+.*$/m, '').trim();
+    return `# SPECS\n\n## Changelog\n\n${notes}\n\n${rules}\n`;
+}
+
 /** The address of a reader view: `#/docs/readme/install`. */
 export function docsHash(doc, section = null) {
     return section ? `#/docs/${doc}/${section}` : `#/docs/${doc}`;

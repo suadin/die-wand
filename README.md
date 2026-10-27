@@ -77,14 +77,14 @@ browser** runs, not where Chrome runs. On another device it shows the last
   NOTES](RELEASE-NOTES.md) as tabs. Each document is split into one page per
   level-two heading, with line icons for the sections. `#/docs/readme` and
   `#/docs/readme/tests` are stable addresses; a reload restores the same page. A
-  link inside a document opens the other document in the reader.
-- **Shows where it comes from and what it was measured with.** The footer
-  carries the repository, the unit-test count with its line coverage, and the
-  E2E count with its line coverage from `site/test-metrics.json`. A missing run
-  is red and says `not executed`, never zero.
+  link inside a document opens the other document in the reader. SPECS starts with
+  one Changelog page from `RELEASE-NOTES.md`; release notes are not a separate tab.
+- **Shows where it comes from and what it was measured with.** The footer carries
+  README, the app version, the Basic Specs version, the repository, the unit-test
+  count and the E2E count. The Basic Specs item turns red only for a newer major
+  release. A missing run is red and says `not executed`, never zero.
 
-The interface follows [Basic Specs](https://github.com/suadin/basic-specs) where it applies: documentation and
-source in one centred footer, deep links, `yyyy-mm-dd` where dates appear, one
+The interface follows [Basic Specs](https://github.com/suadin/basic-specs) where it applies: README, SPECS, BASIC SPECS, source and test numbers in one centred footer, deep links, `yyyy-mm-dd` where dates appear, one
 name for one thing. The design follows the shared tokens: the Comic
 Sans/Trebuchet stack, thick dashed dividers, 2px ink outlines, hard offset
 shadows, yellow for selection, green for links and speech-bubble tooltips. The
@@ -259,11 +259,11 @@ python3 import/test_serve.py  # the helper
 ```
 
 The footer reads `site/test-metrics.json`; commit it after a change so the page
-shows the current count. The suites currently hold 122 unit tests: 71 for the
-page logic and reader, 37 for the Chrome import, 14 for the helper, covering
-32.3 % of the helper modules. The Playwright suite in `e2e/` has 16 journeys
+shows the current count. The suites currently hold 129 unit tests: 78 for the
+page logic, reader and version state, 37 for the Chrome import, 14 for the helper,
+covering 32.3 % of the helper modules. The Playwright suite in `e2e/` has 21 journeys
 across the wall, the reader, the tooltips, the cursors and the bookmark drop,
-covering 77.9 % of the page's JavaScript:
+covering 78.3 % of the page's JavaScript:
 
 ```sh
 cd e2e

@@ -115,6 +115,7 @@ def generated_doc(root: Path, manifest: dict) -> str:
         "## This app",
         "",
         f"- Name: `{manifest.get('name', root.name)}`",
+        f"- App version: **{manifest.get('appVersion', '—')}**",
         f"- Standard: **{standard}**",
         f"- Profiles: {', '.join(f'`{item}`' for item in manifest.get('profiles', [])) or '—'}",
         "- Source: https://github.com/suadin/basic-specs",
@@ -149,6 +150,34 @@ def generated_doc(root: Path, manifest: dict) -> str:
 
 def docs_path(root: Path, manifest: dict) -> Path:
     return root / manifest.get("docs", "docs/BASIC-SPECS.md")
+
+
+def runtime_path(root: Path, manifest: dict) -> Path:
+    return root / manifest.get("runtime", "basic-specs.json")
+
+
+def runtime_text(manifest: dict) -> str:
+    payload = {
+        "app": manifest.get("name", ""),
+        "appVersion": manifest.get("appVersion"),
+        "standard": version(),
+    }
+    return json.dumps(payload, indent=2) + "\n"
+
+
+def write_runtime(root: Path, manifest: dict) -> None:
+    path = runtime_path(root, manifest)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(runtime_text(manifest), encoding="utf-8")
+
+
+def check_runtime(root: Path, manifest: dict, errors: list[str]) -> None:
+    path = runtime_path(root, manifest)
+    if not path.is_file():
+        errors.append(f"{path.relative_to(root)} is missing; run basics docs")
+        return
+    if path.read_text(encoding="utf-8") != runtime_text(manifest):
+        errors.append(f"{path.relative_to(root)} is not generated; run basics docs")
 
 
 def check_lock(root: Path, manifest: dict, errors: list[str]) -> None:
@@ -189,6 +218,10 @@ def check_documents(root: Path, manifest: dict, errors: list[str]) -> None:
         errors.append(f"{app_specs} is missing")
     if not docs_path(root, manifest).is_file():
         errors.append(f"{docs_path(root, manifest).relative_to(root)} is missing")
+    if not manifest.get("appVersion"):
+        errors.append("basics.json has no appVersion")
+    if not manifest.get("runtime"):
+        errors.append("basics.json has no runtime path")
     if not (root / "basics" / "specs" / "BASIC-SPECS.md").is_file():
         errors.append("basics/specs/BASIC-SPECS.md is missing")
 
@@ -323,6 +356,7 @@ def check(root: Path, manifest: dict, run: bool) -> int:
     check_lock(root, manifest, errors)
     check_documents(root, manifest, errors)
     check_generated(root, manifest, errors)
+    check_runtime(root, manifest, errors)
     check_deviations(manifest, errors)
     check_rule_tests(root, manifest, errors)
     check_tests(root, manifest, errors)
@@ -395,6 +429,7 @@ def sync(root: Path, manifest: dict, source: Path | None, remote: str | None, st
     )
     docs_path(root, manifest).parent.mkdir(parents=True, exist_ok=True)
     docs_path(root, manifest).write_text(generated_doc(root, manifest), encoding="utf-8")
+    write_runtime(root, manifest)
     if temp:
         temp.cleanup()
     print(f"basics: synced {standard} into {root} and regenerated {docs_path(root, manifest).relative_to(root)}")
@@ -405,7 +440,8 @@ def docs(root: Path, manifest: dict) -> int:
     path = docs_path(root, manifest)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(generated_doc(root, manifest), encoding="utf-8")
-    print(f"basics: wrote {path.relative_to(root)}")
+    write_runtime(root, manifest)
+    print(f"basics: wrote {path.relative_to(root)} and {runtime_path(root, manifest).relative_to(root)}")
     return 0
 
 
@@ -419,6 +455,8 @@ def init(root: Path, manifest: dict) -> int:
     manifest.setdefault("profiles", ["web-static"])
     manifest.setdefault("docs", "docs/BASIC-SPECS.md")
     manifest.setdefault("appSpecs", "docs/APP-SPECS.md")
+    manifest.setdefault("appVersion", "0.1.0")
+    manifest.setdefault("runtime", "basic-specs.json")
     write_json(path, manifest)
     print(f"basics: wrote {path}")
     return 0
