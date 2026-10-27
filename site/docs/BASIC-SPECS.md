@@ -1,4 +1,5 @@
-<!-- basic-specs: 1.0.0; generated; do not edit -->
+*Generated from Basic Specs 1.0.0. Do not edit; run `basics docs`.*
+
 # Basic specs
 
 The reusable base for a small web app whose primary reader is a future AI session.

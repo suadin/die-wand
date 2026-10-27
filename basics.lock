@@ -4,7 +4,7 @@
   "files": {
     "basics/README.md": "bba05131e56e0ec6561aa6497818834dd97d5922d27446b6d99d54b65f5495e3",
     "basics/VERSION": "59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03",
-    "basics/check.py": "0f083438481756a0130604a03852f1c1812bc7e71695a26b7e16e723c97d01a1",
+    "basics/check.py": "14054c20590862751ace8c5cd7f38d47c760a0a7725cccd924f3a7fdd75f913c",
     "basics/profiles/design-only.md": "f8fe2be31f630b0ea4da33951d5836fc0985f47b315eb2ac8bc3b7a37083bcc6",
     "basics/profiles/quality-python.md": "215dcd7e2217464fa6b7118c15475d7bb93543a55d6325b53dcbff4d2d6a1588",
     "basics/profiles/quality-typescript.md": "5d774e224cf960e8b2da981ff2ee0538cb9213b4b2fd20ef3a30f659014717c6",

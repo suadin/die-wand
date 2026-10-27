@@ -83,9 +83,9 @@ browser** runs, not where Chrome runs. On another device it shows the last
   E2E count with its line coverage from `site/test-metrics.json`. A missing run
   is red and says `not executed`, never zero.
 
-The interface follows the workspace contract where it applies: documentation and
+The interface follows [Basic Specs](https://github.com/suadin/basic-specs) where it applies: documentation and
 source in one centred footer, deep links, `yyyy-mm-dd` where dates appear, one
-name for one thing. The design follows Diary's reference: the Comic
+name for one thing. The design follows the shared tokens: the Comic
 Sans/Trebuchet stack, thick dashed dividers, 2px ink outlines, hard offset
 shadows, yellow for selection, green for links and speech-bubble tooltips. The
 root stays at `100%`, so browser zoom scales the page and the layout still fits
@@ -261,9 +261,9 @@ python3 import/test_serve.py  # the helper
 The footer reads `site/test-metrics.json`; commit it after a change so the page
 shows the current count. The suites currently hold 122 unit tests: 71 for the
 page logic and reader, 37 for the Chrome import, 14 for the helper, covering
-32.3 % of the helper modules. The Playwright suite in `e2e/` has 13 journeys
+32.3 % of the helper modules. The Playwright suite in `e2e/` has 16 journeys
 across the wall, the reader, the tooltips, the cursors and the bookmark drop,
-covering 78.6 % of the page's JavaScript:
+covering 77.9 % of the page's JavaScript:
 
 ```sh
 cd e2e
