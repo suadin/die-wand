@@ -108,7 +108,7 @@ def generated_doc(root: Path, manifest: dict) -> str:
     spec = (BASE / "specs" / "BASIC-SPECS.md").read_text(encoding="utf-8").rstrip()
     names = test_names(root, manifest)
     lines = [
-        f"*Generated from Basic Specs {standard}. Do not edit; run `basics docs`.*",
+        f"Generated from Basic Specs {standard}. Do not edit; run basics docs.",
         "",
         spec,
         "",

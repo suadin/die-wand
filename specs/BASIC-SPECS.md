@@ -1,4 +1,4 @@
-*Generated from Basic Specs 1.0.0. Do not edit; run `basics docs`.*
+Generated from Basic Specs 1.0.0. Do not edit; run basics docs.
 
 # Basic specs
 
