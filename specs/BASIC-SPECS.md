@@ -1,4 +1,4 @@
-Generated from Basic Specs 1.0.0. Do not edit; run basics docs.
+Generated from Basic Specs 1.0.2. Do not edit; run basics docs.
 
 # Basic specs
 
@@ -122,7 +122,7 @@ present; `basics check` green; committed, pushed and deployed where a rollout ex
 ## This app
 
 - Name: `die-wand`
-- Standard: **1.0.0**
+- Standard: **1.0.2**
 - Profiles: `web-static`
 - Source: https://github.com/suadin/basic-specs
 

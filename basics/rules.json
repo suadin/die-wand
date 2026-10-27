@@ -1,148 +1,217 @@
 {
-  "standard": "1.0.0",
+  "standard": "1.0.2",
   "rules": [
     {
       "id": "BASIC-DOCS-01",
       "level": "MUST",
-      "profiles": ["core"],
+      "profiles": [
+        "core"
+      ],
       "check": "documents"
     },
     {
       "id": "BASIC-DOCS-02",
       "level": "MUST",
-      "profiles": ["core"],
+      "profiles": [
+        "core"
+      ],
       "check": "docs-generated"
     },
     {
       "id": "BASIC-READER-01",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-READER-01"
     },
     {
       "id": "BASIC-READER-02",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-READER-02"
     },
     {
       "id": "BASIC-READER-03",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-READER-03"
     },
     {
       "id": "BASIC-READER-04",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-READER-04"
     },
     {
       "id": "BASIC-FOOTER-01",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-FOOTER-01"
     },
     {
       "id": "BASIC-FOOTER-02",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-FOOTER-02"
     },
     {
       "id": "BASIC-FOOTER-03",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-FOOTER-03"
     },
     {
       "id": "BASIC-FOOTER-04",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-FOOTER-04"
     },
     {
       "id": "BASIC-LINKS-01",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-LINKS-01"
     },
     {
       "id": "BASIC-LAYOUT-01",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-LAYOUT-01"
     },
     {
       "id": "BASIC-LAYOUT-02",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-LAYOUT-02"
     },
     {
       "id": "BASIC-DESIGN-01",
       "level": "MUST",
-      "profiles": ["web-static", "web-server", "design-only"],
+      "profiles": [
+        "web-static",
+        "web-server",
+        "design-only"
+      ],
       "test": "BASIC-DESIGN-01"
     },
     {
       "id": "BASIC-DESIGN-02",
       "level": "MUST",
-      "profiles": ["web-static", "web-server", "design-only"],
+      "profiles": [
+        "web-static",
+        "web-server",
+        "design-only"
+      ],
       "test": "BASIC-DESIGN-02"
     },
     {
       "id": "BASIC-DESIGN-03",
       "level": "SHOULD",
-      "profiles": ["web-static", "web-server", "design-only"],
+      "profiles": [
+        "web-static",
+        "web-server",
+        "design-only"
+      ],
       "check": "review"
     },
     {
       "id": "BASIC-DESIGN-04",
       "level": "MUST",
-      "profiles": ["web-static", "web-server", "design-only"],
+      "profiles": [
+        "web-static",
+        "web-server",
+        "design-only"
+      ],
       "test": "BASIC-DESIGN-04"
     },
     {
       "id": "BASIC-DATES-01",
       "level": "MUST",
-      "profiles": ["web-static", "web-server"],
+      "profiles": [
+        "web-static",
+        "web-server"
+      ],
       "test": "BASIC-DATES-01"
     },
     {
       "id": "BASIC-DATA-01",
       "level": "MUST",
-      "profiles": ["core"],
+      "profiles": [
+        "core"
+      ],
       "check": "secrets"
     },
     {
       "id": "BASIC-DATA-02",
       "level": "MUST",
-      "profiles": ["web-server"],
+      "profiles": [
+        "web-server"
+      ],
       "test": "BASIC-DATA-02"
     },
     {
       "id": "BASIC-TESTS-01",
       "level": "MUST",
-      "profiles": ["core"],
+      "profiles": [
+        "core"
+      ],
       "check": "tests"
     },
     {
       "id": "BASIC-TESTS-02",
       "level": "MUST",
-      "profiles": ["core"],
+      "profiles": [
+        "core"
+      ],
       "check": "coverage"
     },
     {
       "id": "BASIC-TESTS-03",
       "level": "MUST",
-      "profiles": ["core"],
+      "profiles": [
+        "core"
+      ],
       "check": "rule-tests"
     },
     {
       "id": "BASIC-QUALITY-01",
       "level": "MUST",
-      "profiles": ["quality-typescript", "quality-python"],
+      "profiles": [
+        "quality-typescript",
+        "quality-python"
+      ],
       "check": "commands"
     }
   ]

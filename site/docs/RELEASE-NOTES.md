@@ -2,7 +2,7 @@
 
 ## 0.4.0 — 2026-10-27
 
-The wall pins Basic Specs 1.0.0. `basics.json`, `basics.lock` and the generated
+The wall pins Basic Specs 1.0.2. `basics.json`, `basics.lock` and the generated
 `specs/BASIC-SPECS.md` are checked in CI. The footer reports 16 E2E journeys.
 
 ## 0.3.0 — 2026-10-26

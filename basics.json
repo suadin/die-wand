@@ -1,7 +1,9 @@
 {
   "name": "die-wand",
-  "standard": "1.0.0",
-  "profiles": ["web-static"],
+  "standard": "1.0.2",
+  "profiles": [
+    "web-static"
+  ],
   "docs": "specs/BASIC-SPECS.md",
   "appSpecs": "specs/APP-SPECS.md",
   "metrics": "site/test-metrics.json",

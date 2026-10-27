@@ -433,8 +433,8 @@ def main(argv: list[str] | None = None) -> int:
     check_parser.add_argument("--run", action="store_true", help="also run declared commands")
 
     sync_parser = sub.add_parser("sync", help="replace the pinned copy with a release")
-    sync_parser.add_argument("--from", dest="source", help="local basic-specs checkout")
-    sync_parser.add_argument("--source", default="https://github.com/suadin/basic-specs")
+    sync_parser.add_argument("--from", dest="local", help="local basic-specs checkout")
+    sync_parser.add_argument("--source", dest="remote", default="https://github.com/suadin/basic-specs")
     sync_parser.add_argument("--version", dest="standard")
 
     sub.add_parser("docs", help="regenerate docs/BASIC-SPECS.md")
@@ -460,8 +460,8 @@ def main(argv: list[str] | None = None) -> int:
         return sync(
             root,
             manifest,
-            Path(args.source).resolve() if args.source and Path(args.source).exists() else None,
-            args.source,
+            Path(args.local).resolve() if args.local else None,
+            args.remote,
             args.standard,
         )
     if args.command == "docs":
