@@ -22,7 +22,7 @@ const METRICS = {
   e2e: null,
 };
 
-async function openWall(page, metrics = METRICS, latest = "1.1.0") {
+async function openWall(page, metrics = METRICS, latest = "1.1.1") {
   await page.route("http://127.0.0.1:8124/**", (route) => route.abort());
   await page.route("http://127.0.0.1:8098/tiles.json", (route) =>
     route.fulfill({ json: TILES }));
@@ -58,7 +58,7 @@ test("[BASIC-FOOTER-01] [BASIC-LAYOUT-02] the wall shows tiles and a one-row hea
   await expect(page.locator(".footer-items svg, .footer-items img")).toHaveCount(6);
   expect(new Set(footerIcons).size).toBe(footerIcons.length);
   await expect(page.locator("#app-version")).toHaveText("0.5.0");
-  await expect(page.locator("#basic-version")).toHaveText("1.1.0");
+  await expect(page.locator("#basic-version")).toHaveText("1.1.1");
 });
 
 test("[BASIC-READER-01] [BASIC-LINKS-01] README opens the reader and a deep link survives a reload", async ({ page }) => {

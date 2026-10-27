@@ -3,11 +3,11 @@
     "total": 129,
     "coverage": 32.3,
     "failed": 0,
-    "duration": 32.5,
-    "perTest": 0.252,
+    "duration": 34.3,
+    "perTest": 0.266,
     "coveredLines": 183,
     "totalLines": 566,
-    "measured": "2026-10-27T22:08",
+    "measured": "2026-10-27T22:57",
     "suites": [
       {
         "name": "page logic",
@@ -26,12 +26,12 @@
   "e2e": {
     "total": 21,
     "failed": 0,
-    "coverage": 78.3,
-    "coveredLines": 701,
+    "coverage": 79.6,
+    "coveredLines": 712,
     "totalLines": 895,
     "duration": 5,
     "perTest": 0.238,
-    "measured": "2026-10-27T21:07:56.729Z"
+    "measured": "2026-10-27T21:56:43.996Z"
   },
   "requirements": {
     "documents": {
