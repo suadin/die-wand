@@ -26,7 +26,8 @@ dropped silently.
   before the first heading is an overview. SPECS is assembled at load time: `Changelog`
   is the first page and stays one continuous page, newest first; the app rules follow.
   An optional API or GUIDE document stays continuous. The level-one title names the
-  document and is not repeated in the body.
+  document and is not repeated in the body. The automated test list stays inside the
+  documentation card, below the body and separated by the dashed rule.
 - **BASIC-READER-05** — `RELEASE-NOTES.md` is the source of the Changelog page, but it
   is not a separate tab. The Changelog is the first SPECS page; its dates or versions
   are subheadings inside that one page.
@@ -52,7 +53,8 @@ dropped silently.
   `—`. A missing run's tooltip is the single word `not executed`. Test tooltips are
   the wide variant.
 - **BASIC-FOOTER-04** — The footer stays on one line at desktop width and wraps
-  cleanly when narrow. It is fixed and always visible; the main panel scrolls.
+  cleanly when narrow. A footer item never wraps internally; only the row may wrap
+  between items. It is fixed and always visible; the main panel scrolls.
 
 ## Versions
 
