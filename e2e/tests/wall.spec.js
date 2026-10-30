@@ -1,4 +1,15 @@
+const { readFileSync } = require("node:fs");
+const { join } = require("node:path");
 const { test, expect } = require("@playwright/test");
+
+// The standard moves; the suite must not. The versions come from the app's own runtime
+// metadata, and the "newer" case is derived from that major.
+const RUNTIME = JSON.parse(readFileSync(join(__dirname, "..", "..", "site", "basic-specs.json"), "utf8"));
+const STANDARD = RUNTIME.standard;
+const [MAJOR, MINOR] = STANDARD.split('.').map(Number);
+const NEXT_MINOR = `${MAJOR}.${MINOR + 1}.0`;
+const NEXT_MAJOR = `${MAJOR + 1}.0.0`;
+
 
 const TILES = {
   version: 1,
@@ -22,7 +33,7 @@ const METRICS = {
   e2e: null,
 };
 
-async function openWall(page, metrics = METRICS, latest = "1.1.1") {
+async function openWall(page, metrics = METRICS, latest = STANDARD) {
   await page.route("http://127.0.0.1:8124/**", (route) => route.abort());
   await page.route("http://127.0.0.1:8098/tiles.json", (route) =>
     route.fulfill({ json: TILES }));
@@ -58,7 +69,7 @@ test("[BASIC-FOOTER-01] [BASIC-LAYOUT-02] the wall shows tiles and a one-row hea
   await expect(page.locator(".footer-items svg, .footer-items img")).toHaveCount(6);
   expect(new Set(footerIcons).size).toBe(footerIcons.length);
   await expect(page.locator("#app-version")).toHaveText("0.5.0");
-  await expect(page.locator("#basic-version")).toHaveText("1.1.1");
+  await expect(page.locator("#basic-version")).toHaveText(STANDARD);
 });
 
 test("[BASIC-READER-01] [BASIC-LINKS-01] README opens the reader and a deep link survives a reload", async ({ page }) => {
@@ -240,13 +251,13 @@ test("[BASIC-VERSION-02] the Basic Specs version opens BASIC SPECS", async ({ pa
 });
 
 test("[BASIC-VERSION-03] only a major update turns red", async ({ page }) => {
-  await openWall(page, METRICS, "1.2.0");
+  await openWall(page, METRICS, NEXT_MINOR);
   const basic = page.locator("#basic-specs-button");
   await expect(basic).not.toHaveClass(/outdated/);
-  await expect(basic).toHaveAttribute("data-tip", /1\.2\.0 available/);
-  await openWall(page, METRICS, "2.0.0");
+  await expect(basic).toHaveAttribute("data-tip", new RegExp(`${NEXT_MINOR.replaceAll(".", "\\.")} available`));
+  await openWall(page, METRICS, NEXT_MAJOR);
   await expect(basic).toHaveClass(/outdated/);
-  await expect(basic).toHaveAttribute("data-tip", /2\.0\.0 available/);
+  await expect(basic).toHaveAttribute("data-tip", new RegExp(`${NEXT_MAJOR.replaceAll(".", "\\.")} available`));
 });
 
 test("[BASIC-VERSION-04] an unavailable latest version stays neutral", async ({ page }) => {
