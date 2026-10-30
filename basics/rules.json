@@ -1,5 +1,5 @@
 {
-  "standard": "1.1.1",
+  "standard": "1.2.0",
   "rules": [
     {
       "id": "BASIC-DOCS-01",
