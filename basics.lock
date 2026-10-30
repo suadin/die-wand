@@ -1,16 +1,16 @@
 {
-  "standard": "1.2.0",
+  "standard": "1.2.1",
   "source": "https://github.com/suadin/basic-specs",
   "files": {
     "basics/README.md": "9a15daa4204da1e1ee39713acddcc2ef425d51be71daf364403293d77dc46c14",
-    "basics/VERSION": "1e5b51cde515396a9fa762909cf8ca6584ccc564b325d2eebeea76175fe95c4d",
+    "basics/VERSION": "6cf4e084b47f33c9b02ef79279d157833868f8f70514169a768be353ee328fea",
     "basics/check.py": "5b69760d057d516eece2341b376bf5620169d631954a5058b230c70f78f9fdd7",
     "basics/profiles/design-only.md": "f8fe2be31f630b0ea4da33951d5836fc0985f47b315eb2ac8bc3b7a37083bcc6",
     "basics/profiles/quality-python.md": "215dcd7e2217464fa6b7118c15475d7bb93543a55d6325b53dcbff4d2d6a1588",
     "basics/profiles/quality-typescript.md": "5d774e224cf960e8b2da981ff2ee0538cb9213b4b2fd20ef3a30f659014717c6",
     "basics/profiles/web-server.md": "23c5c1e9180015e7badf66d02b08395bc87a1e8ef4ceba23afd1fde1bfb85388",
     "basics/profiles/web-static.md": "df07eb247dff3287c72bf7ac6b11049a4b5b632836be1197bcb4357944028b22",
-    "basics/rules.json": "ec2f9fc24dd6ce2fb8b622254b8792eeb27013b2d56899c0f0a8b891e6a584f4",
+    "basics/rules.json": "ff32f798ef6f58c2ebfa12e848cdfc26e8ac9ab00f1e53c68da0fc5d82ccfe72",
     "basics/specs/BASIC-SPECS.md": "0f66eee05525bb79b0554b9eb22002a494431ca0d0fba6fdd19983713b0dd391"
   }
 }

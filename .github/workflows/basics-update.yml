@@ -11,27 +11,4 @@ permissions:
 
 jobs:
   update:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Read latest Basic Specs release
-        id: version
-        run: |
-          version="$(curl -fsSL https://api.github.com/repos/suadin/basic-specs/releases/latest | python3 -c 'import json,sys; print(json.load(sys.stdin)["tag_name"].removeprefix("v"))')"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-      - name: Sync and check
-        run: |
-          python3 basics/check.py --root . sync --version "${{ steps.version.outputs.version }}"
-          python3 basics/check.py --root . check
-      - uses: peter-evans/create-pull-request@v6
-        with:
-          branch: basics/update-${{ steps.version.outputs.version }}
-          title: "Basics: update to ${{ steps.version.outputs.version }}"
-          body: |
-            Automated sync of the pinned Basic Specs snapshot.
-            The branch is only a proposal; the app-specific tests still decide.
-          commit-message: "Sync Basic Specs ${{ steps.version.outputs.version }}"
-          delete-branch: true
+    uses: suadin/basic-specs/.github/workflows/update-app.yml@v1.2.1
