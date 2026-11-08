@@ -1,0 +1,17 @@
+{
+  "name": "die-wand",
+  "version": "0.5.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.1.0",
+  "scripts": {
+    "unit": "./test/run.sh",
+    "e2e": "cd e2e && pnpm test",
+    "metrics": "./test/metrics.sh",
+    "docs": "./publish-pages.sh && ./test/run.sh",
+    "check": "pnpm norm check && ./test/metrics.sh"
+  },
+  "devDependencies": {
+    "@suadin/norm": "file:../norm"
+  }
+}

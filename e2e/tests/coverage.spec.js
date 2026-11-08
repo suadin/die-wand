@@ -15,7 +15,6 @@ const TILES = {
 const FILES = {
   "main.js": "main.js",
   "logic.js": "logic.js",
-  "reader.js": "reader.js",
 };
 
 function lineStarts(text) {
@@ -85,9 +84,9 @@ test("browser JS coverage is measured with page.coverage", async ({ page }) => {
 
   await page.goto("/");
   await expect(page.locator(".tile")).toHaveCount(3);
-  await page.locator("#readme-button").click();
+  await page.locator("#readme").click();
   await expect(page.locator("#reader")).toBeVisible();
-  for (const title of ["SPECS", "BASIC SPECS", "GUIDE", "README"]) {
+  for (const title of ["SPECS", "NORM", "GUIDE", "README"]) {
     await page.getByRole("tab", { name: title, exact: true }).click();
     await expect(page.locator("#reader-title")).toHaveText(title);
   }

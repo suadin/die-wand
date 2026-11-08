@@ -13,7 +13,7 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # crippled the page while serving, without a single check complaining. gjs
 # reports syntax errors while loading the module, before it ever fails on
 # document.
-for script in logic.js reader.js main.js; do
+for script in logic.js main.js; do
   # The output is collected first: with a pipefile the status of gjs (which is
   # non-zero anyway because of document) would decide for pipefail and the
   # check would wave everything through.
@@ -26,13 +26,11 @@ for script in logic.js reader.js main.js; do
 done
 
 TEST_LOGIC="$root/site/logic.js" gjs -m "$root/test/logic-test.js"
-TEST_READER="$root/site/reader.js" gjs -m "$root/test/reader-test.js"
-TEST_VERSION="$root/site/version.js" gjs -m "$root/test/version-test.js"
 python3 "$root/test/check-requirements.py"
 
 # The reader fetches the copies next to the page. A copy that drifted from its
 # source is a documentation bug, not a build detail.
-for doc in README.md GUIDE.md RELEASE-NOTES.md specs/APP-SPECS.md specs/BASIC-SPECS.md; do
+for doc in README.md GUIDE.md RELEASE-NOTES.md specs/APP-SPECS.md; do
   target="$root/site/docs/$(basename "$doc")"
   if ! cmp -s "$root/$doc" "$target"; then
     echo "ERROR $target differs from $doc — run ./publish-pages.sh"

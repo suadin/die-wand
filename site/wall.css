@@ -1,37 +1,3 @@
-:root {
-  color-scheme: light dark;
-  --paper: #f5f0e5;
-  --card: #fffaf0;
-  --ink: #191919;
-  --muted: #68645d;
-  --yellow: #ffd45c;
-  --red: #e84c3d;
-  --green: #588b55;
-  --purple: #b18cff;
-  --purple-ink: #1d1238;
-  --hover: #fff2c9;
-  --danger: #8e1e15;
-  --line: 0.1875rem dashed var(--ink);
-  font-family: "Comic Sans MS", "Trebuchet MS", sans-serif;
-  color: var(--ink);
-  background: var(--paper);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #201f25;
-    --card: #2a2931;
-    --ink: #f3eee3;
-    --muted: #c0bac2;
-    --yellow: #a88835;
-    --red: #ff786e;
-    --green: #a8d49a;
-    --purple: #7d5fc7;
-    --purple-ink: #f6f1e8;
-    --hover: #38343a;
-    --danger: #ff9389;
-  }
-}
 
 /* The root stays the browser base, so Ctrl + wheel zoom scales the page. */
 html { font-size: 100%; }

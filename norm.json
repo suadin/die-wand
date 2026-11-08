@@ -1,0 +1,22 @@
+{
+  "name": "die-wand",
+  "appVersion": "0.5.0",
+  "vendorDir": "site",
+  "source": "https://github.com/suadin/die-wand",
+  "profiles": [
+    "web-static"
+  ],
+  "docs": {
+    "appSpecs": "specs/APP-SPECS.md",
+    "releaseNotes": "RELEASE-NOTES.md"
+  },
+  "runtime": "site/norm/app.json",
+  "metrics": "site/test-metrics.json",
+  "commands": {
+    "unit": "./test/run.sh",
+    "e2e": "cd e2e && pnpm test",
+    "metrics": "./test/metrics.sh",
+    "docs": "./publish-pages.sh"
+  },
+  "allow": []
+}

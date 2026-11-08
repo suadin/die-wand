@@ -11,6 +11,7 @@
        it the old version sticks in the icon cache, across reloads and across
        devices. -->
   <link rel="icon" href="icon.svg?v=4" type="image/svg+xml">
+  <link rel="stylesheet" href="norm/norm.css">
   <link rel="stylesheet" href="wall.css">
 </head>
 <body>
@@ -46,25 +47,6 @@
       <article id="reader-body" class="reader-body"></article>
     </section>
   </main>
-
-  <!-- One compact footer: the documentation, the source, and the test numbers.
-       On a full wall it sits below the fold; on the published demo it is the
-       only thing that says where the page came from. -->
-  <footer class="footer">
-    <div class="footer-items">
-      <button id="readme-button" class="footer-item" type="button" data-doc="readme" data-tip="Read the documentation"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v20H7.5A2.5 2.5 0 0 1 5 19.5v-15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 7.5h6M9 11.5h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>README</span></button>
-      <span class="footer-sep" aria-hidden="true">|</span>
-      <button id="specs-button" class="footer-item" type="button" data-tip="Open SPECS"><img class="footer-logo" src="icon.svg" alt=""><span id="app-version">—</span></button>
-      <span class="footer-sep" aria-hidden="true">|</span>
-      <button id="basic-specs-button" class="footer-item" type="button" data-tip="Open BASIC SPECS"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="m12 3 8 4-8 4-8-4 8-4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m4 11 8 4 8-4M4 15l8 4 8-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="basic-version">—</span></button>
-      <span class="footer-sep" aria-hidden="true">|</span>
-      <span class="footer-item"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="m9 7.5-4.5 4.5L9 16.5M15 7.5l4.5 4.5L15 16.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>source: <a href="https://github.com/suadin/die-wand" target="_blank" rel="noopener noreferrer">suadin/die-wand</a></span></span>
-      <span class="footer-sep" aria-hidden="true">|</span>
-      <span id="unit-metrics" class="footer-item" data-tip="not executed"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 4V3h6v1M8.5 13l2.5 2.5L15.5 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="unit-label">unit not executed</span></span>
-      <span class="footer-sep" aria-hidden="true">|</span>
-      <span id="e2e-metrics" class="footer-item" data-tip="not executed"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9h18" fill="none" stroke="currentColor" stroke-width="2"/><path d="m10 12 5 3-5 3z" fill="currentColor" stroke="none"/></svg><span id="e2e-label">e2e not executed</span></span>
-    </div>
-  </footer>
 
   <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
 

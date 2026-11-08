@@ -19,3 +19,5 @@ e2e/test-results/
 e2e/test-metrics.e2e.json
 
 e2e/coverage.json
+
+node_modules/

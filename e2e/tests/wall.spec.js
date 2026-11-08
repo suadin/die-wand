@@ -1,15 +1,8 @@
-const { readFileSync } = require("node:fs");
-const { join } = require("node:path");
 const { test, expect } = require("@playwright/test");
 
-// The standard moves; the suite must not. The versions come from the app's own runtime
-// metadata, and the "newer" case is derived from that major.
-const RUNTIME = JSON.parse(readFileSync(join(__dirname, "..", "..", "site", "basic-specs.json"), "utf8"));
-const STANDARD = RUNTIME.standard;
-const [MAJOR, MINOR] = STANDARD.split('.').map(Number);
-const NEXT_MINOR = `${MAJOR}.${MINOR + 1}.0`;
-const NEXT_MAJOR = `${MAJOR + 1}.0.0`;
-
+// die-wand journeys: the wall, the import, and the automated-test list in the
+// docs. The footer, reader, layout, design and version states are the package's
+// own suite.
 
 const TILES = {
   version: 1,
@@ -21,19 +14,7 @@ const TILES = {
   ],
 };
 
-const METRICS = {
-  unit: {
-    total: 122,
-    coverage: null,
-    failed: 0,
-    duration: 16.2,
-    perTest: 0.133,
-    measured: "2026-10-26T18:00",
-  },
-  e2e: null,
-};
-
-async function openWall(page, metrics = METRICS, latest = STANDARD) {
+async function openWall(page, metrics = null) {
   await page.route("http://127.0.0.1:8124/**", (route) => route.abort());
   await page.route("http://127.0.0.1:8098/tiles.json", (route) =>
     route.fulfill({ json: TILES }));
@@ -41,125 +22,10 @@ async function openWall(page, metrics = METRICS, latest = STANDARD) {
     await page.route("http://127.0.0.1:8098/test-metrics.json", (route) =>
       route.fulfill({ json: metrics }));
   }
-  if (latest === null) {
-    await page.route("**/version.json", (route) => route.abort());
-  } else {
-    await page.route("**/version.json", (route) =>
-      route.fulfill({ json: { version: latest, releasedAt: "2026-10-27", url: "#" }, headers: { "access-control-allow-origin": "*" } }));
-  }
   await page.goto("/");
   await expect(page.locator(".tile")).toHaveCount(3);
   await expect(page.locator("#app-version")).toHaveText("0.5.0");
 }
-
-test("[BASIC-FOOTER-01] [BASIC-LAYOUT-02] the wall shows tiles and a one-row header", async ({ page }) => {
-  await openWall(page);
-  await expect(page.locator("header h1")).toHaveText("DIE WAND");
-  await expect(page.locator("header img.logo")).toBeVisible();
-  const title = await page.locator("header h1").boundingBox();
-  const tagline = await page.locator(".tagline").boundingBox();
-  const titleMiddle = title.y + title.height / 2;
-  const taglineMiddle = tagline.y + tagline.height / 2;
-  expect(Math.abs(titleMiddle - taglineMiddle)).toBeLessThan(4);
-  await expect(page.locator(".footer-item")).toHaveCount(6);
-  await expect(page.locator(".footer-sep")).toHaveCount(5);
-  const footerIcons = await page.locator(".footer-items svg, .footer-items img").evaluateAll(
-    (nodes) => nodes.map((node) => node.outerHTML),
-  );
-  await expect(page.locator(".footer-items svg, .footer-items img")).toHaveCount(6);
-  expect(new Set(footerIcons).size).toBe(footerIcons.length);
-  await expect(page.locator("#app-version")).toHaveText("0.5.0");
-  await expect(page.locator("#basic-version")).toHaveText(STANDARD);
-});
-
-test("[BASIC-READER-01] [BASIC-LINKS-01] README opens the reader and a deep link survives a reload", async ({ page }) => {
-  await openWall(page);
-  await page.locator("#readme-button").click();
-  await expect(page.locator("#reader")).toBeVisible();
-  await expect(page.locator("header")).toBeVisible();
-  await expect(page.locator(".footer")).toBeVisible();
-  await expect(page.locator(".reader-tab")).toHaveCount(4);
-  await page.locator('.reader-section[aria-label="Tests"]').click();
-  await expect(page).toHaveURL(/#\/docs\/readme\/tests$/);
-  await page.reload();
-  await expect(page.locator("#reader")).toBeVisible();
-  await expect(page.locator("#reader-section-title")).toHaveText("Tests");
-  await expect(page.locator(".reader-tab.active")).toHaveText("README");
-});
-
-test("[BASIC-READER-03] each section has its own icon", async ({ page }) => {
-  await openWall(page);
-  await page.locator("#readme-button").click();
-  await expect(page.locator("#reader-sections .reader-section").first()).toBeVisible();
-  const icons = await page.locator("#reader-sections svg").evaluateAll(
-    (nodes) => nodes.map((node) => node.innerHTML),
-  );
-  expect(icons.length).toBeGreaterThan(5);
-  expect(new Set(icons).size).toBe(icons.length);
-});
-
-test("[BASIC-READER-01] the reader lists every document", async ({ page }) => {
-  await openWall(page);
-  await page.locator("#readme-button").click();
-  await expect(page.locator(".reader-tab")).toHaveText([
-    "README", "SPECS", "BASIC SPECS", "GUIDE",
-  ]);
-  await page.locator(".reader-tab", { hasText: "SPECS" }).first().click();
-  await expect(page.locator("#reader-title")).toHaveText("SPECS");
-  await expect(page.locator("#reader-section-title")).toHaveText("Changelog");
-  await expect(page.locator("#reader-body")).toContainText("0.3.0");
-});
-
-test("[BASIC-FOOTER-02] a test that has not run is red with a plain tooltip", async ({ page }) => {
-  await openWall(page);
-  await expect(page.locator("#unit-label")).toHaveText(/unit 122 tests/);
-  await expect(page.locator("#e2e-metrics")).toHaveClass(/failed/);
-  await expect(page.locator("#e2e-label")).toHaveText("not executed");
-  await page.locator("#e2e-metrics").hover();
-  await expect(page.locator("#tooltip")).toHaveText("not executed");
-});
-
-test("[BASIC-FOOTER-03] [BASIC-DATES-01] a test tooltip always has three rows", async ({ page }) => {
-  await openWall(page);
-  await page.locator("#unit-metrics").hover();
-  const text = await page.locator("#tooltip").innerText();
-  const rows = text.split("\n");
-  expect(rows).toHaveLength(3);
-  expect(rows[0]).toMatch(/^Measured \d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
-  expect(rows[1]).toMatch(/^Duration .* s$/);
-  expect(rows[2]).toMatch(/^Per test .* s$/);
-});
-
-test("[BASIC-FOOTER-02] a measured E2E run replaces the red state", async ({ page }) => {
-  await openWall(page, {
-    ...METRICS,
-    e2e: {
-      total: 10, failed: 0, coverage: null,
-      duration: 24, perTest: 2.4, measured: "2026-10-26T18:05",
-    },
-  });
-  await expect(page.locator("#e2e-metrics")).not.toHaveClass(/failed/);
-  await expect(page.locator("#e2e-label")).toHaveText("e2e 10 journeys · coverage not measured");
-});
-
-test("[BASIC-DESIGN-02] cursors say what a thing does", async ({ page }) => {
-  await openWall(page);
-  await expect(page.locator("#readme-button")).toHaveCSS("cursor", "pointer");
-  await expect(page.locator("#unit-metrics")).toHaveCSS("cursor", "help");
-  await expect(page.locator(".tagline")).toHaveCSS("cursor", "auto");
-});
-
-test("[BASIC-DESIGN-04] [BASIC-LAYOUT-01] the layout fits at 800 px and follows browser zoom", async ({ page }) => {
-  await page.setViewportSize({ width: 800, height: 900 });
-  await openWall(page);
-  const root = await page.evaluate(() => getComputedStyle(document.documentElement).fontSize);
-  expect(root).toBe("16px");
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - window.innerWidth);
-  expect(overflow).toBeLessThanOrEqual(0);
-  await expect(page.locator("header h1")).toBeVisible();
-  await expect(page.locator(".footer")).toBeVisible();
-});
 
 test("dropping a bookmark file replaces the wall", async ({ page }) => {
   await openWall(page);
@@ -177,8 +43,8 @@ test("dropping a bookmark file replaces the wall", async ({ page }) => {
 });
 
 test("specs list the tests that verify them", async ({ page }) => {
-  await openWall(page, null);
-  await page.goto("/#/docs/basic-specs/reader");
+  await openWall(page);
+  await page.goto("/#/docs/norm/reader");
   await expect(page.locator(".doc-tests")).toBeVisible();
   await expect(page.locator(".doc-tests")).toContainText("Automated tests");
   await expect(page.locator(".doc-test-kind").first()).toContainText("Unit ·");
@@ -192,76 +58,4 @@ test("an unknown route returns to the wall", async ({ page }) => {
   await page.goto("/#/elsewhere");
   await expect(page.locator("#reader")).toBeHidden();
   await expect(page.locator(".tile")).toHaveCount(3);
-});
-
-test("[BASIC-FOOTER-04] the footer is fixed and wraps cleanly", async ({ page }) => {
-  await page.setViewportSize({ width: 360, height: 720 });
-  await openWall(page);
-  const footer = page.locator(".footer");
-  await expect(footer).toBeVisible();
-  const box = await footer.boundingBox();
-  expect(box?.y ?? 9999).toBeGreaterThanOrEqual(0);
-  expect((box?.y ?? 9999) + (box?.height ?? 9999)).toBeLessThanOrEqual(720);
-  await expect(page.locator(".footer-item")).toHaveCount(6);
-});
-
-test("[BASIC-DESIGN-01] the page follows the OS colour scheme", async ({ page }) => {
-  await page.emulateMedia({ colorScheme: "dark" });
-  await openWall(page);
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).backgroundColor))
-    .toBe("rgb(32, 31, 37)");
-  await page.emulateMedia({ colorScheme: "light" });
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).backgroundColor))
-    .toBe("rgb(245, 240, 229)");
-});
-
-test("[BASIC-DESIGN-02] focus uses the green outline", async ({ page }) => {
-  await openWall(page);
-  const button = page.locator("#readme-button");
-  await button.focus();
-  const outline = await button.evaluate((node) => {
-    const style = getComputedStyle(node);
-    return { color: style.outlineColor, width: style.outlineWidth, offset: style.outlineOffset, style: style.outlineStyle };
-  });
-  expect(outline).toEqual({ color: "rgb(88, 139, 85)", width: "3px", offset: "2px", style: "solid" });
-});
-
-test("[BASIC-READER-05] SPECS starts with Changelog", async ({ page }) => {
-  await openWall(page);
-  await page.goto("/#/docs/app-specs");
-  await expect(page.locator("#reader-title")).toHaveText("SPECS");
-  await expect(page.locator("#reader-section-title")).toHaveText("Changelog");
-  await expect(page.locator(".reader-section").first()).toHaveAttribute("data-tip", "Changelog");
-  await expect(page.locator(".reader-tab", { hasText: "RELEASE NOTES" })).toHaveCount(0);
-});
-
-test("[BASIC-VERSION-01] the app version opens SPECS", async ({ page }) => {
-  await openWall(page, METRICS, "2.0.0");
-  await expect(page.locator("#specs-button")).not.toHaveClass(/outdated/);
-  await expect(page.locator("#specs-button")).toHaveAttribute("data-tip", "die-wand 0.5.0 — open SPECS");
-  await page.locator("#specs-button").click();
-  await expect(page).toHaveURL(/#\/docs\/app-specs$/);
-});
-
-test("[BASIC-VERSION-02] the Basic Specs version opens BASIC SPECS", async ({ page }) => {
-  await openWall(page);
-  await page.locator("#basic-specs-button").click();
-  await expect(page).toHaveURL(/#\/docs\/basic-specs$/);
-  await expect(page.locator("#reader-title")).toHaveText("BASIC SPECS");
-});
-
-test("[BASIC-VERSION-03] only a major update turns red", async ({ page }) => {
-  await openWall(page, METRICS, NEXT_MINOR);
-  const basic = page.locator("#basic-specs-button");
-  await expect(basic).not.toHaveClass(/outdated/);
-  await expect(basic).toHaveAttribute("data-tip", new RegExp(`${NEXT_MINOR.replaceAll(".", "\\.")} available`));
-  await openWall(page, METRICS, NEXT_MAJOR);
-  await expect(basic).toHaveClass(/outdated/);
-  await expect(basic).toHaveAttribute("data-tip", new RegExp(`${NEXT_MAJOR.replaceAll(".", "\\.")} available`));
-});
-
-test("[BASIC-VERSION-04] an unavailable latest version stays neutral", async ({ page }) => {
-  await openWall(page, METRICS, null);
-  await expect(page.locator("#basic-specs-button")).not.toHaveClass(/outdated/);
-  await expect(page.locator("#basic-specs-button")).toHaveAttribute("data-tip", /latest not checked/);
 });
