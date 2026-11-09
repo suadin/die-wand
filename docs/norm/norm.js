@@ -63,8 +63,9 @@ export async function mountNorm(options = {}) {
 
   const home = options.home ? root.querySelector(options.home) : root.querySelector('#home');
   if (!root.querySelector('#reader')) {
-    if (!home) throw new Error('mountNorm: no #reader and no #home element found');
-    home.insertAdjacentHTML('afterend', READER_HTML);
+    const anchor = home ?? root.querySelector('main');
+    if (!anchor) throw new Error('mountNorm: no #reader, #home or <main> element found');
+    anchor.insertAdjacentHTML('afterend', READER_HTML);
   }
 
   if (options.footer !== false) {
@@ -88,14 +89,27 @@ export async function mountNorm(options = {}) {
   const state = { docs: [], byslug: {}, current: null };
   let metricsData = {};
 
+  const docsIsFunction = typeof docs === 'function';
+
   // Which document a `.md` link points at, by basename: `CSV.md` -> `csv`.
+  // A function-provided document set carries `file` (the basename) itself.
   const docByFile = {};
-  for (const spec of docs) {
-    docByFile[baseName(spec.file)] = spec.slug;
-    if (spec.changelog) docByFile[baseName(spec.changelog)] = spec.slug;
+  if (!docsIsFunction) {
+    for (const spec of docs) {
+      docByFile[baseName(spec.file)] = spec.slug;
+      if (spec.changelog) docByFile[baseName(spec.changelog)] = spec.slug;
+    }
   }
 
   async function loadDocs() {
+    if (docsIsFunction) {
+      const items = await docs();
+      for (const item of items) {
+        state.byslug[item.slug] = item;
+        if (item.file) docByFile[baseName(item.file)] = item.slug;
+      }
+      return items;
+    }
     const items = await Promise.all(docs.map(async (spec) => {
       const response = await fetch(base + spec.file);
       let markdown = await response.text();
@@ -119,7 +133,12 @@ export async function mountNorm(options = {}) {
       button.type = 'button';
       button.className = `reader-tab${item.slug === current.slug ? ' active' : ''}`;
       button.textContent = item.title;
-      button.addEventListener('click', () => open(item.slug));
+      button.setAttribute('role', 'tab');
+      button.setAttribute('aria-selected', String(item.slug === current.slug));
+      button.addEventListener('click', () => {
+        win.history.pushState(null, '', docsHash(item.slug, item.pages[0]?.slug ?? null));
+        open(item.slug);
+      });
       elements.tabs.append(button);
     }
     const icons = uniqueIcons(current.pages.map((page) => page.title));
@@ -153,7 +172,10 @@ export async function mountNorm(options = {}) {
   // card, below the body. The metrics file carries `requirements`, a map from
   // section slug to the unit and e2e names that protect the rules there.
   function readableTestName(name) {
-    return String(name).startsWith('test_') ? String(name).slice(5).replace(/_/g, ' ') : name;
+    const text = String(name);
+    const marker = text.lastIndexOf('.test_');
+    if (marker !== -1) return text.slice(marker + 6).replace(/_/g, ' ');
+    return text.startsWith('test_') ? text.slice(5).replace(/_/g, ' ') : text;
   }
 
   function renderRequirementTests(slug) {
