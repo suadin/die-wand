@@ -12,6 +12,6 @@
     "check": "pnpm norm check && ./test/metrics.sh"
   },
   "devDependencies": {
-    "@suadin/norm": "file:../norm"
+    "@suadin/norm": "2.0.0"
   }
 }
