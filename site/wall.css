@@ -1,158 +1,45 @@
+/* DIE WAND: only what Bootstrap does not bring — tile size, icon size, hover. */
 
-/* The root stays the browser base, so Ctrl + wheel zoom scales the page. */
-html { font-size: 100%; }
-
-* { box-sizing: border-box; }
-
-body {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  height: 100dvh;
-  margin: 0;
-  overflow: hidden;
-  background: var(--paper);
-  color: var(--ink);
-  font: 1rem/1.5 "Comic Sans MS", "Trebuchet MS", sans-serif;
-}
-
-button, input { font: inherit; }
-button { color: inherit; cursor: pointer; }
-[hidden] { display: none !important; }
-
-/* Two columns: the name and tagline on the left, the notice centered next to
-   it. The dashed line below is one of the three structural dividers. */
-header {
-  flex-shrink: 0;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 1rem;
-  padding: .7rem clamp(1rem, 4vw, 3.5rem);
-  border-bottom: var(--line);
-}
-
-.brand-line { display: flex; align-items: center; gap: .65rem; min-width: 0; }
-
-header h1 {
-  display: flex;
-  align-items: center;
-  gap: .55rem;
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 900;
-  letter-spacing: .04em;
-  white-space: nowrap;
-}
-
-header .logo {
-  width: 2.375rem;
-  height: 2.375rem;
+.logo {
+  width: 2.4rem;
+  height: 2.4rem;
   border-radius: .5rem;
-  box-shadow: .25rem .25rem 0 var(--ink);
-  transition: transform .2s ease;
 }
 
-.brand-line:hover .logo { animation: wiggle .5s ease-in-out; }
+#wall { align-content: start; }
 
-.tagline {
-  margin: 0;
-  color: var(--muted);
-  font-size: 1rem;
-}
-
-header #notice {
-  justify-self: center;
-  margin: 0;
-  padding: 0 .5rem;
-  max-width: 42rem;
-  text-align: center;
-  font-size: .82rem;
-  color: var(--muted);
-}
-
-main {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 1.2rem clamp(1rem, 4vw, 3.5rem) 1.6rem;
-}
-
-:focus-visible { outline: 0.1875rem solid var(--green); outline-offset: 0.125rem; }
-
-/* Hover tells what the thing does: hand = clickable, help = tooltip only. */
-[data-tip] { cursor: help; }
-button[data-tip],
-a[data-tip],
-button:has([data-tip]) { cursor: pointer; }
-
-#wall {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-  align-content: start;
-  gap: 1rem;
-}
-
-/* Square card: icon on top, text below. Hard shadow, short lift and a tiny
-   alternating rotation carry the play; the palette stays quiet. */
+/* Square card: icon on top, text below. */
 .tile {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .6rem;
   aspect-ratio: 1;
-  padding: 1rem .5rem;
-  border: 2px solid var(--ink);
-  border-radius: .75rem;
-  background: var(--card);
-  color: inherit;
-  text-decoration: none;
-  box-shadow: .25rem .25rem 0 var(--ink);
-  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+  transition: transform .16s ease, box-shadow .16s ease;
 }
 
 .tile:hover {
-  background: var(--hover);
-  transform: translateY(-.125rem) rotate(-.2deg);
-  box-shadow: .1875rem .1875rem 0 var(--ink);
-}
-
-.tile:nth-child(even):hover { transform: translateY(-.125rem) rotate(.2deg); }
-
-.tile:active {
-  transform: translate(.125rem, .125rem);
-  box-shadow: .0625rem .0625rem 0 var(--ink);
+  transform: translateY(-.125rem);
+  box-shadow: 0 .5rem 1rem rgb(0 0 0 / .15);
 }
 
 .icon {
-  flex: 0 0 auto;
   width: 4rem;
   height: 4rem;
   object-fit: contain;
   border-radius: .5rem;
-  transition: transform .2s ease;
 }
 
 .initial {
-  flex: 0 0 auto;
   display: grid;
   place-items: center;
   width: 4rem;
   height: 4rem;
   border-radius: .5rem;
-  background: var(--hover);
-  color: var(--ink);
+  background: var(--bs-tertiary-bg);
   font-size: 2.4rem;
   line-height: 1;
-  transition: transform .2s ease;
 }
 
+.icon, .initial { transition: transform .2s ease; }
 .tile:hover .icon,
 .tile:hover .initial { transform: translateY(-.125rem) rotate(-3deg); }
-
-.label { min-width: 0; width: 100%; text-align: center; }
 
 .title {
   display: -webkit-box;
@@ -160,279 +47,15 @@ button:has([data-tip]) { cursor: pointer; }
   -webkit-box-orient: vertical;
   overflow: hidden;
   overflow-wrap: anywhere;
-  font-size: 1rem;
   font-weight: 700;
   line-height: 1.25;
 }
 
-body.dragging #wall { outline: 0.1875rem dashed var(--yellow); outline-offset: .5rem; }
-
-/* The footer is the third structural divider. */
-.footer {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  padding: .7rem clamp(1rem, 4vw, 3.5rem);
-  border-top: var(--line);
-  color: var(--muted);
-  font-size: .76rem;
-}
-
-.footer-items {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: .3rem .55rem;
-  text-align: center;
-}
-
-.footer-item {
-  display: inline-flex;
-  align-items: center;
-  gap: .25rem;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-weight: 900;
-  white-space: nowrap;
-}
-
-button.footer-item { cursor: pointer; }
-button.footer-item:hover { color: var(--ink); }
-.footer-item.failed { color: var(--red); }
-
-.footer a { color: var(--green); font-weight: 900; text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
-
-.footer-sep { color: var(--muted); opacity: .55; }
-
-/* ---- Documentation reader ------------------------------------------------ */
-
-.reader {
-  width: 100%;
-  padding-bottom: 2rem;
-}
-
-.reader-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  max-width: 64rem;
-  margin: 0 auto;
-}
-
-.eyebrow {
-  margin: 0 0 .4rem;
-  color: var(--green);
-  font-size: .72rem;
-  font-weight: 900;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-
-.reader-head h2 {
-  margin: 0;
-  font-size: clamp(1.7rem, 4vw, 2.4rem);
-  line-height: 1.1;
-}
-
-.button {
-  border: 2px solid var(--ink);
-  border-radius: .75rem;
-  padding: .55rem .85rem;
-  background: var(--card);
-  color: var(--ink);
-  font-weight: 800;
-  box-shadow: .25rem .25rem 0 var(--ink);
-  transition: transform .14s ease, box-shadow .14s ease;
-}
-
-.button:hover { transform: translate(.125rem, .125rem); box-shadow: .125rem .125rem 0 var(--ink); }
-.button:active { transform: translate(.25rem, .25rem); box-shadow: 0 0 0 var(--ink); }
-
-.reader-tabs,
-.reader-sections {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .4rem;
-  max-width: 64rem;
-  margin: 1rem auto .8rem;
-}
-
-.reader-tab {
-  border: 2px solid transparent;
-  border-radius: .5625rem;
-  padding: .35rem .7rem;
-  background: transparent;
-  color: var(--muted);
-  font-size: .8rem;
-  font-weight: 900;
-  transition: color .15s ease, border-color .15s ease, background .15s ease;
-}
-
-.reader-tab:hover { color: var(--ink); border-color: var(--muted); }
-.reader-tab.active { color: var(--ink); background: var(--yellow); border-color: var(--ink); }
-
-/* Sections are icons, not labels. The tooltip gives the heading. */
-.reader-section {
-  display: inline-grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0;
-  border: 2px solid var(--muted);
-  border-radius: .625rem;
-  background: var(--card);
-  color: var(--muted);
-  transition: transform .14s ease, color .14s ease, border-color .14s ease,
-    background .14s ease;
-}
-
-.reader-section:hover {
-  color: var(--ink);
-  border-color: var(--ink);
-  transform: translateY(-.125rem);
-}
-
-.reader-section.active {
-  color: var(--ink);
-  background: var(--yellow);
-  border-color: var(--ink);
-  transform: rotate(-2deg);
-}
-
-.reader-section-title {
-  max-width: 64rem;
-  margin: 0 auto .6rem;
-  font-size: clamp(1.35rem, 3vw, 1.9rem);
-}
-
-.reader-body {
-  max-width: 64rem;
-  margin: 0 auto 2rem;
-  padding: clamp(1rem, 3vw, 1.8rem);
-  border: 2px solid var(--ink);
-  border-radius: 1rem;
-  background: var(--card);
-  box-shadow: .3125rem .3125rem 0 var(--ink);
-  font-size: 1rem;
-}
-
-.reader-body h4 { margin: 1.2rem 0 .4rem; font-size: 1.05em; }
-.reader-body h4:first-child { margin-top: 0; }
-.reader-body p,
-.reader-body li { line-height: 1.65; }
-.reader-body ul,
-.reader-body ol { padding-left: 1.3rem; }
-.reader-body code {
-  padding: .08rem .3rem;
-  border-radius: .3125rem;
-  background: var(--hover);
-  font-size: .88em;
-}
-.reader-body pre {
-  overflow: auto;
-  padding: .8rem;
-  border: 2px solid var(--ink);
-  border-radius: .625rem;
-  background: var(--paper);
-}
-.reader-body pre code { background: none; padding: 0; }
-.reader-body a { color: var(--green); font-weight: 900; }
-.reader-body table {
-  width: 100%;
-  margin: .8rem 0;
-  border-collapse: collapse;
-  font-size: .88em;
-}
-.reader-body th,
-.reader-body td {
-  padding: .35rem .5rem;
-  border: 1px solid var(--muted);
-  text-align: left;
-  vertical-align: top;
-}
-.reader-body blockquote {
-  margin: .8rem 0;
-  padding-left: .9rem;
-  border-left: .1875rem solid var(--green);
-  color: var(--muted);
-}
-
-.doc-tests {
-  margin-top: 1.4rem;
-  padding-top: .9rem;
-  border-top: 0.125rem dashed var(--muted);
-}
-.doc-tests h4 { margin: 0 0 .3rem; }
-.doc-test-group { margin-top: .6rem; }
-.doc-test-kind {
-  display: block;
-  color: var(--green);
-  font-size: .74em;
-  font-weight: 900;
-}
-.doc-test-group ol {
-  margin: .1rem 0 0;
-  padding-left: 1.4rem;
-  font-size: .8em;
-  line-height: 1.5;
-}
-.doc-test-group li { margin: 0; overflow-wrap: anywhere; }
-.doc-test-group li::marker { color: var(--green); font-weight: 900; }
-
-/* ---- Tooltip: a speech bubble, not a plain title ------------------------- */
-
-.tooltip {
-  position: fixed;
-  z-index: 20;
-  max-width: min(16.25rem, calc(100vw - 1rem));
-  padding: .42rem .62rem;
-  border-radius: .625rem;
-  background: var(--ink);
-  color: var(--paper);
-  font-size: .73rem;
-  font-weight: 700;
-  line-height: 1.35;
-  text-align: center;
-  white-space: pre-line;
-  pointer-events: none;
-  box-shadow: .1875rem .1875rem 0 rgb(0 0 0 / .22);
-}
-
-.tooltip::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  width: .625rem;
-  height: .625rem;
-  background: var(--ink);
-  transform: translateX(-50%) rotate(45deg);
-}
-
-.tooltip[data-placement="top"]::after { bottom: -.25rem; }
-.tooltip[data-placement="bottom"]::after { top: -.25rem; }
-
-@keyframes wiggle {
-  25% { transform: rotate(-8deg); }
-  75% { transform: rotate(8deg); }
-}
-
-@media (max-width: 720px) {
-  header { grid-template-columns: 1fr; }
-  header #notice { justify-self: start; }
+body.dragging #wall {
+  outline: .1875rem dashed var(--bs-warning);
+  outline-offset: .5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-  }
+  .tile, .icon, .initial { transition: none; }
 }
-
-.footer-logo { width: 15px; height: 15px; display: block; }
-#basic-specs-button.outdated { color: var(--red); }

@@ -6,18 +6,16 @@ __pycache__/
 .DS_Store
 
 # Real bookmark data never belongs in the repository; the committed
-# site/tiles.json and docs/tiles.json are empty placeholders and stay.
+# site/tiles.json is an empty placeholder and stays.
 tiles.json
 !site/tiles.json
-!docs/tiles.json
 
 # Personal renames, not for the repository.
 import/renames.json
-# E2E runtime and its raw report; the count is merged into site/test-metrics.json.
-e2e/node_modules/
-e2e/test-results/
-e2e/test-metrics.e2e.json
-
-e2e/coverage.json
 
 node_modules/
+
+# Test output; publish-pages.sh copies the reports into site/test/.
+test-report/
+e2e/test-results/
+site/test/

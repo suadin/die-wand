@@ -1,4 +1,4 @@
-// DIE WAND: wires the page to logic.js.
+// DIE WAND: wires the page to bookmarks.js.
 //
 // What the page is: a view of the bookmark bar from Chrome. It reads nothing
 // itself — it asks the helper on the same machine (import/serve.py) and shows
@@ -12,15 +12,11 @@
 //
 // Two rules for the import, both deliberate: a file replaces the wall
 // completely, and everything lands flat on the wall, without folders.
-//
-// The footer, the documentation reader and the tooltip come from the Norm
-// runtime; only the wall, the drag-and-drop import and the message belong to
-// this page.
 
 import {
     fromBookmarks, flatten, hasLocalTiles, iconCandidates, normalize, glyph,
     count,
-} from './logic.js';
+} from './bookmarks.js';
 
 const STORAGE_KEY = 'die-wand.tiles';
 
@@ -137,22 +133,25 @@ function imageOrGlyph(tile, parent) {
 }
 
 function tileElement(tile) {
+    const col = document.createElement('div');
+    col.className = 'col';
+
     const a = document.createElement('a');
-    a.className = 'tile';
+    a.className = 'card tile h-100 text-decoration-none text-body ' +
+        'align-items-center justify-content-center gap-2 p-3 text-center';
     a.href = tile.url;
     a.target = '_blank';
     a.rel = 'noopener';
 
     imageOrGlyph(tile, a);
 
-    const label = document.createElement('span');
-    label.className = 'label';
     const title = document.createElement('span');
     title.className = 'title';
     title.textContent = tile.title;
-    label.append(title);
-    a.append(label);
-    return a;
+    a.append(title);
+
+    col.append(a);
+    return col;
 }
 
 /**
@@ -248,35 +247,6 @@ async function start() {
     }
 
     render();
-}
-
-// Escape closes the reader, exactly like the back button.
-document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && /^#\/docs\//.test(location.hash))
-        location.hash = '';
-});
-
-try {
-    const { mountNorm } = await import('./norm/norm.js');
-    const response = await fetch('norm/app.json');
-    const runtime = response.ok ? await response.json() : null;
-    await mountNorm({
-        app: { name: 'DIE WAND', version: runtime?.appVersion ?? '0.5.0', logo: 'icon.svg' },
-        source: 'https://github.com/suadin/die-wand',
-        normVersion: runtime?.norm ?? '2.0.0',
-        docs: [
-            { slug: 'readme', title: 'README', file: 'docs/README.md' },
-            { slug: 'app-specs', title: 'SPECS', file: 'docs/APP-SPECS.md', changelog: 'docs/RELEASE-NOTES.md' },
-            { slug: 'norm', title: 'NORM', file: 'norm/NORM.md' },
-            { slug: 'guide', title: 'GUIDE', file: 'docs/GUIDE.md' },
-        ],
-        metrics: 'test-metrics.json',
-        autoRoute: true,
-        home: '#wall',
-        homeHash: '',
-    });
-} catch {
-    /* Without the package the wall still works; footer and reader are absent. */
 }
 
 start();

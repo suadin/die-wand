@@ -5,13 +5,13 @@
   "type": "module",
   "packageManager": "pnpm@10.1.0",
   "scripts": {
-    "unit": "./test/run.sh",
-    "e2e": "cd e2e && pnpm test",
-    "metrics": "./test/metrics.sh",
-    "docs": "./publish-pages.sh && ./test/run.sh",
-    "check": "pnpm norm check && ./test/metrics.sh"
+    "unit": "vitest run --reporter=html --outputFile=test-report/unit/index.html --reporter=default",
+    "e2e": "playwright test --config e2e/playwright.config.js",
+    "check": "pnpm unit && pnpm e2e"
   },
   "devDependencies": {
-    "@suadin/norm": "2.0.0"
+    "@playwright/test": "1.64.1",
+    "@vitest/ui": "3.2.7",
+    "vitest": "^3.2.4"
   }
 }

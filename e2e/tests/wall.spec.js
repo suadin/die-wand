@@ -1,8 +1,6 @@
-const { test, expect } = require("@playwright/test");
+import { test, expect } from "@playwright/test";
 
-// die-wand journeys: the wall, the import, and the automated-test list in the
-// docs. The footer, reader, layout, design and version states are the package's
-// own suite.
+// die-wand journeys: the wall, the import, the footer link to the reports.
 
 const TILES = {
   version: 1,
@@ -14,18 +12,18 @@ const TILES = {
   ],
 };
 
-async function openWall(page, metrics = null) {
+async function openWall(page) {
   await page.route("http://127.0.0.1:8124/**", (route) => route.abort());
   await page.route("http://127.0.0.1:8098/tiles.json", (route) =>
     route.fulfill({ json: TILES }));
-  if (metrics) {
-    await page.route("http://127.0.0.1:8098/test-metrics.json", (route) =>
-      route.fulfill({ json: metrics }));
-  }
   await page.goto("/");
   await expect(page.locator(".tile")).toHaveCount(3);
-  await expect(page.locator("#app-version")).toHaveText("0.5.0");
 }
+
+test("the wall shows the tiles from tiles.json", async ({ page }) => {
+  await openWall(page);
+  await expect(page.locator(".tile .title").first()).toHaveText("Diary");
+});
 
 test("dropping a bookmark file replaces the wall", async ({ page }) => {
   await openWall(page);
@@ -42,20 +40,15 @@ test("dropping a bookmark file replaces the wall", async ({ page }) => {
   await expect(page.locator(".tile .title")).toHaveText("Dropped");
 });
 
-test("specs list the tests that verify them", async ({ page }) => {
+test("the footer links to the test reports", async ({ page }) => {
   await openWall(page);
-  await page.goto("/#/docs/norm/reader");
-  await expect(page.locator(".doc-tests")).toBeVisible();
-  await expect(page.locator(".doc-tests")).toContainText("Automated tests");
-  await expect(page.locator(".doc-test-kind").first()).toContainText("Unit ·");
-  await expect(page.locator(".doc-tests")).toContainText("icons in one row are unique");
-  await page.goto("/#/docs/app-specs/reading-chrome");
-  await expect(page.locator(".doc-tests")).toContainText("bitmap is embedded");
+  const link = page.locator("footer a", { hasText: "Tests" });
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute("href", "test/index.html");
 });
 
-test("an unknown route returns to the wall", async ({ page }) => {
+test("an unknown hash route keeps the wall", async ({ page }) => {
   await openWall(page);
   await page.goto("/#/elsewhere");
-  await expect(page.locator("#reader")).toBeHidden();
   await expect(page.locator(".tile")).toHaveCount(3);
 });

@@ -1,20 +1,39 @@
 #!/usr/bin/env bash
-# Rebuilds the documentation copies and docs/ — docs/ is what GitHub Pages
-# publishes, site/ is where the page is written. Run after every change in
-# site/, in README.md, or in GUIDE.md, and commit both.
+# Runs the tests and copies their reports into site/test/, so the published
+# page links to them. GitHub Pages deploys site/ (see
+# .github/workflows/pages.yml), which runs this script first.
 set -euo pipefail
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$here"
 
-# The reader fetches these next to the page. Keeping the copies in site/ makes
-# the same page work from a local server, from the NAS, and from Pages.
-mkdir -p "$here/site/docs"
-cp "$here/README.md" "$here/GUIDE.md" "$here/RELEASE-NOTES.md" "$here/site/docs/"
-cp "$here"/specs/*.md "$here/site/docs/"
+pnpm check
 
-rm -rf "$here/docs"
-mkdir -p "$here/docs"
-cp -R "$here"/site/. "$here/docs"/
-# Keeps Pages from running the directory through Jekyll, which would ignore
-# files it does not know. Rebuilt here because docs/ is deleted above.
-touch "$here/docs/.nojekyll"
-echo "docs/ rebuilt from site/, documentation copied into site/docs/"
+rm -rf site/test
+mkdir -p site/test
+cp -R test-report/unit site/test/unit
+cp -R test-report/e2e site/test/e2e
+if [ -f e2e/test-results/journey-die-wand-happy-path-chromium/journey.webm ]; then
+  cp e2e/test-results/journey-die-wand-happy-path-chromium/journey.webm site/test/e2e/journey.webm
+fi
+
+cat > site/test/index.html <<'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DIE WAND — Tests</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+  <h1 class="h4">Test reports</h1>
+  <ul class="list-unstyled">
+    <li><a href="unit/index.html">Unit tests</a></li>
+    <li><a href="e2e/index.html">E2E tests (with videos)</a></li>
+    <li><a href="e2e/journey.webm">Journey video (happy path)</a></li>
+  </ul>
+</body>
+</html>
+EOF
+
+echo "site/test/ built from test-report/"
