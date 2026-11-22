@@ -288,7 +288,7 @@ def nas_credentials():
                 'user': from_env['DIE_WAND_NAS_USER'],
                 'key_path': from_env['DIE_WAND_NAS_KEY']}
 
-    file = Path(os.getenv('DIE_WAND_OPENCODE', '~/dev/opencode.json')).expanduser()
+    file = Path(os.getenv('DIE_WAND_OPENCODE', '~/Projects/opencode.json')).expanduser()
     try:
         data = json.loads(file.read_text())
         # SSH_TARGETS stands in that file as text, not as a list.
