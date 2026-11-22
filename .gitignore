@@ -1,4 +1,4 @@
-# Python: the import creates .pyc files next to the source while reading.
+# Python: the backend writes .pyc files next to the source.
 __pycache__/
 *.pyc
 
@@ -11,11 +11,11 @@ tiles.json
 !site/tiles.json
 
 # Personal renames, not for the repository.
-import/renames.json
+backend/renames.json
 
 node_modules/
 
-# Test output; publish-pages.sh copies the reports into site/test/.
-test-report/
-e2e/test-results/
+# Test output; tests/publish.sh copies the reports into site/test/.
+tests/report/
+tests/results/
 site/test/

@@ -5,7 +5,7 @@ Documentation=file:README.md
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 %h/dev/repos/die-wand/import/serve.py --seconds 120
+ExecStart=/usr/bin/python3 %h/dev/repos/die-wand/backend/serve.py --seconds 120
 TimeoutStopSec=10
 
 # If Chrome is not in its usual place, or the page is served from somewhere

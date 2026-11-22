@@ -71,7 +71,7 @@ def read_bookmark_bar(profile, name='AccountBookmarks'):
 
 
 # Optional list from "this is what it is called in Chrome" to "this is what it
-# should be called on the wall". File import/renames.json, one entry per line
+# should be called on the wall". File backend/renames.json, one entry per line
 # in the format old name:new name. It does not belong in the repository: it is
 # a personal quirk, not a property of the tool.
 RENAMES = Path(__file__).with_name('renames.json')

@@ -18,7 +18,7 @@ from pathlib import Path
 
 
 def load():
-    path = Path(__file__).with_name('serve.py')
+    path = Path(__file__).resolve().parents[2] / 'backend' / 'serve.py'
     spec = importlib.util.spec_from_file_location('serve', path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

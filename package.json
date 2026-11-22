@@ -2,12 +2,14 @@
   "name": "die-wand",
   "version": "0.5.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@10.1.0",
   "scripts": {
-    "unit": "vitest run --reporter=html --outputFile=test-report/unit/index.html --reporter=default",
-    "e2e": "playwright test --config e2e/playwright.config.js",
-    "check": "pnpm unit && pnpm e2e"
+    "unit": "vitest run tests/unit --reporter=html --outputFile=tests/report/unit/index.html --reporter=default",
+    "e2e": "playwright test --config tests/e2e/playwright.config.js",
+    "check": "pnpm unit && pnpm e2e",
+    "pages": "bash tests/publish.sh"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",

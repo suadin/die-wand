@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest';
 import {
     fromBookmarks, normalize, grapheme, glyph, count, hasLocalTiles,
     iconCandidates, flatten,
-} from '../site/bookmarks.js';
+} from '../../site/bookmarks.js';
 
 // ---- Minimal DOM -------------------------------------------------------
 

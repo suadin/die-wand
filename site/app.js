@@ -1,9 +1,9 @@
 // DIE WAND: wires the page to bookmarks.js.
 //
 // What the page is: a view of the bookmark bar from Chrome. It reads nothing
-// itself — it asks the helper on the same machine (import/serve.py) and shows
+// itself — it asks the helper on the same machine (backend/serve.py) and shows
 // what the helper returns. If it does not answer, tiles.json from the server
-// comes in, the one import/chrome.py wrote.
+// comes in, the one backend/chrome.py wrote.
 //
 // What the page is not: no place to change and no place to save. Alias,
 // address, order and icons live in Chrome, and on the next read tiles changed

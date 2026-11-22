@@ -1,8 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "./tests",
-  outputDir: "./test-results",
+  testDir: ".",
+  outputDir: "../results",
   timeout: 45_000,
   expect: { timeout: 7_000 },
   fullyParallel: false,
@@ -10,7 +10,7 @@ export default defineConfig({
   retries: 0,
   reporter: [
     ["list"],
-    ["html", { outputFolder: "../test-report/e2e", open: "never" }],
+    ["html", { outputFolder: "../report/e2e", open: "never" }],
   ],
   use: {
     baseURL: "http://127.0.0.1:8098",
@@ -20,7 +20,7 @@ export default defineConfig({
   },
   webServer: {
     command: "python3 -m http.server 8098 --directory site",
-    cwd: new URL("..", import.meta.url).pathname,
+    cwd: new URL("../..", import.meta.url).pathname,
     url: "http://127.0.0.1:8098/",
     reuseExistingServer: false,
     timeout: 30_000,

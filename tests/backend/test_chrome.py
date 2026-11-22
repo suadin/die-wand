@@ -13,7 +13,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-path = Path(__file__).with_name('chrome.py')
+path = Path(__file__).resolve().parents[2] / 'backend' / 'chrome.py'
 spec = importlib.util.spec_from_file_location('chrome', path)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
@@ -261,7 +261,7 @@ class TestChrome(unittest.TestCase):
         self.assertEqual(tiles[0]['title'], 'nas:9999')
 
     def test_rename_only_when_entered(self):
-        # The renaming is a local quirk (import/renames.json) and must not
+        # The renaming is a local quirk (backend/renames.json) and must not
         # live in the tool.
         self.assertEqual(
             mod.readable_title('Homepage', 'https://wall.local/', {'Homepage': 'DIE WAND'}),
