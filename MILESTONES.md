@@ -1,12 +1,13 @@
 # Meilensteine
 
 Die Meilensteine folgen der tatsächlichen Git-Historie. Jeder abgeschlossene
-Meilenstein hat einen eigenen Commit-Bereich; neue Arbeiten laufen im nächsten
+Meilenstein hat einen Commit- und Datumsbereich; neue Arbeiten laufen im nächsten
 Meilenstein weiter.
 
 ## M1 – Startseite und Grundfunktion
 
 **Status:** abgeschlossen  
+**Zeitraum:** 17.10.2026  
 **Commits:** `bd7468b` bis `b4151ee`
 
 Wesentliche Commits:
@@ -19,39 +20,49 @@ Wesentliche Commits:
 **Ergebnis:** Statische Kachelwand, Chrome-Lesezeichenleiste, lokaler Helfer,
 Favicons, `tiles.json` und erste Dokumentation.
 
-## M2 – Oberfläche, Tests und Standards
+## M2 – Oberfläche und Tests
 
 **Status:** abgeschlossen  
-**Commits:** `c2994f2` bis `ffbc0ae`
+**Zeitraum:** 26.10.2026  
+**Commits:** `c2994f2` bis `a95c252`
 
 Wesentliche Commits:
 
 - `c2994f2` – Dokumentationsansicht und Test-Footer
+- `1a126e9` – klare Abschnitte und verspielte Oberfläche
 - `569f8d7` – Abschnittsicons und Playwright-Suite
-- `ff185e7` – Basic Specs und Conformance-CI
-- `48f50b0` – Migration auf das Norm-Paket
-- `ffbc0ae` – Norm-Version fixiert und CI ergänzt
+- `a95c252` – Coverage und sichtbarer Header/Footer
 
-**Ergebnis:** Ausgereifte Oberfläche, E2E-Tests, Test-Reports, gemeinsame
-Design-Standards und erste CI-Absicherung.
+**Ergebnis:** Ausgereifte Kacheloberfläche, E2E-Tests, Test-Reports und erste
+Messung der Testabdeckung.
 
-## M3 – Umbau und Deployment
+## M3 – Standard-Experiment, Bootstrap und Umbau
 
 **Status:** abgeschlossen  
-**Commits:** `3728dea` bis `782e8f3`
+**Zeitraum:** 27.10.–22.11.2026  
+**Commits:** `ff185e7` bis `782e8f3`
 
 Wesentliche Commits:
 
+- `ff185e7` – Basic Specs und Conformance-CI eingeführt
+- `48f50b0` – Migration auf das Norm-Paket
+- `ffbc0ae` – Norm-Version fixiert und CI ergänzt
 - `3728dea` – Norm/Basic-Specs entfernt, Bootstrap 5 und Screencast-Journey
 - `c03bedd` – feste Ordner `backend/`, `deploy/` und `tests/`
 - `782e8f3` – Standardpfad der `opencode.json` angepasst
 
-**Ergebnis:** Klare Projektstruktur, vereinheitlichte Skripte, Deployment-Unterlagen
-und sauberer Ausgangspunkt für die Erweiterung.
+**Ergebnis:** Grundlegende CI-Erfahrung gesammelt, die zusätzliche
+Standard-Schicht wieder entfernt und die App auf Bootstrap 5 mit klarer
+Projektstruktur zurückgeführt.
+
+**Erkenntnis:** Norm und Basic Specs haben für diese kleine App mehr indirekte
+Struktur erzeugt, als sie Nutzen gebracht haben. Framework-Bordmittel direkt
+einsetzen; keine eigene Standard-Schicht ohne nachweisbaren Mehrwert.
 
 ## M4 – Chrome-Erweiterung und Lesezeichen-Verwaltung
 
 **Status:** abgeschlossen  
+**Zeitraum:** 26.11.2026  
 **Commit:** `3a1b642`
 
 Der Commit bündelt die gesamte Erweiterung und die zugehörige Qualitätssicherung:
@@ -72,6 +83,7 @@ Lesezeichenverwaltung.
 ## M5 – CI-Absicherung und Distribution
 
 **Status:** aktiv  
+**Zeitraum:** ab 26.11.2026  
 **Commit-Bereich:** ab `3a1b642`, noch keine eigenen Commits
 
 Geplante Arbeiten:
@@ -88,5 +100,6 @@ funktionieren ohne manuelle Profil-Eingriffe.
 ## Regeln
 
 - Issues und Pull Requests referenzieren `M1`–`M5`.
-- Status und Commit-Bereich werden bei einem neuen Meilenstein ergänzt.
+- Status, Commit-Bereich und Zeitraum werden bei einem neuen Meilenstein ergänzt.
 - Ein Meilenstein wird erst nach erfüllten Abschlusskriterien geschlossen.
+- Repository-Dokumentation und GitHub-Meilensteine werden synchron gehalten.
