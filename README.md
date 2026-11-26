@@ -19,8 +19,11 @@ Danach <http://127.0.0.1:8080/> öffnen. Ein HTTP-Server ist nötig, weil die Se
 | --- | --- |
 | `site/` | Oberfläche |
 | `backend/` | Liest die Chrome-Lesezeichen |
+| `extension/` | Chrome-Erweiterung für die Live-Verwaltung |
 | `deploy/` | nginx, Container und systemd |
 | `tests/` | Unit- und E2E-Tests mit Reports |
+
+Die Entwicklungsphasen und Commit-Bereiche stehen in [MILESTONES.md](MILESTONES.md).
 
 ## Lesezeichen
 
