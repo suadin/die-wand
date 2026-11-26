@@ -134,7 +134,7 @@ class Response(BaseHTTPRequestHandler):
                 return
             self.respond(200, json.dumps(data, ensure_ascii=False))
             return
-        self.respond(200, 'DIE WAND: /tiles.json serves the bookmarks from Chrome.\n')
+        self.respond(200, 'die-wand: /tiles.json serves the bookmarks from Chrome.\n')
 
     def do_OPTIONS(self):  # noqa: N802
         origin = allowed_origin(self.headers.get('Origin'))
@@ -269,7 +269,7 @@ def main() -> int:
         source = ('activated by socket' if os.environ.get('LISTEN_PID') == str(os.getpid())
                   else 'started by hand')
         extra = ', '.join(sorted(extra_origins())) or 'none beyond loopback'
-        print(f'DIE WAND listens on {server.server_address[0]}:{server.server_address[1]} '
+        print(f'die-wand listens on {server.server_address[0]}:{server.server_address[1]} '
               f'({source}, read only, end after {args.seconds}s without a request)')
         print(f'allowed origins beyond loopback: {extra}')
         watcher = threading.Thread(target=server.stop_when_idle,

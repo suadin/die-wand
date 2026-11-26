@@ -1,4 +1,4 @@
-/* DIE WAND: only what Bootstrap does not bring — tile size, icon size, hover. */
+/* die-wand: only what Bootstrap does not bring — tile size, icon size, hover. */
 
 .logo {
   width: 2.4rem;
@@ -6,7 +6,111 @@
   border-radius: .5rem;
 }
 
-#wall { align-content: start; }
+#wall, .tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(8rem, 10vw, 10rem), 1fr));
+  align-content: start;
+}
+
+
+.tile-cell { min-width: 0; position: relative; }
+
+.delete-tile {
+  position: absolute;
+  top: .35rem;
+  right: .35rem;
+  z-index: 2;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity .16s ease;
+}
+
+.edit-tile {
+  position: absolute;
+  top: .35rem;
+  left: .35rem;
+  z-index: 2;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity .16s ease;
+}
+
+.move-tile {
+  position: absolute;
+  top: .35rem;
+  left: 2.25rem;
+  z-index: 2;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity .16s ease;
+}
+
+.tile-cell:hover .delete-tile,
+.tile-cell:hover .move-tile,
+.tile-cell:hover .edit-tile,
+.tile-cell:hover .reorder-tile,
+.delete-tile:focus-visible,
+.move-tile:focus-visible,
+.edit-tile:focus-visible,
+.reorder-tile:focus-visible { opacity: 1; }
+
+@media (hover: none) {
+  .delete-tile, .move-tile, .edit-tile, .reorder-tile { opacity: 1; }
+}
+
+.reorder-tile {
+  position: absolute;
+  bottom: .35rem;
+  z-index: 2;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity .16s ease;
+}
+
+.reorder-left { left: .35rem; }
+.reorder-right { right: .35rem; }
+
+#notice {
+  position: fixed;
+  top: .75rem;
+  left: 50%;
+  z-index: 1080;
+  transform: translateX(-50%);
+  max-width: min(42rem, calc(100vw - 2rem));
+  margin: 0;
+  padding: .5rem .75rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .5rem;
+  background: var(--bs-body-bg);
+  box-shadow: 0 .25rem 1rem rgb(0 0 0 / .15);
+  text-align: center;
+}
+
+#notice[hidden] { display: none; }
+
+#entry-dialog {
+  width: min(32rem, calc(100vw - 2rem));
+  margin: auto;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+}
+
+#entry-dialog::backdrop {
+  background: rgb(0 0 0 / .45);
+  backdrop-filter: blur(2px);
+}
 
 /* Square card: icon on top, text below. */
 .tile {
@@ -20,8 +124,8 @@
 }
 
 .icon {
-  width: 4rem;
-  height: 4rem;
+  width: 3.25rem;
+  height: 3.25rem;
   object-fit: contain;
   border-radius: .5rem;
 }
@@ -29,11 +133,11 @@
 .initial {
   display: grid;
   place-items: center;
-  width: 4rem;
-  height: 4rem;
+  width: 3.25rem;
+  height: 3.25rem;
   border-radius: .5rem;
   background: var(--bs-tertiary-bg);
-  font-size: 2.4rem;
+  font-size: 2rem;
   line-height: 1;
 }
 
@@ -47,6 +151,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   overflow-wrap: anywhere;
+  font-size: .875rem;
   font-weight: 700;
   line-height: 1.25;
 }

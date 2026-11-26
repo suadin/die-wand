@@ -3,10 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DIE WAND</title>
+  <title>die-wand</title>
   <meta name="description" content="Your Chrome bookmark bar as a start page.">
-  <meta name="theme-color" content="#212529" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#f8f9fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#f8f9fa" id="theme-color">
+  <script>
+    (() => {
+      const key = 'die-wand.theme';
+      let theme = null;
+      try { theme = localStorage.getItem(key); } catch {}
+      if (theme !== 'light' && theme !== 'dark')
+        theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.bsTheme = theme;
+      document.getElementById('theme-color').content =
+        theme === 'dark' ? '#212529' : '#f8f9fa';
+    })();
+  </script>
   <!-- The number after the name forces Chrome to fetch the icon again. Without
        it the old version sticks in the icon cache, across reloads and across
        devices. -->
@@ -15,24 +26,62 @@
   <link rel="stylesheet" href="wall.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
-  <!-- No button: everything comes from Chrome, and what Chrome can do the user
-       can do there too. -->
+  <!-- Everything comes from Chrome. Changes go through the installed die-wand
+       extension; without it the page stays read-only. -->
   <header class="border-bottom">
     <div class="container-fluid d-flex flex-wrap align-items-center gap-3 py-3 px-md-4">
       <img class="logo" src="icon.svg" alt="">
       <div>
-        <h1 class="h4 mb-0">DIE WAND</h1>
+        <h1 class="h4 mb-0">die-wand</h1>
         <p class="text-muted mb-0">Your bookmark bar, one wall away.</p>
       </div>
-      <!-- The notice sits in the header, centered. At the bottom it was the most
-           conspicuous part of the page, which is exactly what bothered. -->
-      <p id="notice" class="text-muted small text-center mx-auto mb-0" hidden></p>
+      <!-- Status and theme controls stay on the right, also when no notice is shown. -->
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <button id="new-bookmark" class="btn btn-sm btn-primary" type="button" hidden>
+          + Lesezeichen
+        </button>
+        <button id="new-folder" class="btn btn-sm btn-outline-primary" type="button" hidden>
+          + Ordner
+        </button>
+        <button id="delete-folder" class="btn btn-sm btn-outline-danger" type="button" hidden>
+          Ordner löschen
+        </button>
+        <p id="notice" class="text-muted small text-center mb-0" hidden></p>
+        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary" type="button"
+                aria-label="Dark mode" aria-pressed="false" title="Dark mode">
+          <span id="theme-icon" aria-hidden="true">☾</span>
+        </button>
+      </div>
     </div>
   </header>
 
   <main class="container-fluid flex-grow-1 py-4 px-md-4">
-    <div id="wall" class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3" aria-live="polite"></div>
+    <div id="wall" class="tile-grid gap-2" aria-live="polite"></div>
   </main>
+
+  <dialog id="entry-dialog" class="border-0 rounded shadow">
+    <form id="entry-form" class="p-4">
+      <h2 id="dialog-title" class="h5 mb-3">Lesezeichen anlegen</h2>
+      <div id="title-field" class="mb-3">
+        <label for="entry-title" class="form-label">Name</label>
+        <input id="entry-title" class="form-control" type="text" maxlength="120" required>
+      </div>
+      <div id="url-field" class="mb-3">
+        <label for="entry-url" class="form-label">Adresse</label>
+        <input id="entry-url" class="form-control" type="url" placeholder="https://…"
+               maxlength="2048" required>
+      </div>
+      <div id="folder-field" class="mb-3">
+        <label for="entry-folder" class="form-label">Ordner</label>
+        <select id="entry-folder" class="form-select"></select>
+      </div>
+      <p id="dialog-error" class="text-danger small mt-2" hidden></p>
+      <div class="d-flex justify-content-end gap-2">
+        <button id="dialog-cancel" class="btn btn-outline-secondary" type="button">Abbrechen</button>
+        <button id="dialog-submit" class="btn btn-primary" type="submit">Anlegen</button>
+      </div>
+    </form>
+  </dialog>
 
   <footer class="border-top py-2 mt-auto text-center small">
     <a href="test/index.html">Tests</a>

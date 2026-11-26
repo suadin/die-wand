@@ -105,7 +105,14 @@ export function normalize(raw) {
     // and all that is asked here is the scheme anyway.
     const clean = (url) => {
         const t = (url ?? '').trim();
-        return /^https?:\/\//i.test(t) && !/\s/.test(t) ? t : null;
+        return /^(https?:\/\/|chrome:\/\/)/i.test(t) && !/\s/.test(t) ? t : null;
+    };
+
+    // Chrome's stable bookmark ID. It is not a secret and is the only safe way
+    // to delete one exact entry when the same URL appears more than once.
+    const stableId = (value) => {
+        const id = (value ?? '').toString().trim();
+        return id && id.length <= 200 && !/\s/.test(id) ? id : '';
     };
 
     const walk = (list, target) => {
@@ -119,6 +126,16 @@ export function normalize(raw) {
                     title: (entry.title ?? url).toString().slice(0, 120),
                     url,
                 };
+                const guid = stableId(entry.guid);
+                if (guid)
+                    tile.guid = guid;
+                const parentId = stableId(entry.parentId);
+                if (parentId)
+                    tile.parentId = parentId;
+                for (const key of ['index', 'siblingCount']) {
+                    if (Number.isInteger(entry[key]) && entry[key] >= 0)
+                        tile[key] = entry[key];
+                }
                 const custom = (entry.glyph ?? '').toString().trim();
                 if (custom)
                     tile.glyph = [...custom].slice(0, 8).join('');
@@ -134,9 +151,16 @@ export function normalize(raw) {
             } else if (entry.children) {
                 const children = [];
                 walk(Array.isArray(entry.children) ? entry.children : [], children);
-                if (children.length)
-                    target.push({title: (entry.title ?? 'Untitled').toString().slice(0, 60),
-                                 children});
+                const guid = stableId(entry.guid);
+                if (children.length || guid) {
+                    const folder = {
+                        title: (entry.title ?? 'Untitled').toString().slice(0, 60),
+                        children,
+                    };
+                    if (guid)
+                        folder.guid = guid;
+                    target.push(folder);
+                }
             }
         }
     };

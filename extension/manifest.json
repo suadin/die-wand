@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "die-wand",
+  "version": "1.4.1",
+  "description": "Verwaltet die Lesezeichen der die-wand-Startseite direkt in Chrome.",
+  "permissions": ["bookmarks", "favicon", "tabs"],
+  "web_accessible_resources": [
+    {
+      "resources": ["_favicon/*"],
+      "matches": [
+        "http://127.0.0.1:8080/*",
+        "http://localhost:8080/*",
+        "https://192.168.178.50:8443/*"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_title": "die-wand",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "externally_connectable": {
+    "matches": [
+      "http://127.0.0.1:8080/*",
+      "http://localhost:8080/*",
+      "https://192.168.178.50:8443/*"
+    ]
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt0z3mVg1sVSL9yXzk88hYsdmHfVJ31BHQOLWYTBJSBbfJ8e8546vZ4MOFt9BZHkSnnJHYzDcUY0gUyjmZRBS1xTsSbUYBMkWBP4YDm73xODFIaZjjWP2yeSNG24LNzYKwNsIaJsp5O6aa7Msz+baAvKP6Pb0ergTPJyAwIiK1EThwjQHADTCub56BBc29lLtvAo4HVxQImETpWynde7Z2OkT/wHRMiMJKGq0U1p/ploaF0rv8K+vwX9LhGR51sTpgw3jOb4fHr1Wcgr8HFA7FkS8MEOpMjQ59Ez6sURx84ZbDTbg2oz1PzStqfPWNrJhw/t82khe9ClUw6P3TXyQ2wIDAQAB"
+}

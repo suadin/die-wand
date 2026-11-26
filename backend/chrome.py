@@ -104,14 +104,24 @@ def to_tiles(children):
     for entry in children:
         if entry.get('type') == 'url':
             url = (entry.get('url') or '').strip()
-            if url.startswith(('http://', 'https://')):
-                tiles.append({
-                    'title': readable_title(entry.get('name'), url), 'url': url})
+            if url.startswith(('http://', 'https://', 'chrome://')):
+                tile = {
+                    'title': readable_title(entry.get('name'), url), 'url': url}
+                # Chrome's stable ID lets the page address exactly this entry
+                # through the extension, even when two bookmarks share a URL.
+                guid = entry.get('guid')
+                if isinstance(guid, str) and guid:
+                    tile['guid'] = guid
+                tiles.append(tile)
         elif entry.get('type') == 'folder':
             content = to_tiles(entry.get('children', []))
             if content:
-                tiles.append({'title': entry.get('name') or 'Untitled',
-                              'children': content})
+                tile = {'title': entry.get('name') or 'Untitled',
+                        'children': content}
+                guid = entry.get('guid')
+                if isinstance(guid, str) and guid:
+                    tile['guid'] = guid
+                tiles.append(tile)
     return tiles
 
 

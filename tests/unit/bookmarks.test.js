@@ -175,15 +175,47 @@ describe('normalize', () => {
         expect(normalize({ tiles: [{ title: 'x', url: 'https://a.example/' },
                                    { title: 'y', url: 'https://a.example/' }] }).length).toBe(1);
     });
+    it('keeps the stable Chrome id on bookmarks and folders', () => {
+        const tiles = normalize({tiles: [
+            {title: 'Folder', guid: 'folder-1', children: [
+                {title: 'Link', url: 'https://a.example/', guid: 'link-1'},
+            ]},
+        ]});
+        expect(tiles[0].guid).toBe('folder-1');
+        expect(tiles[0].children[0].guid).toBe('link-1');
+    });
+    it('keeps the folder position supplied by the extension', () => {
+        const tiles = normalize({tiles: [
+            {title: 'Link', url: 'https://a.example/', guid: 'link-1',
+                parentId: 'folder-1', index: 2, siblingCount: 4},
+        ]});
+        expect(tiles[0]).toMatchObject({
+            parentId: 'folder-1', index: 2, siblingCount: 4,
+        });
+    });
+    it('drops an invalid Chrome id', () => {
+        const tiles = normalize({tiles: [
+            {title: 'Link', url: 'https://a.example/', guid: 'bad id'},
+        ]});
+        expect(tiles[0].guid).toBeUndefined();
+    });
     it('trims whitespace', () => {
         expect(normalize({ tiles: [{ title: 'x', url: '  https://a.example/  ' }] })[0].url)
             .toBe('https://a.example/');
+    });
+    it('accepts Chrome internal pages', () => {
+        expect(normalize({tiles: [{title: 'Extensions', url: 'chrome://extensions/'}]}))
+            .toEqual([{title: 'Extensions', url: 'chrome://extensions/'}]);
     });
     it('drops an address with a space', () => {
         expect(normalize({ tiles: [{ title: 'x', url: 'https://a example/' }] })).toEqual([]);
     });
     it('drops an empty folder', () => {
         expect(normalize({ tiles: [{ title: 'empty', children: [] }] })).toEqual([]);
+    });
+    it('keeps an empty Chrome folder so it can be filled', () => {
+        expect(normalize({tiles: [{title: 'New', guid: 'folder-1', children: []}]}))
+            .toEqual([{title: 'New', guid: 'folder-1', children: []}]);
     });
     it('keeps a self-set glyph in the tile', () => {
         expect(normalize({ tiles: [{ title: 'Ice', url: 'https://ice.example/',

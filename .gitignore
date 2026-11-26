@@ -13,6 +13,9 @@ tiles.json
 # Personal renames, not for the repository.
 backend/renames.json
 
+# Machine values for deploy.sh (NAS host, user, key).
+deploy/.env
+
 node_modules/
 
 # Test output; tests/publish.sh copies the reports into site/test/.

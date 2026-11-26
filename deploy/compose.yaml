@@ -9,8 +9,7 @@
 # Two ports: 8110 is the http that only redirects to https, 8443 is the https.
 # Not 443, because something already runs there on most servers.
 #
-# `../site` points at the page in this repository. `docker compose up -d` is
-# run from `deploy/`, so the page is one level up.
+# `./site` points at the page copied flat into NAS_DIR by deploy.sh.
 services:
   die-wand:
     image: nginx:1.27-alpine
@@ -20,7 +19,7 @@ services:
       - "8110:80"
       - "8443:443"
     volumes:
-      - ../site:/usr/share/nginx/html:ro
+      - ./site:/usr/share/nginx/html:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./ssl:/etc/nginx/ssl:ro
     read_only: true

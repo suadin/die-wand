@@ -235,6 +235,25 @@ class TestChrome(unittest.TestCase):
     def test_addresses_are_taken_over(self):
         self.assertIn({'title': 'GNOME', 'url': 'https://gnome.org/'}, self.tiles)
 
+    def test_guid_is_kept_for_the_extension(self):
+        tiles = mod.to_tiles([
+            {'type': 'url', 'name': 'GNOME', 'url': 'https://gnome.org/',
+             'guid': '12345678-1234-1234-1234-123456789abc'}])
+        self.assertEqual(tiles[0]['guid'], '12345678-1234-1234-1234-123456789abc')
+
+    def test_folder_guid_is_kept_too(self):
+        tiles = mod.to_tiles([
+            {'type': 'folder', 'name': 'Tech', 'guid': 'folder-guid', 'children': [
+                {'type': 'url', 'name': 'GNOME', 'url': 'https://gnome.org/',
+                 'guid': 'link-guid'}]}])
+        self.assertEqual(tiles[0]['guid'], 'folder-guid')
+        self.assertEqual(tiles[0]['children'][0]['guid'], 'link-guid')
+
+    def test_chrome_internal_page_is_taken_over(self):
+        tiles = mod.to_tiles([
+            {'type': 'url', 'name': 'Extensions', 'url': 'chrome://extensions/'}])
+        self.assertEqual(tiles, [{'title': 'Extensions', 'url': 'chrome://extensions/'}])
+
     def test_non_http_falls_away(self):
         self.assertFalse(any(t.get('url', '').startswith('javascript')
                              for t in self.tiles))
@@ -264,8 +283,8 @@ class TestChrome(unittest.TestCase):
         # The renaming is a local quirk (backend/renames.json) and must not
         # live in the tool.
         self.assertEqual(
-            mod.readable_title('Homepage', 'https://wall.local/', {'Homepage': 'DIE WAND'}),
-            'DIE WAND')
+            mod.readable_title('Homepage', 'https://wall.local/', {'Homepage': 'die-wand'}),
+            'die-wand')
         self.assertEqual(mod.readable_title('Homepage', 'https://wall.local/', {}),
                          'Homepage')
 
